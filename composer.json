@@ -8,7 +8,9 @@
             "email": "benjamin.calef@caudalie.com"
         }
     ],
+    "license": "MIT",
     "config": {
+        "sort-packages": true,
         "preferred-install": "dist"
     },
     "require": {
@@ -20,7 +22,6 @@
             "Zepgram\\CodeMaker\\": "src"
         }
     },
-    "license": "MIT",
     "extra": {
         "map": [
             [
