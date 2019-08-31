@@ -23,6 +23,9 @@
             "Zepgram\\CodeMaker\\": "src"
         }
     },
+    "bin": [
+        "dist/bin/zepgram"
+    ],
     "extra": {
         "map": [
             [
