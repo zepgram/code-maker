@@ -23,13 +23,10 @@
             "Zepgram\\CodeMaker\\": "src"
         }
     },
-    "bin": [
-        "dist/bin/zepgram"
-    ],
     "extra": {
         "map": [
             [
-                "dist/bin/zepgram",
+                "src/dist/bin/zepgram",
                 "bin/zepgram"
             ]
         ],
