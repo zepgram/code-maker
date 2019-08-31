@@ -1,0 +1,35 @@
+{
+    "name": "zepgram/code-maker",
+    "description": "Helps you to create code on the fly for magento2",
+    "keywords": ["generator", "code generator", "installer", "scaffolding", "scaffold"],
+    "authors":[
+        {
+            "name": "Benjamin Calef",
+            "email": "benjamin.calef@caudalie.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "symfony/console": "^2.6|^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zepgram\\CodeMaker\\": "src"
+        }
+    },
+    "license": "MIT",
+    "extra": {
+        "map": [
+            [
+                "dist/bin/zepgram",
+                "bin/zepgram"
+            ]
+        ],
+        "chmod": [
+            {
+                "mask": "0755",
+                "path": "bin/zepgram"
+            }
+        ]
+    }
+}
