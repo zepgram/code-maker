@@ -2,6 +2,7 @@
     "name": "zepgram/code-maker",
     "description": "Helps you to create code on the fly for magento2",
     "keywords": ["generator", "code generator", "installer", "scaffolding", "scaffold"],
+    "type": "magento2-component",
     "authors":[
         {
             "name": "Benjamin Calef",
