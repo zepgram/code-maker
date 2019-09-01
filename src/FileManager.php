@@ -28,6 +28,11 @@ class FileManager
         return array_diff(scandir($directory), ['..', '.']);
     }
 
+    public static function fileExist($path)
+    {
+        return file_exists($path);
+    }
+
     public static function mkpath($path)
     {
         if(@mkdir($path) or file_exists($path)) return true;

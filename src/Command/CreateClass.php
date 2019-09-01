@@ -15,16 +15,17 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Zepgram\CodeMaker\BaseCommand;
 
-class CreateHelper extends BaseCommand
+class CreateClass extends BaseCommand
 {
-    protected static $defaultName = 'create:helper';
+    protected static $defaultName = 'create:class';
 
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Creates helper');
+            ->setDescription('Creates helper, block, view-model');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -32,13 +33,31 @@ class CreateHelper extends BaseCommand
         $parameters = [
             'class_name' => ['Data', 'ucfirst']
         ];
+        $helper = $this->getHelper('question');
+        $question = new ChoiceQuestion(
+            'Please select your class',
+            ['Helper', 'Block', 'ViewModel'],
+            'Helper'
+        );
+        $scope = $helper->ask($input, $output, $question);
+        $output->writeln("<info>You have selected</info>: $scope");
         $templatesParameters = $this->askParameters($parameters, $input, $output);
+
+        $templatesParameters['scope'] = $scope;
+        $scopePath = strtolower($scope);
         $className = $templatesParameters['class_name'];
+        $className = explode('/', $className);
+        $namespaces = [];
+        foreach ($className as $namespace) {
+            $namespaces[] = ucwords($namespace);
+        }
+        $className = implode('/', $namespaces);
+
         $filePath =[
-            'helper.tpl.php' => "Helper/$className.php",
+            "$scopePath.tpl.php" => $scope . "/$className.php",
         ];
 
-        $this->generator
+        $this->maker->setTemplateSkeleton([$scopePath])
             ->setTemplateParameters($templatesParameters)
             ->setFilesPath($filePath);
 

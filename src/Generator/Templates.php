@@ -16,9 +16,9 @@ use Zepgram\CodeMaker\FileManager;
 
 class Templates extends Files
 {
-    public function __construct(Maker $generator)
+    public function __construct(Maker $maker)
     {
-        $this->generator = $generator;
+        $this->maker = $maker;
     }
 
     /**
@@ -27,20 +27,20 @@ class Templates extends Files
     protected function getTemplates()
     {
         $templates = [];
-        $templateDirectories = $this->generator->getTemplateSkeleton();
+        $templateDirectories = $this->maker->getTemplateSkeleton();
         foreach ($templateDirectories as $templateDirectory) {
-            $absolutePathToSkeletons = dirname(__DIR__) . '/Resources/skeleton/' . $templateDirectory;
+            $absolutePathToSkeletons = dirname(__DIR__) . '/Resources/skeleton/'.$templateDirectory;
             if (!is_dir($absolutePathToSkeletons)) {
                 throw new \RuntimeException("Template not found for '$templateDirectory'");
             }
             $skeletons = FileManager::scanDir($absolutePathToSkeletons);
 
             foreach ($skeletons as $skeleton) {
-                $filePath = $this->generator->getFilesPath();
+                $filePath = $this->maker->getFilesPath();
                 if (isset($filePath[$skeleton])) {
                     $templates[$filePath[$skeleton]] = FileManager::parseTemplate(
                         "$absolutePathToSkeletons/$skeleton",
-                        $this->generator->getTemplateParameters()
+                        $this->maker->getTemplateParameters()
                     );
                 }
             }

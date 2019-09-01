@@ -25,13 +25,63 @@ class BaseCommand extends Command
     /**
      * @var Maker
      */
-    public $generator;
+    public $maker;
 
     /** @var string */
     public $module;
 
-    /** @var bool */
-    public $force = false;
+    /**
+     * Set maker instance
+     */
+    private function setMaker()
+    {
+        list($namespace, $moduleName) = explode('_', $this->module);
+
+        $templatesParameters = [
+            'module_name' => ucfirst($moduleName),
+            'module_namespace' => ucfirst($namespace),
+            'lower_namespace' => strtolower($namespace),
+            'lower_module' => strtolower($moduleName)
+        ];
+        $this->maker = new Maker();
+        $this->maker->setAppDirectory(getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY)
+            ->setModuleNamespace($namespace)
+            ->setModuleName($moduleName)
+            ->setModuleFullNamespace(ucfirst($namespace . "\\" . $moduleName))
+            ->setTemplateSkeleton([$this->getCommandSkeleton()])
+            ->setTemplateParameters($templatesParameters);
+    }
+
+    /**
+     * Initialize module
+     */
+    private function initializeModule()
+    {
+        $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
+            ->setFilesPath(array_merge([
+                'module.tpl.php'       => 'etc/module.xml',
+                'registration.tpl.php' => 'registration.php',
+                'composer.tpl.php'     => 'composer.json'
+            ], $this->maker->getFilesPath()));
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getCommandSkeleton()
+    {
+        return explode(':', $this->getName())[1];
+    }
+
+    /**
+     * @return bool
+     */
+    private function isModuleInitialized()
+    {
+        return file_exists($this->maker->getAppDirectory().$this->maker->getModuleNamespace().
+            DIRECTORY_SEPARATOR.$this->maker->getModuleName().'/registration.php');
+    }
+
 
     /**
      * @param InputInterface  $input
@@ -53,40 +103,23 @@ class BaseCommand extends Command
         });
         $question->setMaxAttempts(2);
         $this->module = $helper->ask($input, $output, $question);
-
-        list($namespace, $moduleName) = explode('_', $this->module);
-
-        $templatesParameters = [
-            'name_space' => ucfirst($namespace . "\\" . $moduleName),
-            'module_name' => ucfirst($moduleName),
-            'module_namespace' => ucfirst($namespace),
-            'lower_namespace' => strtolower($namespace),
-            'lower_module' => strtolower($moduleName)
-        ];
-        $this->generator = new Maker();
-        $this->generator
-            ->setAppDirectory($this->getAppDirectory())
-            ->setNameSpace($namespace)
-            ->setModuleName($moduleName)
-            ->setTemplateSkeleton([$this->getCommandSkeleton()])
-            ->setTemplateParameters($templatesParameters);
+        $this->setMaker();
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int|void|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->moduleExist() && $this->getName() === 'create:module') {
-            $output->write("\n");
-            $output->writeln("<info>Module</info> $this->module <info>already exist</info>");
-            $question = new ConfirmationQuestion('<info>Do you want to override existing files ?</info>');
-            if (!$this->getHelper('question')->ask($input, $output, $question)) {
-                return;
-            }
-            $this->force = true;
+        if (!$this->isModuleInitialized() || ($this->isModuleInitialized() && $this->getName() === 'create:module')) {
+            $this->initializeModule();
         }
-        $this->initializeModule();
 
-        $template = new Templates($this->generator);
-        $createdFiles = $template->writeTemplates();
+        $template = new Templates($this->maker);
+        $createdFiles = $template->writeTemplates($input, $output, $this);
 
         $output->write("\n");
         foreach ($createdFiles as $file) {
@@ -95,20 +128,13 @@ class BaseCommand extends Command
         $output->write("\n");
     }
 
-    protected function initializeModule()
-    {
-        if ($this->force === false && $this->moduleExist()) {
-            return;
-        }
-        $this->generator
-        ->setTemplateSkeleton(array_merge($this->generator->getTemplateSkeleton(), ['module']))
-        ->setFilesPath(array_merge([
-            'module.tpl.php'       => 'etc/module.xml',
-            'registration.tpl.php' => 'registration.php',
-            'composer.tpl.php'     => 'composer.json'
-        ], $this->generator->getFilesPath()));
-    }
-
+    /**
+     * @param      $question
+     * @param bool $comment
+     * @param null $default
+     *
+     * @return Question
+     */
     protected function formattedQuestion($question, $comment = false, $default = null)
     {
         if ($comment) {
@@ -119,11 +145,17 @@ class BaseCommand extends Command
         return new Question("<info>$question</info>:\r\n > ");
     }
 
+    /**
+     * @param $parameters
+     * @param $input
+     * @param $output
+     *
+     * @return array
+     */
     protected function askParameters($parameters, $input, $output)
     {
         $answers = [];
-        foreach ($parameters as $parameter => $value) {
-            list($comment, $function) = $value;
+        foreach ($parameters as $parameter => list($comment, $function)) {
             $helper   = $this->getHelper('question');
             $question = $this->formattedQuestion("Which value do you want for your $parameter", $comment, true);
             $question->setValidator(static function ($answer) {
@@ -139,27 +171,5 @@ class BaseCommand extends Command
         }
 
         return $answers;
-    }
-
-    private function moduleExist()
-    {
-        return file_exists($this->getAppDirectory().$this->generator->getNamespace().
-            DIRECTORY_SEPARATOR.$this->generator->getModuleName().'/registration.php');
-    }
-
-    /**
-     * @return string
-     */
-    private function getAppDirectory()
-    {
-        return getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getCommandSkeleton()
-    {
-        return explode(':', $this->getName())[1];
     }
 }

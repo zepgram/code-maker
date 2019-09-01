@@ -1,6 +1,6 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space ?>\ViewModel;
+namespace <?= $name_space ?>;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 

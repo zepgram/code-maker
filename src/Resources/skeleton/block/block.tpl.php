@@ -1,6 +1,6 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space ?>\Block;
+namespace <?= $name_space ?>;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;

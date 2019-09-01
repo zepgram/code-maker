@@ -47,6 +47,7 @@ class CreateController extends BaseCommand
         ];
         $templatesParameters = $this->askParameters($parameters, $input, $output);
 
+        $templatesParameters['base_name_space'] = $this->maker->getModuleFullNamespace();
         $templatesParameters['before_backend'] = $isBackend ? ' before="Magento_Backend"' : '';
         $templatesParameters['router_id'] = $isBackend ? 'admin' : 'standard';
         $templatesParameters['dependencies'] = [
@@ -63,13 +64,12 @@ class CreateController extends BaseCommand
         }
         $controllerPath = $templatesParameters['controller'] . DIRECTORY_SEPARATOR . $templatesParameters['action'];
         $controllerPath = $isBackend ? 'Adminhtml/' . $controllerPath : $controllerPath;
-        $filePath =[
+        $filePath = [
             'controller.tpl.php' => "Controller/$controllerPath.php",
             'routes.tpl.php'     => "etc/$scope/routes.xml"
         ];
 
-        $this->generator
-            ->setTemplateParameters($templatesParameters)
+        $this->maker->setTemplateParameters($templatesParameters)
             ->setFilesPath($filePath);
 
         parent::execute($input, $output);

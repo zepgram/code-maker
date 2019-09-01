@@ -3,7 +3,7 @@
  * This file is part of Zepgram\CodeMaker
  *
  * @package    Zepgram\CodeMaker
- * @file       Generator.php
+ * @file       MakerInterface.php
  * @date       31 08 2019 15:05
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
@@ -11,20 +11,23 @@
 
 namespace Zepgram\CodeMaker;
 
-
 interface MakerInterface
 {
     public function getAppDirectory();
 
     public function setAppDirectory($appDirectory);
 
-    public function getNameSpace();
+    public function getModuleNamespace();
 
-    public function setNameSpace($nameSpace);
+    public function setModuleNamespace($namespace);
 
     public function getModuleName();
 
-    public function setModuleName($moduleName);
+    public function setModuleName($moduleNamespace);
+
+    public function getModuleFullNamespace();
+
+    public function setModuleFullNamespace($moduleFullNamespace);
 
     public function getTemplateSkeleton();
 

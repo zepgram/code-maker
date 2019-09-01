@@ -1,6 +1,6 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space ?>\Controller\Helper;
+namespace <?= $name_space ?>;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;

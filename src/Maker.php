@@ -3,7 +3,7 @@
  * This file is part of Zepgram\CodeMaker
  *
  * @package    Zepgram\CodeMaker
- * @file       Generator.php
+ * @file       Maker.php
  * @date       31 08 2019 15:12
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
@@ -14,11 +14,13 @@ namespace Zepgram\CodeMaker;
 
 class Maker implements MakerInterface
 {
+    private $appDirectory;
+
     private $moduleNamespace;
 
     private $moduleName;
 
-    private $appDirectory;
+    private $moduleFullNamespace;
 
     private $templateSkeleton = [];
 
@@ -38,14 +40,14 @@ class Maker implements MakerInterface
         return $this;
     }
 
-    public function getNamespace()
+    public function getModuleNamespace()
     {
         return $this->moduleNamespace;
     }
 
-    public function setNamespace($namespace)
+    public function setModuleNamespace($moduleNamespace)
     {
-        $this->moduleNamespace = $namespace;
+        $this->moduleNamespace = $moduleNamespace;
 
         return $this;
     }
@@ -58,6 +60,18 @@ class Maker implements MakerInterface
     public function setModuleName($moduleName)
     {
         $this->moduleName = $moduleName;
+
+        return $this;
+    }
+
+    public function getModuleFullNamespace()
+    {
+        return $this->moduleFullNamespace;
+    }
+
+    public function setModuleFullNamespace($moduleFullNamespace)
+    {
+        $this->moduleFullNamespace = $moduleFullNamespace;
 
         return $this;
     }
@@ -86,7 +100,10 @@ class Maker implements MakerInterface
 
             return $this;
         }
-        $this->templateParameters = array_merge($templatesParameters, $this->templateParameters);
+        $this->templateParameters = array_merge($this->templateParameters, $templatesParameters);
+        if (isset($this->templateParameters['class_name'], $this->templateParameters['scope'])) {
+            $this->setNamespaceForClass();
+        }
 
         return $this;
     }
@@ -101,5 +118,23 @@ class Maker implements MakerInterface
         $this->filesPath = $filePath;
 
         return $this;
+    }
+
+    private function setNamespaceForClass()
+    {
+        $items = null;
+        $className = $this->templateParameters['class_name'];
+        $scope = $this->templateParameters['scope'];
+        if (strpos($className, '/') !== false) {
+            $namespace = explode('/', $className);
+            $className = array_pop($namespace);
+            foreach ($namespace as $item) {
+                $items.= "\\$item";
+            }
+        }
+        $namespace = $this->getModuleFullNamespace() ."\\$scope" . $items;
+        $className = ucwords($className);
+        $this->templateParameters['name_space'] = ucwords($namespace);
+        $this->templateParameters['class_name'] = $className;
     }
 }

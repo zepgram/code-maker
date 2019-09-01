@@ -1,6 +1,6 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space ?>\Controller\<?= $admin_html_namespace ?><?= $controller ?>;
+namespace <?= $base_name_space ?>\Controller\<?= $admin_html_namespace ?><?= $controller ?>;
 
 <?php foreach($dependencies as $dependency): ?>
 use <?= "$dependency;\r\n" ?>
