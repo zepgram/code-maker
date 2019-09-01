@@ -19,7 +19,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Zepgram\CodeMaker\FileManager;
 use Zepgram\CodeMaker\Maker;
 
-abstract class Files
+abstract class AbstractFiles
 {
     /** @var Maker */
     protected $maker;

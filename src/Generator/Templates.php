@@ -14,7 +14,7 @@ namespace Zepgram\CodeMaker\Generator;
 use Zepgram\CodeMaker\Maker;
 use Zepgram\CodeMaker\FileManager;
 
-class Templates extends Files
+class Templates extends AbstractFiles
 {
     public function __construct(Maker $maker)
     {

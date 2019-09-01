@@ -33,19 +33,13 @@ class FileManager
         return file_exists($path);
     }
 
-    public static function mkpath($path)
-    {
-        if(@mkdir($path) or file_exists($path)) return true;
-        return (self::mkpath(dirname($path)) and mkdir($path));
-    }
-
     public static function mkdir($directory)
     {
         if (is_dir($directory)) {
             return;
         }
-        if(@mkdir($directory) || file_exists($directory)) return true;
-        return (self::mkpath(dirname($directory)) and mkdir($directory));
+        if (@mkdir($directory) || file_exists($directory)) return true;
+        return (self::mkdir(dirname($directory)) and mkdir($directory));
     }
 
     public static function writeFiles($filePath, $content)

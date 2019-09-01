@@ -125,7 +125,7 @@ class Maker implements MakerInterface
         $items = null;
         $className = $this->templateParameters['class_name'];
         $scope = $this->templateParameters['scope'];
-        if (strpos($className, '/') !== false) {
+        if (strpos($this->templateParameters['class_name'], '/') !== false) {
             $namespace = explode('/', $className);
             $className = array_pop($namespace);
             foreach ($namespace as $item) {
@@ -133,8 +133,7 @@ class Maker implements MakerInterface
             }
         }
         $namespace = $this->getModuleFullNamespace() ."\\$scope" . $items;
-        $className = ucwords($className);
         $this->templateParameters['name_space'] = ucwords($namespace);
-        $this->templateParameters['class_name'] = $className;
+        $this->templateParameters['class_name'] = ucwords($className);
     }
 }
