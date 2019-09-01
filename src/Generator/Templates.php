@@ -26,21 +26,23 @@ class Templates extends Files
      */
     protected function getTemplates()
     {
-        $templateDir = $this->generator->getTemplateSkeleton();
-        $absolutePathToSkeletons = dirname(__DIR__) . '/Resources/skeleton/' .$templateDir;
-        if (!is_dir($absolutePathToSkeletons)) {
-            throw new \RuntimeException("Template not found for '$templateDir'");
-        }
-        $skeletons = FileManager::scanDir($absolutePathToSkeletons);
         $templates = [];
+        $templateDirectories = $this->generator->getTemplateSkeleton();
+        foreach ($templateDirectories as $templateDirectory) {
+            $absolutePathToSkeletons = dirname(__DIR__) . '/Resources/skeleton/' . $templateDirectory;
+            if (!is_dir($absolutePathToSkeletons)) {
+                throw new \RuntimeException("Template not found for '$templateDirectory'");
+            }
+            $skeletons = FileManager::scanDir($absolutePathToSkeletons);
 
-        foreach ($skeletons as $skeleton) {
-            $filePath = $this->generator->getFilesPath()[$skeleton];
-            if (isset($filePath)) {
-                $templates[$filePath] = FileManager::parseTemplate(
-                    "$absolutePathToSkeletons/$skeleton",
-                    $this->generator->getTemplateParameters()
-                );
+            foreach ($skeletons as $skeleton) {
+                $filePath = $this->generator->getFilesPath();
+                if (isset($filePath[$skeleton])) {
+                    $templates[$filePath[$skeleton]] = FileManager::parseTemplate(
+                        "$absolutePathToSkeletons/$skeleton",
+                        $this->generator->getTemplateParameters()
+                    );
+                }
             }
         }
 

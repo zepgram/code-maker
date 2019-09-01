@@ -20,6 +20,6 @@ class CreateModule extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Creates a new module');
+            ->setDescription('Creates new module');
     }
 }

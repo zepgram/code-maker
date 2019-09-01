@@ -1,5 +1,5 @@
 <?= "{\n" ?>
-  "name": "<?= $composer_namespace ?>/module-<?= $composer_module ?>",
+  "name": "<?= $lower_namespace ?>/module-<?= $lower_module ?>",
   "description": "<?= $module_namespace ?> <?= $module_name ?>",
   "type": "magento2-module",
   "version": "0.0.1",

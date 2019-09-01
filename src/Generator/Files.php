@@ -20,8 +20,12 @@ abstract class Files
     /** @var Maker */
     protected $generator;
 
+    /**
+     * @return array
+     */
     public function writeTemplates()
     {
+        $createdFiles = [];
         $appDirectory = $this->generator->getAppDirectory();
         $namespaceDirectory = $appDirectory.$this->generator->getNamespace().DIRECTORY_SEPARATOR;
         $moduleDirectory = $namespaceDirectory.$this->generator->getModuleName().DIRECTORY_SEPARATOR;
@@ -32,7 +36,10 @@ abstract class Files
 
         foreach ($this->getTemplates() as $path => $content) {
             FileManager::writeFiles($moduleDirectory . $path, $content);
+            $createdFiles[] = $path;
         }
+
+        return $createdFiles;
     }
 
     abstract protected function getTemplates();

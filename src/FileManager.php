@@ -28,14 +28,19 @@ class FileManager
         return array_diff(scandir($directory), ['..', '.']);
     }
 
+    public static function mkpath($path)
+    {
+        if(@mkdir($path) or file_exists($path)) return true;
+        return (self::mkpath(dirname($path)) and mkdir($path));
+    }
+
     public static function mkdir($directory)
     {
         if (is_dir($directory)) {
             return;
         }
-        if (!mkdir($concurrentDirectory = $directory) && !is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-        }
+        if(@mkdir($directory) || file_exists($directory)) return true;
+        return (self::mkpath(dirname($directory)) and mkdir($directory));
     }
 
     public static function writeFiles($filePath, $content)

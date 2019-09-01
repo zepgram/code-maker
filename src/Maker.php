@@ -18,13 +18,13 @@ class Maker implements MakerInterface
 
     private $moduleName;
 
-    private $templateSkeleton;
-
     private $appDirectory;
 
-    private $templateParameters;
+    private $templateSkeleton = [];
 
-    private $filesPath;
+    private $templateParameters = [];
+
+    private $filesPath = [];
 
     public function getAppDirectory()
     {
@@ -81,7 +81,12 @@ class Maker implements MakerInterface
 
     public function setTemplateParameters(array $templatesParameters)
     {
-        $this->templateParameters = $templatesParameters;
+        if ($this->templateParameters === null) {
+            $this->templateParameters = $templatesParameters;
+
+            return $this;
+        }
+        $this->templateParameters = array_merge($templatesParameters, $this->templateParameters);
 
         return $this;
     }
