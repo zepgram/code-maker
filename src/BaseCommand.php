@@ -59,9 +59,17 @@ class BaseCommand extends Command
     }
 
     /**
+     * @return mixed
+     */
+    private function getCommandSkeleton()
+    {
+        return explode(':', $this->getName())[1];
+    }
+
+    /**
      * Initialize module
      */
-    private function initializeModule()
+    protected function initializeModule()
     {
         $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
             ->setFilesPath(array_merge([
@@ -72,17 +80,9 @@ class BaseCommand extends Command
     }
 
     /**
-     * @return mixed
-     */
-    private function getCommandSkeleton()
-    {
-        return explode(':', $this->getName())[1];
-    }
-
-    /**
      * @return bool
      */
-    private function isModuleInitialized()
+    protected function isModuleInitialized()
     {
         return file_exists($this->maker->getAppDirectory().$this->maker->getModuleNamespace().
             DIRECTORY_SEPARATOR.$this->maker->getModuleName().'/registration.php');
@@ -117,6 +117,8 @@ class BaseCommand extends Command
     }
 
     /**
+     * Display files created
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
@@ -124,7 +126,7 @@ class BaseCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->isModuleInitialized() || ($this->isModuleInitialized() && $this->getName() === 'create:module')) {
+        if (!$this->isModuleInitialized()) {
             $this->initializeModule();
         }
 
@@ -155,6 +157,12 @@ class BaseCommand extends Command
         return new Question("<info>$question</info>:\r\n > ");
     }
 
+    /**
+     * @param string $parameter
+     * @param array  $values
+     *
+     * @return ChoiceQuestion
+     */
     protected function formattedChoiceQuestion(string $parameter, array $values)
     {
         return new ChoiceQuestion(

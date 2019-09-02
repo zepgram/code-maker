@@ -12,6 +12,7 @@
 namespace Zepgram\CodeMaker\Console;
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Zepgram\CodeMaker\FileManager;
 
 class Cli extends Application
@@ -56,7 +57,10 @@ class Cli extends Application
         foreach ($scanDir as $commandFile) {
             $command = self::COMMAND_NAME_SPACE . '\\' . str_replace('.php', '', $commandFile);
             if (class_exists($command)) {
-                $instanceCommand[] = new $command;
+                $command = new $command;
+                if (is_subclass_of($command, Command::class)) {
+                    $instanceCommand[] = $command;
+                }
             }
         }
 

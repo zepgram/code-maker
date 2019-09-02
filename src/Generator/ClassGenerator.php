@@ -12,32 +12,30 @@
 
 namespace Zepgram\CodeMaker\Generator;
 
-
-use Zepgram\CodeMaker\MakerInterface;
+use Zepgram\CodeMaker\Format;
 
 class ClassGenerator
 {
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $className;
 
-    /** @var string */
-    private $classType;
-
-    /** @var string */
-    private $moduleNamespace;
+    /**
+     * @var string
+     */
+    private $baseNamespace;
 
     /**
      * ClassGenerator constructor.
      *
      * @param string $className
-     * @param string $classType
-     * @param string $moduleNamespace
+     * @param string $baseNamespace
      */
-    public function __construct(string $classType, string $className, string $moduleNamespace)
+    public function __construct(string $className, string $baseNamespace)
     {
-        $this->classType = $classType;
-        $this->className = $this->formatClassName($className);
-        $this->moduleNamespace = $moduleNamespace;
+        $this->className     = $this->formatClassName($className);
+        $this->baseNamespace = $baseNamespace;
     }
 
     /**
@@ -61,8 +59,7 @@ class ClassGenerator
      */
     public function setNamespaceForType()
     {
-        $namespaces = str_replace('/', '\\', $this->classType);
-        $namespaces = "\\$namespaces";
+        $namespaces = null;
         if (strpos($this->className, '/') !== false) {
             $namespace = explode('/', $this->className);
             array_pop($namespace);
@@ -74,6 +71,9 @@ class ClassGenerator
         return $namespaces;
     }
 
+    /**
+     * @return mixed
+     */
     public function getClassName()
     {
         $namespace = explode('/', $this->className);
@@ -81,13 +81,57 @@ class ClassGenerator
         return array_pop($namespace);
     }
 
+    /**
+     * @return string
+     */
     public function getClassNamespace()
     {
-        return $this->moduleNamespace . $this->setNamespaceForType();
+        return $this->baseNamespace . $this->setNamespaceForType();
     }
 
-    public function getClassPath()
+    /**
+     * @return string
+     */
+    public function getPathForNamespace()
     {
-        return $this->classType . DIRECTORY_SEPARATOR . $this->className . '.php';
+        $beforeClassName = explode('\\', $this->baseNamespace);
+        unset($beforeClassName[0], $beforeClassName[1]);
+
+        return str_replace('\\', '/', implode('\\', $beforeClassName));
+    }
+
+    /**
+     * @param $routerName
+     *
+     * @return string
+     */
+    public function getControllerRouteId($routerName)
+    {
+        $router_base = explode('\\', $this->baseNamespace)[1];
+
+        return Format::asSnakeCase($router_base.'_'.$routerName);
+    }
+
+    /**
+     * @param $routerName
+     *
+     * @return string
+     */
+    public function getControllerRoute($routerName)
+    {
+        $string = str_replace('.php', '', $this->getClassFile());
+        $controllerPath = explode('/', $string);
+        unset($controllerPath[0]);
+        $route = implode('/', $controllerPath);
+
+        return $this->getControllerRouteId($routerName).'_'.Format::asSnakeCase($route);
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassFile()
+    {
+        return $this->getPathForNamespace() . DIRECTORY_SEPARATOR . $this->className . '.php';
     }
 }

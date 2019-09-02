@@ -38,15 +38,14 @@ class CreateHelper extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $classGenerator = new ClassGenerator(
-            'Helper',
             $this->parameters['class_name'],
-            $this->maker->getModuleFullNamespace()
+            $this->maker->getModuleFullNamespace(). '\\Helper'
         );
 
         $this->parameters['class_name'] = $classGenerator->getClassName();
         $this->parameters['name_space'] = $classGenerator->getClassNamespace();
         $filePath = [
-            'helper.tpl.php' => $classGenerator->getClassPath(),
+            'helper.tpl.php' => $classGenerator->getClassFile(),
         ];
 
         $this->maker->setTemplateParameters($this->parameters)

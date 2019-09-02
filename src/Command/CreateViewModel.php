@@ -38,15 +38,14 @@ class CreateViewModel extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $classGenerator = new ClassGenerator(
-            'ViewModel',
             $this->parameters['class_name'],
-            $this->maker->getModuleFullNamespace()
+            $this->maker->getModuleFullNamespace() . '\\ViewModel'
         );
 
         $this->parameters['class_name'] = $classGenerator->getClassName();
         $this->parameters['name_space'] = $classGenerator->getClassNamespace();
         $filePath = [
-            'view-model.tpl.php' => $classGenerator->getClassPath(),
+            'view-model.tpl.php' => $classGenerator->getClassFile(),
         ];
 
         $this->maker->setTemplateParameters($this->parameters)

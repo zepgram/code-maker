@@ -16,7 +16,6 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\Format;
 use Zepgram\CodeMaker\Generator\ClassGenerator;
 
 class CreateBlock extends BaseCommand
@@ -39,17 +38,15 @@ class CreateBlock extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $classGenerator = new ClassGenerator(
-            'Block',
             $this->parameters['class_name'],
-            $this->maker->getModuleFullNamespace()
+            $this->maker->getModuleFullNamespace() . '\\Block'
         );
 
         $this->parameters['class_name'] = $classGenerator->getClassName();
         $this->parameters['name_space'] = $classGenerator->getClassNamespace();
         $filePath = [
-            'block.tpl.php' => $classGenerator->getClassPath(),
+            'block.tpl.php' => $classGenerator->getClassFile(),
         ];
-
         $this->maker->setTemplateParameters($this->parameters)
             ->setFilesPath($filePath);
 

@@ -32,40 +32,33 @@ class CreateController extends BaseCommand
     {
         return [
             'scope' => ['choice_question', ['frontend','adminhtml']],
+            'router' => ['subscribe', 'strtolower'],
+            'action' => ['Index', 'ucfirst'],
             'class_name' => ['Subscribe', 'ucfirst'],
-            'router' => ['subscribe', 'strtolower']
         ];
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $scope = $this->parameters['scope'];
+        $action = $this->parameters['action'];
         $isBackend = $scope === 'adminhtml';
-        $this->parameters['before_backend'] = $isBackend ? ' before="Magento_Backend"' : '';
-        $this->parameters['router_id'] = $isBackend ? 'admin' : 'standard';
-        $this->parameters['dependencies'] = [
-            'Magento\Framework\App\Action\Action',
-            'Magento\Framework\App\Action\Context'
-        ];
-        $this->parameters['admin_html_namespace'] = '';
-        if ($isBackend) {
-            $this->parameters['dependencies'] = [
-                'Magento\Backend\App\Action',
-                'Magento\Backend\App\Action\Context'
-            ];
-            $this->parameters['admin_html_namespace'] = 'Adminhtml\\';
-        }
 
+        $classScope = $isBackend ? '\\Controller\\Adminhtml' : '\\Controller';
         $classGenerator = new ClassGenerator(
-            $isBackend ? 'Controller/Adminhtml' : 'Controller',
             $this->parameters['class_name'],
-            $this->maker->getModuleFullNamespace()
+            $this->maker->getModuleFullNamespace() . $classScope . "\\$action"
         );
 
+        $this->parameters['before_backend'] = $isBackend ? ' before="Magento_Backend"' : '';
+        $this->parameters['router_id'] = $isBackend ? 'admin' : 'standard';
+        $this->parameters['dependencies'] = $isBackend ?
+            ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
+            ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
         $this->parameters['class_name'] = $classGenerator->getClassName();
         $this->parameters['name_space'] = $classGenerator->getClassNamespace();
         $filePath = [
-            'controller.tpl.php' => $classGenerator->getClassPath(),
+            'controller.tpl.php' => $classGenerator->getClassFile(),
             'routes.tpl.php'     => "etc/$scope/routes.xml"
         ];
 
