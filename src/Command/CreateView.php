@@ -1,12 +1,11 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker\Command for Caudalie
+ * This file is part of Zepgram\CodeMaker\Command
  *
  * @package    Zepgram\CodeMaker\Command
  * @file       CreateView.php
- * @date       02 09 2019 14:14
- * @author     bcalef <benjamin.calef@caudalie.com>
- * @copyright  2019 Caudalie Copyright (c) (https://caudalie.com)
+ * @date       02 09 2019 14:59
+ * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 
@@ -17,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\Format;
-use Zepgram\CodeMaker\Generator\ClassGenerator;
+use Zepgram\CodeMaker\ClassTemplate;
 
 class CreateView extends BaseCommand
 {
@@ -49,23 +48,25 @@ class CreateView extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $viewModelClass = new ClassGenerator(
+        $viewModelClass = new ClassTemplate(
             $this->parameters['action'],
             $this->maker->getModuleFullNamespace() . '\\ViewModel'
         );
 
         $controller = $this->parameters['controller'];
-        $controllerClass = new ClassGenerator(
+        $controllerClass = new ClassTemplate(
             $this->parameters['action'],
             $this->maker->getModuleFullNamespace() . '\\Controller' . "\\$controller"
         );
 
+        // controller variables
+        $this->parameters['controller'] = $controllerClass->getClassName();
+        $this->parameters['name_space_controller'] = $controllerClass->getClassNamespace();
+
+        // view model variables
         $this->parameters['view_model'] = $viewModelClass->getClassName();
         $this->parameters['name_space_view_model'] = $viewModelClass->getClassNamespace();
         $this->parameters['view_model_class'] = $viewModelClass->getClassNamespace().'\\'.$viewModelClass->getClassName();
-
-        $this->parameters['controller'] = $controllerClass->getClassName();
-        $this->parameters['name_space_controller'] = $controllerClass->getClassNamespace();
         $this->parameters['template'] = Format::asSnakeCase($this->parameters['action']);
         $route_action = $controllerClass->getControllerRoute($this->parameters['router']);
         $template = $this->parameters['template'];

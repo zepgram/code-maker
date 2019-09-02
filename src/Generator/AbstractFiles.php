@@ -3,7 +3,7 @@
  * This file is part of Zepgram\CodeMaker\Generator
  *
  * @package    Zepgram\CodeMaker\Generator
- * @file       Files.php
+ * @file       AbstactFiles.php
  * @date       31 08 2019 18:09
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary

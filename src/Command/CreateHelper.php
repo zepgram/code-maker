@@ -1,12 +1,11 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker\Command for Caudalie
+ * This file is part of Zepgram\CodeMaker\Command
  *
  * @package    Zepgram\CodeMaker\Command
- * @file       CreateController.php
- * @date       01 09 2019 00:02
- * @author     bcalef <benjamin.calef@caudalie.com>
- * @copyright  2019 Caudalie Copyright (c) (https://caudalie.com)
+ * @file       CreateHelper.php
+ * @date       02 09 2019 14:59
+ * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 
@@ -16,7 +15,7 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\Generator\ClassGenerator;
+use Zepgram\CodeMaker\ClassTemplate;
 
 class CreateHelper extends BaseCommand
 {
@@ -46,15 +45,15 @@ class CreateHelper extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $classGenerator = new ClassGenerator(
+        $classTemplate = new ClassTemplate(
             $this->parameters['class_name'],
             $this->maker->getModuleFullNamespace(). '\\Helper'
         );
 
-        $this->parameters['class_name'] = $classGenerator->getClassName();
-        $this->parameters['name_space'] = $classGenerator->getClassNamespace();
+        $this->parameters['class_name'] = $classTemplate->getClassName();
+        $this->parameters['name_space'] = $classTemplate->getClassNamespace();
         $filePath = [
-            'helper.tpl.php' => $classGenerator->getClassFile(),
+            'helper.tpl.php' => $classTemplate->getClassFile(),
         ];
 
         $this->maker->setTemplateParameters($this->parameters)

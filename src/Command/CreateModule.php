@@ -3,7 +3,7 @@
  * This file is part of Zepgram\CodeMaker\Console
  *
  * @package    Zepgram\CodeMaker\Console
- * @file       Cli.php
+ * @file       CreateModule.php
  * @date       30 08 2019 17:55
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary

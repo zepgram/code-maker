@@ -186,15 +186,12 @@ class BaseCommand extends Command
      * @param            $input
      * @param            $output
      *
-     * @param array|null $parameters
-     *
      * @return array
      */
-    protected function askParameters($input, $output, array $parameters = null)
+    protected function askParameters($input, $output)
     {
         $answers = [];
-        $parameters = $parameters ?? $this->getParameters();
-        foreach ($parameters as $parameter => list($comment, $function)) {
+        foreach ($this->getParameters() as $parameter => list($comment, $function)) {
             $helper = $this->getHelper('question');
             if ($comment === 'choice_question') {
                 $question = $this->formattedChoiceQuestion($parameter, $function);

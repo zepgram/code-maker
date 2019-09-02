@@ -1,12 +1,11 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker for Caudalie
+ * This file is part of Zepgram\CodeMaker
  *
  * @package    Zepgram\CodeMaker
  * @file       Format.php
- * @date       02 09 2019 17:12
- * @author     bcalef <benjamin.calef@caudalie.com>
- * @copyright  2019 Caudalie Copyright (c) (https://caudalie.com)
+ * @date       02 09 2019 14:59
+ * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 

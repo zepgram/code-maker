@@ -1,20 +1,17 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker\Generator for Caudalie
+ * This file is part of Zepgram\CodeMaker\Generator
  *
  * @package    Zepgram\CodeMaker\Generator
  * @file       ClassGenerator.php
- * @date       02 09 2019 11:31
- * @author     bcalef <benjamin.calef@caudalie.com>
- * @copyright  2019 Caudalie Copyright (c) (https://caudalie.com)
+ * @date       02 09 2019 14:59
+ * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 
-namespace Zepgram\CodeMaker\Generator;
+namespace Zepgram\CodeMaker;
 
-use Zepgram\CodeMaker\Format;
-
-class ClassGenerator
+class ClassTemplate
 {
     /**
      * @var string|null
