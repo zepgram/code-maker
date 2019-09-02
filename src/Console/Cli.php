@@ -20,7 +20,7 @@ class Cli extends Application
 
     const COMPOSER_FILE = 'composer.json';
 
-    const MAGENTO_REPOSITORY = 'repo.magento.com';
+    const MAGENTO_REPOSITORY = 'https://repo.magento.com';
 
     /**
      * {@inheritdoc}

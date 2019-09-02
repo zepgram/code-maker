@@ -14,6 +14,7 @@ namespace Zepgram\CodeMaker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Zepgram\CodeMaker\Generator\Templates;
 
@@ -26,8 +27,15 @@ class BaseCommand extends Command
      */
     public $maker;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $module;
+
+    /**
+     * @var array
+     */
+    public $parameters;
 
     /**
      * Set maker instance
@@ -35,7 +43,6 @@ class BaseCommand extends Command
     private function setMaker()
     {
         list($namespace, $moduleName) = explode('_', $this->module);
-
         $templatesParameters = [
             'module_name' => ucfirst($moduleName),
             'module_namespace' => ucfirst($namespace),
@@ -81,7 +88,6 @@ class BaseCommand extends Command
             DIRECTORY_SEPARATOR.$this->maker->getModuleName().'/registration.php');
     }
 
-
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -101,8 +107,13 @@ class BaseCommand extends Command
             return $answer;
         });
         $question->setMaxAttempts(2);
+
         $this->module = $helper->ask($input, $output, $question);
         $this->setMaker();
+
+        if (!empty($this->getParameters())) {
+            $this->parameters = $this->askParameters($input, $output);
+        }
     }
 
     /**
@@ -144,18 +155,42 @@ class BaseCommand extends Command
         return new Question("<info>$question</info>:\r\n > ");
     }
 
+    protected function formattedChoiceQuestion(string $parameter, array $values)
+    {
+        return new ChoiceQuestion(
+            "Please select your $parameter",
+            $values,
+            $values[0]
+        );
+    }
+
     /**
-     * @param $parameters
-     * @param $input
-     * @param $output
+     * @return array
+     */
+    protected function getParameters()
+    {
+        return [];
+    }
+
+    /**
+     * @param            $input
+     * @param            $output
+     *
+     * @param array|null $parameters
      *
      * @return array
      */
-    protected function askParameters($parameters, $input, $output)
+    protected function askParameters($input, $output, array $parameters = null)
     {
         $answers = [];
+        $parameters = $parameters ?? $this->getParameters();
         foreach ($parameters as $parameter => list($comment, $function)) {
-            $helper   = $this->getHelper('question');
+            $helper = $this->getHelper('question');
+            if ($comment === 'choice_question') {
+                $question = $this->formattedChoiceQuestion($parameter, $function);
+                $answers[$parameter] = $helper->ask($input, $output, $question);
+                continue;
+            }
             $question = $this->formattedQuestion("Which value do you want for your $parameter", $comment, true);
             $question->setValidator(static function ($answer) {
                 if (empty($answer)) {

@@ -33,8 +33,8 @@ class Templates extends AbstractFiles
             if (!is_dir($absolutePathToSkeletons)) {
                 throw new \RuntimeException("Template not found for '$templateDirectory'");
             }
-            $skeletons = FileManager::scanDir($absolutePathToSkeletons);
 
+            $skeletons = FileManager::scanDir($absolutePathToSkeletons);
             foreach ($skeletons as $skeleton) {
                 $filePath = $this->maker->getFilesPath();
                 if (isset($filePath[$skeleton])) {

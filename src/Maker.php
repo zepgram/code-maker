@@ -101,9 +101,6 @@ class Maker implements MakerInterface
             return $this;
         }
         $this->templateParameters = array_merge($this->templateParameters, $templatesParameters);
-        if (isset($this->templateParameters['class_name'], $this->templateParameters['scope'])) {
-            $this->setNamespaceForClass();
-        }
 
         return $this;
     }
@@ -118,22 +115,5 @@ class Maker implements MakerInterface
         $this->filesPath = $filePath;
 
         return $this;
-    }
-
-    private function setNamespaceForClass()
-    {
-        $items = null;
-        $className = $this->templateParameters['class_name'];
-        $scope = $this->templateParameters['scope'];
-        if (strpos($this->templateParameters['class_name'], '/') !== false) {
-            $namespace = explode('/', $className);
-            $className = array_pop($namespace);
-            foreach ($namespace as $item) {
-                $items.= "\\$item";
-            }
-        }
-        $namespace = $this->getModuleFullNamespace() ."\\$scope" . $items;
-        $this->templateParameters['name_space'] = ucwords($namespace);
-        $this->templateParameters['class_name'] = ucwords($className);
     }
 }

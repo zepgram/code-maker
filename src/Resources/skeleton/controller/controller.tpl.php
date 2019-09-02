@@ -1,15 +1,15 @@
 <?= "<?php\n" ?>
 
-namespace <?= $base_name_space ?>\Controller\<?= $admin_html_namespace ?><?= $controller ?>;
+namespace <?= $name_space ?>;
 
 <?php foreach($dependencies as $dependency): ?>
 use <?= "$dependency;\r\n" ?>
 <?php endforeach; ?>
 
 /**
- * Class <?= $action ?>.
+ * Class <?= $class_name ?>.
  */
-class <?= $action ?> extends Action
+class <?= $class_name ?> extends Action
 {
     public function __construct(Context $context)
     {
