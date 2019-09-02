@@ -12,9 +12,13 @@
 
 namespace Zepgram\CodeMaker;
 
-
 class Format
 {
+    /**
+     * @param $value
+     *
+     * @return string|string[]|null
+     */
     public static function asSnakeCase($value)
     {
         $value = trim($value);
@@ -24,5 +28,35 @@ class Format
         $value = strtolower($value);
 
         return $value;
+    }
+
+    /**
+     * @param string $str
+     *
+     * @return string
+     */
+    public static function asCamelCase(string $str)
+    {
+        return strtr(ucwords(strtr($str, ['_' => ' ', '.' => ' ', '\\' => ' '])), [' ' => '']);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function lowercase(string $string)
+    {
+        return strtolower($string);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function ucwords(string $string)
+    {
+        return ucwords($string);
     }
 }

@@ -7,9 +7,9 @@ use <?= "$dependency;\r\n" ?>
 <?php endforeach; ?>
 
 /**
- * Class <?= $class_name ?>.
+ * Class <?= $action ?>.
  */
-class <?= $class_name ?> extends Action
+class <?= $action ?> extends Action
 {
     public function __construct(Context $context)
     {
@@ -19,5 +19,6 @@ class <?= $class_name ?> extends Action
     public function execute()
     {
         // TODO: Implement execute() method.
+        die('you are in controller action');
     }
 }

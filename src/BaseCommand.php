@@ -43,17 +43,19 @@ class BaseCommand extends Command
     private function setMaker()
     {
         list($namespace, $moduleName) = explode('_', $this->module);
+        $namespace = Format::ucwords($namespace);
+        $moduleName = Format::ucwords($moduleName);
         $templatesParameters = [
-            'module_name' => ucfirst($moduleName),
-            'module_namespace' => ucfirst($namespace),
-            'lower_namespace' => strtolower($namespace),
-            'lower_module' => strtolower($moduleName)
+            'module_name' => $moduleName,
+            'module_namespace' => $namespace,
+            'lower_namespace' => Format::lowercase($namespace),
+            'lower_module' => Format::lowercase($moduleName)
         ];
         $this->maker = new Maker();
         $this->maker->setAppDirectory(getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY)
             ->setModuleNamespace($namespace)
             ->setModuleName($moduleName)
-            ->setModuleFullNamespace(ucfirst($namespace . "\\" . $moduleName))
+            ->setModuleFullNamespace($namespace . "\\" . $moduleName)
             ->setTemplateSkeleton([$this->getCommandSkeleton()])
             ->setTemplateParameters($templatesParameters);
     }
@@ -209,7 +211,7 @@ class BaseCommand extends Command
 
                 return $answer;
             });
-            $answers[$parameter] = $function($helper->ask($input, $output, $question));
+            $answers[$parameter] = Format::$function($helper->ask($input, $output, $question));
         }
 
         return $answers;

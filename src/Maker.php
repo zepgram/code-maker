@@ -11,9 +11,6 @@
 
 namespace Zepgram\CodeMaker;
 
-
-use Zepgram\CodeMaker\Generator\Templates;
-
 class Maker implements MakerInterface
 {
     private $appDirectory;

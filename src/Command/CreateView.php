@@ -23,33 +23,41 @@ class CreateView extends BaseCommand
 {
     protected static $defaultName = 'create:view';
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName(self::$defaultName)
             ->setDescription('Creates full view');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getParameters()
     {
         return [
-            'router' => ['hello', 'strtolower'],
-            'action' => ['Index', 'ucfirst'],
-            'view' => ['Index', 'ucfirst'],
-            'template' => ['index', 'strtolower']
+            'router' => ['hello', 'asSnakeCase'],
+            'controller' => ['Index', 'asCamelCase'],
+            'action' => ['Index', 'asCamelCase']
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $viewModelClass = new ClassGenerator(
-            $this->parameters['view'],
+            $this->parameters['action'],
             $this->maker->getModuleFullNamespace() . '\\ViewModel'
         );
 
-        $action = $this->parameters['action'];
+        $controller = $this->parameters['controller'];
         $controllerClass = new ClassGenerator(
-            $this->parameters['view'],
-            $this->maker->getModuleFullNamespace() . '\\Controller' . "\\$action"
+            $this->parameters['action'],
+            $this->maker->getModuleFullNamespace() . '\\Controller' . "\\$controller"
         );
 
         $this->parameters['view_model'] = $viewModelClass->getClassName();
@@ -58,7 +66,7 @@ class CreateView extends BaseCommand
 
         $this->parameters['controller'] = $controllerClass->getClassName();
         $this->parameters['name_space_controller'] = $controllerClass->getClassNamespace();
-        $this->parameters['route_id'] = $controllerClass->getControllerRouteId($this->parameters['router']);
+        $this->parameters['template'] = Format::asSnakeCase($this->parameters['action']);
         $route_action = $controllerClass->getControllerRoute($this->parameters['router']);
         $template = $this->parameters['template'];
 

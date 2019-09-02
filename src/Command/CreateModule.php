@@ -19,12 +19,18 @@ class CreateModule extends BaseCommand
 {
     protected static $defaultName = 'create:module';
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName(self::$defaultName)
             ->setDescription('Creates new module');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($this->isModuleInitialized() && $this->getName() === 'create:module') {

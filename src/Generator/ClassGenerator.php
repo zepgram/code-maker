@@ -24,18 +24,18 @@ class ClassGenerator
     /**
      * @var string
      */
-    private $baseNamespace;
+    private $fullNamespace;
 
     /**
      * ClassGenerator constructor.
      *
      * @param string $className
-     * @param string $baseNamespace
+     * @param string $fullNamespace
      */
-    public function __construct(string $className, string $baseNamespace)
+    public function __construct(string $className, string $fullNamespace)
     {
-        $this->className     = $this->formatClassName($className);
-        $this->baseNamespace = $baseNamespace;
+        $this->className = $this->formatClassName($className);
+        $this->fullNamespace = $fullNamespace;
     }
 
     /**
@@ -57,7 +57,7 @@ class ClassGenerator
     /**
      * @return string|null
      */
-    public function setNamespaceForType()
+    public function additionalNamespace()
     {
         $namespaces = null;
         if (strpos($this->className, '/') !== false) {
@@ -86,7 +86,7 @@ class ClassGenerator
      */
     public function getClassNamespace()
     {
-        return $this->baseNamespace . $this->setNamespaceForType();
+        return $this->fullNamespace . $this->additionalNamespace();
     }
 
     /**
@@ -94,10 +94,18 @@ class ClassGenerator
      */
     public function getPathForNamespace()
     {
-        $beforeClassName = explode('\\', $this->baseNamespace);
+        $beforeClassName = explode('\\', $this->fullNamespace);
         unset($beforeClassName[0], $beforeClassName[1]);
 
         return str_replace('\\', '/', implode('\\', $beforeClassName));
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassFile()
+    {
+        return $this->getPathForNamespace() . DIRECTORY_SEPARATOR . $this->className . '.php';
     }
 
     /**
@@ -107,7 +115,7 @@ class ClassGenerator
      */
     public function getControllerRouteId($routerName)
     {
-        $router_base = explode('\\', $this->baseNamespace)[1];
+        $router_base = explode('\\', $this->fullNamespace)[1];
 
         return Format::asSnakeCase($router_base.'_'.$routerName);
     }
@@ -125,13 +133,5 @@ class ClassGenerator
         $route = implode('/', $controllerPath);
 
         return $this->getControllerRouteId($routerName).'_'.Format::asSnakeCase($route);
-    }
-
-    /**
-     * @return string
-     */
-    public function getClassFile()
-    {
-        return $this->getPathForNamespace() . DIRECTORY_SEPARATOR . $this->className . '.php';
     }
 }

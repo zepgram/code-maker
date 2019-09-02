@@ -22,32 +22,41 @@ class CreateController extends BaseCommand
 {
     protected static $defaultName = 'create:controller';
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName(self::$defaultName)
             ->setDescription('Creates controller');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getParameters()
     {
         return [
             'scope' => ['choice_question', ['frontend','adminhtml']],
-            'router' => ['subscribe', 'strtolower'],
-            'action' => ['Index', 'ucfirst'],
-            'class_name' => ['Subscribe', 'ucfirst'],
+            'router' => ['subscriber', 'asSnakeCase'],
+            'controller' => ['New', 'asCamelCase'],
+            'action' => ['Index', 'asCamelCase'],
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $scope = $this->parameters['scope'];
-        $action = $this->parameters['action'];
+        $controller = $this->parameters['controller'];
         $isBackend = $scope === 'adminhtml';
 
         $classScope = $isBackend ? '\\Controller\\Adminhtml' : '\\Controller';
         $classGenerator = new ClassGenerator(
-            $this->parameters['class_name'],
-            $this->maker->getModuleFullNamespace() . $classScope . "\\$action"
+            $this->parameters['action'],
+            $this->maker->getModuleFullNamespace() . $classScope . "\\$controller"
         );
 
         $this->parameters['before_backend'] = $isBackend ? ' before="Magento_Backend"' : '';

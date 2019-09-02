@@ -11,7 +11,6 @@
 
 namespace Zepgram\CodeMaker;
 
-
 class FileManager
 {
     public static function parseTemplate(string $templatePath, array $parameters): string

@@ -22,19 +22,28 @@ class CreateHelper extends BaseCommand
 {
     protected static $defaultName = 'create:helper';
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName(self::$defaultName)
             ->setDescription('Creates helper');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getParameters()
     {
         return [
-            'class_name' => ['Data', 'ucfirst']
+            'class_name' => ['Data', 'ucwords']
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $classGenerator = new ClassGenerator(
