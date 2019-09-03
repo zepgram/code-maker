@@ -27,7 +27,7 @@ class CreateBlock extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Creates block');
+            ->setDescription('Create block');
     }
 
     /**
@@ -36,7 +36,7 @@ class CreateBlock extends BaseCommand
     protected function getParameters()
     {
         return [
-            'class_name' => ['Data', 'ucwords']
+            'block_name' => ['Data', 'ucwords']
         ];
     }
 
@@ -46,12 +46,12 @@ class CreateBlock extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $classTemplate = new ClassTemplate(
-            $this->parameters['class_name'],
+            $this->parameters['block_name'],
             $this->maker->getModuleFullNamespace() . '\\Block'
         );
 
-        $this->parameters['class_name'] = $classTemplate->getClassName();
-        $this->parameters['name_space'] = $classTemplate->getClassNamespace();
+        $this->parameters['class_block'] = $classTemplate->getClassName();
+        $this->parameters['name_space_block'] = $classTemplate->getClassNamespace();
         $filePath = [
             'block.tpl.php' => $classTemplate->getClassFile(),
         ];

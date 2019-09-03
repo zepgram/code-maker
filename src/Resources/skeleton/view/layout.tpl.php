@@ -4,7 +4,7 @@
         <referenceContainer name="content">
             <block name="<?= $lower_namespace ?>.<?= $lower_module ?>.<?= $template ?>" template="<?= $module_namespace ?>_<?= $module_name ?>::<?= $template ?>.phtml">
                 <arguments>
-                    <argument name="view_model" xsi:type="object"><?= $view_model_class ?></argument>
+                    <argument name="view_model" xsi:type="object"><?= $use_view_model ?></argument>
                 </arguments>
             </block>
         </referenceContainer>

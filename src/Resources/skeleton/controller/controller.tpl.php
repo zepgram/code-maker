@@ -1,8 +1,8 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space ?>;
+namespace <?= $name_space_controller ?>;
 
-<?php foreach($dependencies as $dependency): ?>
+<?php foreach ($dependencies as $dependency): ?>
 use <?= "$dependency;\r\n" ?>
 <?php endforeach; ?>
 
@@ -11,6 +11,11 @@ use <?= "$dependency;\r\n" ?>
  */
 class <?= $action ?> extends Action
 {
+    /**
+     * <?= $action ?> constructor.
+     *
+     * @param Context     $context
+     */
     public function __construct(Context $context)
     {
         parent::__construct($context);
@@ -18,7 +23,12 @@ class <?= $action ?> extends Action
 
     public function execute()
     {
-        // TODO: Implement execute() method.
-        die('you are in controller action');
+<?php if (isset($template)): ?>
+        $this->_view->loadLayout();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__($this->getRequest()->getActionName()));
+        $this->_view->renderLayout();
+<?php else: ?>
+        die('You are in controller action:' . $this->getRequest()->getActionName());
+<?php endif; ?>
     }
 }

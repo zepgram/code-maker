@@ -28,7 +28,7 @@ class CreateView extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Creates full view');
+            ->setDescription('Create basic view');
     }
 
     /**
@@ -62,11 +62,15 @@ class CreateView extends BaseCommand
         // controller variables
         $this->parameters['controller'] = $controllerClass->getClassName();
         $this->parameters['name_space_controller'] = $controllerClass->getClassNamespace();
+        $this->parameters['router_id'] = 'standard';
+        $this->parameters['dependencies'] = [
+            'Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'
+        ];
 
         // view model variables
-        $this->parameters['view_model'] = $viewModelClass->getClassName();
+        $this->parameters['class_view_model'] = $viewModelClass->getClassName();
         $this->parameters['name_space_view_model'] = $viewModelClass->getClassNamespace();
-        $this->parameters['view_model_class'] = $viewModelClass->getClassNamespace().'\\'.$viewModelClass->getClassName();
+        $this->parameters['use_view_model'] = $viewModelClass->getClassNamespace().'\\'.$viewModelClass->getClassName();
         $this->parameters['template'] = Format::asSnakeCase($this->parameters['action']);
         $route_action = $controllerClass->getControllerRoute($this->parameters['router']);
         $template = $this->parameters['template'];
@@ -80,6 +84,7 @@ class CreateView extends BaseCommand
         ];
 
         $this->maker->setTemplateParameters($this->parameters)
+            ->setTemplateSkeleton(['controller','view'])
             ->setFilesPath($filePath);
 
         parent::execute($input, $output);

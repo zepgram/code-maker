@@ -27,7 +27,7 @@ class CreateHelper extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Creates helper');
+            ->setDescription('Create helper');
     }
 
     /**
@@ -50,8 +50,8 @@ class CreateHelper extends BaseCommand
             $this->maker->getModuleFullNamespace(). '\\Helper'
         );
 
-        $this->parameters['class_name'] = $classTemplate->getClassName();
-        $this->parameters['name_space'] = $classTemplate->getClassNamespace();
+        $this->parameters['class_helper'] = $classTemplate->getClassName();
+        $this->parameters['name_space_helper'] = $classTemplate->getClassNamespace();
         $filePath = [
             'helper.tpl.php' => $classTemplate->getClassFile(),
         ];

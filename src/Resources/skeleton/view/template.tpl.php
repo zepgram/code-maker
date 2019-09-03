@@ -1,6 +1,6 @@
 <?= "<?php\n" ?>
 /**
- * @var \<?= $view_model_class ?> $viewModel
+ * @var \<?= $use_view_model ?> $viewModel
  */
 
 $viewModel = $block->getViewModel();

@@ -27,7 +27,7 @@ class CreateController extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Creates controller');
+            ->setDescription('Create controller');
     }
 
     /**
@@ -38,7 +38,7 @@ class CreateController extends BaseCommand
         return [
             'scope' => ['choice_question', ['frontend','adminhtml']],
             'router' => ['subscriber', 'asSnakeCase'],
-            'controller' => ['New', 'asCamelCase'],
+            'controller' => ['Update', 'asCamelCase'],
             'action' => ['Index', 'asCamelCase'],
         ];
     }
@@ -51,20 +51,18 @@ class CreateController extends BaseCommand
         $scope = $this->parameters['scope'];
         $controller = $this->parameters['controller'];
         $isBackend = $scope === 'adminhtml';
-
         $classScope = $isBackend ? '\\Controller\\Adminhtml' : '\\Controller';
         $classTemplate = new ClassTemplate(
             $this->parameters['action'],
             $this->maker->getModuleFullNamespace() . $classScope . "\\$controller"
         );
 
-        $this->parameters['before_backend'] = $isBackend ? ' before="Magento_Backend"' : '';
         $this->parameters['router_id'] = $isBackend ? 'admin' : 'standard';
         $this->parameters['dependencies'] = $isBackend ?
             ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
             ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
-        $this->parameters['class_name'] = $classTemplate->getClassName();
-        $this->parameters['name_space'] = $classTemplate->getClassNamespace();
+        $this->parameters['action'] = $classTemplate->getClassName();
+        $this->parameters['name_space_controller'] = $classTemplate->getClassNamespace();
         $filePath = [
             'controller.tpl.php' => $classTemplate->getClassFile(),
             'routes.tpl.php'     => "etc/$scope/routes.xml"

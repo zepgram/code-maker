@@ -1,14 +1,14 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space ?>;
+namespace <?= $name_space_block ?>;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
- * Class <?= $class_name ?>.
+ * Class <?= $class_block ?>.
  */
-class <?= $class_name ?> extends Template
+class <?= $class_block ?> extends Template
 {
     public function __construct(Context $context, array $data = [])
     {
