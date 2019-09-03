@@ -45,7 +45,7 @@ class ClassTemplate
         $className = explode('/', $className);
         $subDirectories = [];
         foreach ($className as $string) {
-            $subDirectories[] = ucwords($string);
+            $subDirectories[] = Format::ucwords($string);
         }
 
         return implode('/', $subDirectories);

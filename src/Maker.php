@@ -27,6 +27,8 @@ class Maker implements MakerInterface
 
     private $filesPath = [];
 
+    private $isInitialized;
+
     public function getAppDirectory()
     {
         return $this->appDirectory;
@@ -112,6 +114,18 @@ class Maker implements MakerInterface
     public function setFilesPath(array $filePath)
     {
         $this->filesPath = $filePath;
+
+        return $this;
+    }
+
+    public function getIsInitialized()
+    {
+        return $this->isInitialized;
+    }
+
+    public function setIsInitialized(bool $isInitialized)
+    {
+        $this->isInitialized = $isInitialized;
 
         return $this;
     }

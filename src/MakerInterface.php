@@ -40,4 +40,8 @@ interface MakerInterface
     public function getFilesPath();
 
     public function setFilesPath(array $filesPath);
+
+    public function setIsInitialized(bool $isInitialized);
+
+    public function getIsInitialized();
 }

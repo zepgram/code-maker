@@ -6,4 +6,4 @@
 $viewModel = $block->getViewModel();
 ?>
 
-<?= '<?= $viewModel->getHelloWorld() ?>' ?>
+<?= '<?= $viewModel->getHelloWorld() ?>' . "\n" ?>

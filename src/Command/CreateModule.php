@@ -31,12 +31,16 @@ class CreateModule extends BaseCommand
     /**
      * {@inheritdoc}
      */
+    protected function isModuleInitialized()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->isModuleInitialized() && $this->getName() === 'create:module') {
-            $this->initializeModule();
-        }
-
         parent::execute($input, $output);
     }
 }

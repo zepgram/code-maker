@@ -24,7 +24,7 @@ class Format
         $value = preg_replace('/[^a-zA-Z0-9_]/', '_', $value);
         $value = preg_replace('/(?<=\\w)([A-Z])/', '_$1', $value);
         $value = preg_replace('/_{2,}/', '_', $value);
-        $value = strtolower($value);
+        $value = self::lowercase($value);
 
         return $value;
     }
@@ -36,7 +36,7 @@ class Format
      */
     public static function asCamelCase(string $str)
     {
-        return strtr(ucwords(strtr($str, ['_' => ' ', '.' => ' ', '\\' => ' '])), [' ' => '']);
+        return strtr(self::ucwords(strtr($str, ['_' => ' ', '.' => ' ', '\\' => ' '])), [' ' => '']);
     }
 
     /**
@@ -46,7 +46,7 @@ class Format
      */
     public static function lowercase(string $string)
     {
-        return strtolower($string);
+        return strtolower(trim($string));
     }
 
     /**
@@ -56,6 +56,6 @@ class Format
      */
     public static function ucwords(string $string)
     {
-        return ucwords($string);
+        return ucwords(trim($string));
     }
 }

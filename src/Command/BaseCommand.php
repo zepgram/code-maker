@@ -13,8 +13,10 @@ namespace Zepgram\CodeMaker;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Zepgram\CodeMaker\Generator\Templates;
 
@@ -69,16 +71,15 @@ class BaseCommand extends Command
     }
 
     /**
-     * Initialize module
+     * @param string $statement
+     * @param array $files
+     * @param OutputInterface $output
      */
-    protected function initializeModule()
+    private function printFiles(string $statement, array $files, OutputInterface $output)
     {
-        $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
-            ->setFilesPath(array_merge([
-                'module.tpl.php'       => 'etc/module.xml',
-                'registration.tpl.php' => 'registration.php',
-                'composer.tpl.php'     => 'composer.json'
-            ], $this->maker->getFilesPath()));
+        foreach ($files as $fileName => $content) {
+            $output->writeln("<info>$statement</info>: $fileName");
+        }
     }
 
     /**
@@ -119,7 +120,7 @@ class BaseCommand extends Command
     }
 
     /**
-     * Display files created
+     * Main entry point
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -128,16 +129,38 @@ class BaseCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->isModuleInitialized()) {
-            $this->initializeModule();
+        // Is module initialized
+        $this->maker->setIsInitialized($this->isModuleInitialized());
+
+        // Templates
+        $templates = new Templates($this->maker);
+
+        // Handle confirmation
+        $confirmed = $templates->getConfirmOperation();
+        if (!empty($confirmed && is_array($confirmed))) {
+            foreach ($confirmed as $filePath => $content) {
+                $output->write("\n");
+                $output->writeln("<info>File</info> $filePath <info>already exist</info>");
+                $question = new ConfirmationQuestion('<info>Do you want to override existing files ?</info>');
+                if (!$this->getHelper('question')->ask($input, $output, $question)) {
+                    continue;
+                }
+                $templates->addWriteOperation($filePath, $content);
+            }
         }
 
-        $template = new Templates($this->maker);
-        $createdFiles = $template->writeTemplates($input, $output, $this);
+        // Write
+        $templates->generate();
+        $append = $templates->getAppendOperation();
+        $created = $templates->getWriteOperation();
 
+        // Print
         $output->write("\n");
-        foreach ($createdFiles as $file) {
-            $output->writeln("<info>created</info>: $file");
+        if (!empty($append) && is_array($append)) {
+            $this->printFiles('append', $append, $output);
+        }
+        if (!empty($created) && is_array($created)) {
+            $this->printFiles('created', $created, $output);
         }
         $output->write("\n");
     }
@@ -208,7 +231,11 @@ class BaseCommand extends Command
 
                 return $answer;
             });
-            $answers[$parameter] = Format::$function($helper->ask($input, $output, $question));
+            $value = $helper->ask($input, $output, $question);
+            if (method_exists(Format::class, $function)) {
+                $value = Format::$function($value);
+            }
+            $answers[$parameter] = $value;
         }
 
         return $answers;

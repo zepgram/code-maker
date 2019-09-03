@@ -14,11 +14,47 @@ namespace Zepgram\CodeMaker\Generator;
 use Zepgram\CodeMaker\Maker;
 use Zepgram\CodeMaker\FileManager;
 
-class Templates extends AbstractFiles
+class Templates extends AbstractOperations
 {
+    /**
+     * @var Maker
+     */
+    protected $maker;
+
+    /**
+     * Templates constructor.
+     *
+     * @param Maker $maker
+     */
     public function __construct(Maker $maker)
     {
         $this->maker = $maker;
+        $this->writeAppDirectories();
+        $this->setFilesStatements();
+        $this->handleAppendFiles();
+    }
+
+    /**
+     * Write app directories
+     */
+    public function writeAppDirectories()
+    {
+        $appDirectory = $this->maker->getAppDirectory();
+        $namespaceDirectory = $appDirectory.$this->maker->getModuleNamespace().DIRECTORY_SEPARATOR;
+        $this->moduleDirectory = $namespaceDirectory.$this->maker->getModuleName().DIRECTORY_SEPARATOR;
+
+        FileManager::mkdir($appDirectory);
+        FileManager::mkdir($namespaceDirectory);
+        FileManager::mkdir($this->moduleDirectory);
+
+        if (!$this->maker->getIsInitialized()) {
+            $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
+                ->setFilesPath(array_merge([
+                    'module.tpl.php'       => 'etc/module.xml',
+                    'registration.tpl.php' => 'registration.php',
+                    'composer.tpl.php'     => 'composer.json'
+                ], $this->maker->getFilesPath()));
+        }
     }
 
     /**
@@ -47,5 +83,31 @@ class Templates extends AbstractFiles
         }
 
         return $templates;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function setFilesStatements()
+    {
+        foreach ($this->getTemplates() as $path => $content) {
+            $filePath = $this->getAbsoluteFilePath($path);
+            // must be append
+            if (FileManager::fileExist($filePath) && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
+                $this->addAppendOperation($path, $content);
+                continue;
+            }
+            // must be confirmed
+            if (FileManager::fileExist($filePath)) {
+                $this->addConfirmOperation($path, $content);
+                continue;
+            }
+            $this->addWriteOperation($path, $content);
+        }
+    }
+
+    public function handleAppendFiles()
+    {
+
     }
 }
