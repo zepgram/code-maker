@@ -53,6 +53,7 @@ class CreateView extends BaseCommand
             'ViewModel/'.$this->parameters['action']
         );
 
+        // todo: handle controller and action parameters (no separator allowed)
         $controller = $this->parameters['controller'];
         $controllerClass = new FormatClass(
             $this->maker->getModuleNamespace(),

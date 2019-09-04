@@ -101,13 +101,19 @@ class Management
     /**
      * @param $filePath
      * @param $content
+     *
+     * @return bool
      */
     public static function appendXmlFiles($filePath, $content)
     {
         $file = new SimpleXmlExtend(file_get_contents($filePath));
         $append = new SimpleXmlExtend($content);
-        $file->appendXML($append->children());
-        self::saveXml($filePath, $file->asXML());
+        $asChange = $file->appendXML($append->children());
+        if ($asChange) {
+            self::saveXml($filePath, $file->asXML());
+        }
+
+        return $asChange;
     }
 
     /**

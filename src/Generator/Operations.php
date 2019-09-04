@@ -60,7 +60,10 @@ abstract class Operations
         }
         if ($this->filesAppend) {
             foreach ($this->filesAppend as $path => $content) {
-                Management::appendXmlFiles($this->getAbsoluteFilePath($path), $content);
+                $asChange = Management::appendXmlFiles($this->getAbsoluteFilePath($path), $content);
+                if (!$asChange) {
+                    unset($this->filesAppend[$path]);
+                }
             }
         }
     }

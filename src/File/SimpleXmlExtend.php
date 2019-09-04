@@ -14,19 +14,27 @@ use SimpleXMLElement;
 
 class SimpleXmlExtend extends SimpleXMLElement
 {
-    private $childrens;
+    // @todo:
+    /* handle cron - node group_id (node)
+    /* handle observer - node event (node)
+    /* handle commandline - node event (node)
 
     /**
      * Add SimpleXMLElement code into a SimpleXMLElement
+     *
      * @param SimpleXMLElement $append
+     *
+     * @return bool
      */
     public function appendXML($append)
     {
+        // do not add a node already in file
         foreach ($this->children() as $base) {
             if ($append->asXML() === $base->asXML()) {
-                return;
+                return false;
             }
         }
+        // write changes
         if (trim((string)$append) === '') {
             $xml = $this->addChild($append->getName());
             foreach ($append->children() as $child) {
@@ -38,5 +46,7 @@ class SimpleXmlExtend extends SimpleXMLElement
         foreach ($append->attributes() as $n => $v) {
             $xml->addAttribute($n, $v);
         }
+
+        return true;
     }
 }

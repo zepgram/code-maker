@@ -48,6 +48,7 @@ class CreateController extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // todo: handle controller and action parameters (no separator allowed)
         $scope = $this->parameters['scope'];
         $controller = $this->parameters['controller'];
         $isBackend = $scope === 'adminhtml';
