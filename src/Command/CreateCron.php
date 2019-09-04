@@ -16,8 +16,8 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\ClassTemplate;
-use Zepgram\CodeMaker\Format;
+use Zepgram\CodeMaker\FormatClass;
+use Zepgram\CodeMaker\FormatString;
 
 class CreateCron extends BaseCommand
 {
@@ -48,17 +48,17 @@ class CreateCron extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $classTemplate = new ClassTemplate(
-            $this->parameters['cron_name'],
-            $this->maker->getModuleNamespace() . '\\Cron'
+        $classTemplate = new FormatClass(
+            $this->maker->getModuleNamespace(),
+            'Cron/'.$this->parameters['cron_name']
         );
 
-        $this->parameters['class_cron'] = $classTemplate->getClassName();
-        $this->parameters['name_space_cron'] = $classTemplate->getClassNamespace();
-        $this->parameters['use_cron'] = $classTemplate->getClassNamespace().'\\'.$classTemplate->getClassName();
-        $this->parameters['snake_case_cron'] = Format::asSnakeCase($this->parameters['use_cron']);
+        $this->parameters['class_cron'] = $classTemplate->getName();
+        $this->parameters['name_space_cron'] = $classTemplate->getNamespace();
+        $this->parameters['use_cron'] = $classTemplate->getUse();
+        $this->parameters['snake_case_cron'] = FormatString::asSnakeCase($this->parameters['use_cron']);
         $filePath = [
-            'cron.tpl.php' => $classTemplate->getClassFile(),
+            'cron.tpl.php' => $classTemplate->getFileName(),
             'crontab.tpl.php' => 'etc/crontab.xml'
         ];
         $this->maker->setTemplateParameters($this->parameters)

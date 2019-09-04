@@ -15,8 +15,8 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\Format;
-use Zepgram\CodeMaker\ClassTemplate;
+use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\FormatClass;
 
 class CreateView extends BaseCommand
 {
@@ -48,37 +48,38 @@ class CreateView extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $viewModelClass = new ClassTemplate(
-            $this->parameters['action'],
-            $this->maker->getModuleNamespace() . '\\ViewModel'
+        $viewModelClass = new FormatClass(
+            $this->maker->getModuleNamespace(),
+            'ViewModel/'.$this->parameters['action']
         );
 
         $controller = $this->parameters['controller'];
-        $controllerClass = new ClassTemplate(
-            $this->parameters['action'],
-            $this->maker->getModuleNamespace() . '\\Controller' . "\\$controller"
+        $controllerClass = new FormatClass(
+            $this->maker->getModuleNamespace(),
+            "Controller/$controller/".$this->parameters['action']
         );
 
         // controller variables
-        $this->parameters['controller'] = $controllerClass->getClassName();
-        $this->parameters['name_space_controller'] = $controllerClass->getClassNamespace();
+        $this->parameters['controller'] = $controllerClass->getName();
+        $this->parameters['name_space_controller'] = $controllerClass->getNamespace();
         $this->parameters['router_id'] = 'standard';
+        $this->parameters['route_id'] = $controllerClass->getRouterId($this->parameters['router']);
         $this->parameters['dependencies'] = [
             'Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'
         ];
 
         // view model variables
-        $this->parameters['class_view_model'] = $viewModelClass->getClassName();
-        $this->parameters['name_space_view_model'] = $viewModelClass->getClassNamespace();
-        $this->parameters['use_view_model'] = $viewModelClass->getClassNamespace().'\\'.$viewModelClass->getClassName();
-        $this->parameters['template'] = Format::asSnakeCase($this->parameters['action']);
-        $route_action = $controllerClass->getControllerRoute($this->parameters['router']);
+        $this->parameters['class_view_model'] = $viewModelClass->getName();
+        $this->parameters['name_space_view_model'] = $viewModelClass->getNamespace();
+        $this->parameters['use_view_model'] = $viewModelClass->getUse();
+        $this->parameters['template'] = FormatString::asSnakeCase($this->parameters['action']);
+        $route_action = $controllerClass->getLayoutRoute($this->parameters['router']);
         $template = $this->parameters['template'];
 
         $filePath = [
             'routes.tpl.php' => 'etc/frontend/routes.xml',
-            'controller.tpl.php' => $controllerClass->getClassFile(),
-            'view-model.tpl.php' => $viewModelClass->getClassFile(),
+            'controller.tpl.php' => $controllerClass->getFileName(),
+            'view-model.tpl.php' => $viewModelClass->getFileName(),
             'layout.tpl.php' => "view/frontend/layout/$route_action.xml",
             'template.tpl.php' => "view/frontend/templates/$template.phtml"
         ];

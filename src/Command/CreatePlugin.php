@@ -16,8 +16,8 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\ClassTemplate;
-use Zepgram\CodeMaker\Format;
+use Zepgram\CodeMaker\FormatClass;
+use Zepgram\CodeMaker\FormatString;
 
 class CreatePlugin extends BaseCommand
 {
@@ -50,21 +50,20 @@ class CreatePlugin extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $scope = $this->parameters['scope'] === 'global' ? '' : $this->parameters['scope'];
-        $classScope = $scope ? "\\Plugin\\$scope" : '\\Plugin';
-        $classTemplate = new ClassTemplate(
-            $this->parameters['plugin_name'],
-            $this->maker->getModuleNamespace() . $classScope
+        $classTemplate = new FormatClass(
+            $this->maker->getModuleNamespace(),
+            'Plugin/'.$this->parameters['plugin_name']
         );
 
         $targetClassName = explode('\\', $this->parameters['target_class']);
-        $this->parameters['class_plugin'] = $classTemplate->getClassName();
-        $this->parameters['name_space_plugin'] = $classTemplate->getClassNamespace();
-        $this->parameters['use_plugin'] = $classTemplate->getClassNamespace().'\\'.$classTemplate->getClassName();
-        $this->parameters['snake_case_plugin'] = Format::asSnakeCase($this->parameters['use_plugin']);
+        $this->parameters['class_plugin'] = $classTemplate->getName();
+        $this->parameters['name_space_plugin'] = $classTemplate->getNamespace();
+        $this->parameters['use_plugin'] = $classTemplate->getUse();
+        $this->parameters['snake_case_plugin'] = FormatString::asSnakeCase($this->parameters['use_plugin']);
         $this->parameters['target_class_name'] = array_pop($targetClassName);
         $eventPath = $scope ? "etc/$scope/di.xml" : 'etc/di.xml';
         $filePath = [
-            'plugin.tpl.php' => $classTemplate->getClassFile(),
+            'plugin.tpl.php' => $classTemplate->getFileName(),
             'di.tpl.php' => $eventPath
         ];
         $this->maker->setTemplateParameters($this->parameters)

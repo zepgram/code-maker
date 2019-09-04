@@ -13,7 +13,7 @@ namespace Zepgram\CodeMaker\Console;
 
 use Symfony\Component\Console\Application;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FileManager;
+use Zepgram\CodeMaker\File\Management;
 
 class Cli extends Application
 {
@@ -52,7 +52,7 @@ class Cli extends Application
     {
         $instanceCommand = [];
         $commandDirectory = dirname(__DIR__) . '/' . explode('\\', self::COMMAND_NAME_SPACE)[2];
-        $scanDir = FileManager::scanDir($commandDirectory);
+        $scanDir = Management::scanDir($commandDirectory);
 
         foreach ($scanDir as $commandFile) {
             $command = self::COMMAND_NAME_SPACE . '\\' . str_replace('.php', '', $commandFile);

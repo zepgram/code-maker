@@ -15,7 +15,7 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\ClassTemplate;
+use Zepgram\CodeMaker\FormatClass;
 
 class CreateController extends BaseCommand
 {
@@ -51,20 +51,22 @@ class CreateController extends BaseCommand
         $scope = $this->parameters['scope'];
         $controller = $this->parameters['controller'];
         $isBackend = $scope === 'adminhtml';
-        $classScope = $isBackend ? '\\Controller\\Adminhtml' : '\\Controller';
-        $classTemplate = new ClassTemplate(
-            $this->parameters['action'],
-            $this->maker->getModuleNamespace() . $classScope . "\\$controller"
+        $classScope = $isBackend ? 'Controller/Adminhtml' : 'Controller';
+
+        $classTemplate = new FormatClass(
+            $this->maker->getModuleNamespace(),
+            $classScope . "/$controller/" . $this->parameters['action']
         );
 
         $this->parameters['router_id'] = $isBackend ? 'admin' : 'standard';
         $this->parameters['dependencies'] = $isBackend ?
             ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
             ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
-        $this->parameters['action'] = $classTemplate->getClassName();
-        $this->parameters['name_space_controller'] = $classTemplate->getClassNamespace();
+        $this->parameters['action'] = $classTemplate->getName();
+        $this->parameters['name_space_controller'] = $classTemplate->getNamespace();
+        $this->parameters['route_id'] = $classTemplate->getRouterId($this->parameters['router']);
         $filePath = [
-            'controller.tpl.php' => $classTemplate->getClassFile(),
+            'controller.tpl.php' => $classTemplate->getFileName(),
             'routes.tpl.php'     => "etc/$scope/routes.xml"
         ];
 

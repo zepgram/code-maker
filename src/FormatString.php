@@ -3,7 +3,7 @@
  * This file is part of Zepgram\CodeMaker
  *
  * @package    Zepgram\CodeMaker
- * @file       Format.php
+ * @file       StringFormat.php
  * @date       02 09 2019 14:59
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
@@ -11,7 +11,7 @@
 
 namespace Zepgram\CodeMaker;
 
-class Format
+class FormatString
 {
     /**
      * @param $value
@@ -21,7 +21,7 @@ class Format
     public static function asSnakeCase($value)
     {
         $value = trim($value);
-        $value = preg_replace('/[^a-zA-Z0-9_]/', '_', $value);
+        $value = preg_replace('/[^a-zA-Z0-9' . '_]/', '_', $value);
         $value = preg_replace('/(?<=\\w)([A-Z])/', '_$1', $value);
         $value = preg_replace('/_{2,}/', '_', $value);
         $value = self::lowercase($value);

@@ -11,14 +11,10 @@
 
 namespace Zepgram\CodeMaker\Generator;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Zepgram\CodeMaker\FileManager;
+use Zepgram\CodeMaker\File\Management;
 use Zepgram\CodeMaker\Maker;
 
-abstract class AbstractOperations
+abstract class Operations
 {
     /**
      * @var array
@@ -59,12 +55,12 @@ abstract class AbstractOperations
     {
         if ($this->filesWrite) {
             foreach ($this->filesWrite as $path => $content) {
-                FileManager::writeFiles($this->getAbsoluteFilePath($path), $content);
+                Management::writeFiles($this->getAbsoluteFilePath($path), $content);
             }
         }
         if ($this->filesAppend) {
             foreach ($this->filesAppend as $path => $content) {
-                //@todo: FileManager::appendFiles($this->getAbsoluteFilePath($path), $content);
+                Management::appendXmlFiles($this->getAbsoluteFilePath($path), $content);
             }
         }
     }

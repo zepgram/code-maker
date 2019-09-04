@@ -11,11 +11,10 @@
 
 namespace Zepgram\CodeMaker\Command;
 
-
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\ClassTemplate;
+use Zepgram\CodeMaker\FormatClass;
 
 class CreateHelper extends BaseCommand
 {
@@ -45,15 +44,15 @@ class CreateHelper extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $classTemplate = new ClassTemplate(
-            $this->parameters['class_name'],
-            $this->maker->getModuleNamespace(). '\\Helper'
+        $classTemplate = new FormatClass(
+            $this->maker->getModuleNamespace(),
+            'Helper/'.$this->parameters['class_name']
         );
 
-        $this->parameters['class_helper'] = $classTemplate->getClassName();
-        $this->parameters['name_space_helper'] = $classTemplate->getClassNamespace();
+        $this->parameters['class_helper'] = $classTemplate->getName();
+        $this->parameters['name_space_helper'] = $classTemplate->getNamespace();
         $filePath = [
-            'helper.tpl.php' => $classTemplate->getClassFile(),
+            'helper.tpl.php' => $classTemplate->getFileName(),
         ];
 
         $this->maker->setTemplateParameters($this->parameters)

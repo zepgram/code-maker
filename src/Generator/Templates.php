@@ -12,9 +12,9 @@
 namespace Zepgram\CodeMaker\Generator;
 
 use Zepgram\CodeMaker\Maker;
-use Zepgram\CodeMaker\FileManager;
+use Zepgram\CodeMaker\File\Management;
 
-class Templates extends AbstractOperations
+class Templates extends Operations
 {
     /**
      * Templates constructor.
@@ -33,7 +33,7 @@ class Templates extends AbstractOperations
      */
     public function writeAppDirectories()
     {
-        FileManager::mkdir($this->maker->getAbsolutePath());
+        Management::mkdir($this->maker->getAbsolutePath());
 
         if (!$this->maker->getIsInitialized()) {
             $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
@@ -58,11 +58,11 @@ class Templates extends AbstractOperations
                 throw new \RuntimeException("Template not found for '$templateDirectory'");
             }
 
-            $skeletons = FileManager::scanDir($absolutePathToSkeletons);
+            $skeletons = Management::scanDir($absolutePathToSkeletons);
             foreach ($skeletons as $skeleton) {
                 $filePath = $this->maker->getFilesPath();
                 if (isset($filePath[$skeleton])) {
-                    $templates[$filePath[$skeleton]] = FileManager::parseTemplate(
+                    $templates[$filePath[$skeleton]] = Management::parseTemplate(
                         "$absolutePathToSkeletons/$skeleton",
                         $this->maker->getTemplateParameters()
                     );
@@ -81,12 +81,12 @@ class Templates extends AbstractOperations
         foreach ($this->getTemplates() as $path => $content) {
             $filePath = $this->getAbsoluteFilePath($path);
             // must be append
-            if (FileManager::fileExist($filePath) && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
+            if (Management::fileExist($filePath) && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
                 $this->addAppendOperation($path, $content);
                 continue;
             }
             // must be confirmed
-            if (FileManager::fileExist($filePath)) {
+            if (Management::fileExist($filePath)) {
                 $this->addConfirmOperation($path, $content);
                 continue;
             }

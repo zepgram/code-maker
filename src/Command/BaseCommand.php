@@ -155,8 +155,8 @@ class BaseCommand extends Command
     private function setMaker()
     {
         list($vendor, $moduleName) = explode('_', $this->module);
-        $vendor = Format::ucwords($vendor);
-        $moduleName = Format::ucwords($moduleName);
+        $vendor = FormatString::ucwords($vendor);
+        $moduleName = FormatString::ucwords($moduleName);
         $appDirectory = getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY;
 
         $this->maker = new Maker();
@@ -166,8 +166,8 @@ class BaseCommand extends Command
             ->setTemplateParameters([
                 'module_name'      => $moduleName,
                 'module_namespace' => $vendor,
-                'lower_namespace'  => Format::lowercase($vendor),
-                'lower_module'     => Format::lowercase($moduleName)
+                'lower_namespace'  => FormatString::lowercase($vendor),
+                'lower_module'     => FormatString::lowercase($moduleName)
             ]);
     }
 
@@ -230,8 +230,8 @@ class BaseCommand extends Command
                 return $answer;
             });
             $value = $helper->ask($input, $output, $question);
-            if (method_exists(Format::class, $function)) {
-                $value = Format::$function($value);
+            if (method_exists(FormatString::class, $function)) {
+                $value = FormatString::$function($value);
             }
             $answers[$parameter] = $value;
         }
