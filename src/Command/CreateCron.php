@@ -50,13 +50,13 @@ class CreateCron extends BaseCommand
     {
         $classTemplate = new ClassTemplate(
             $this->parameters['cron_name'],
-            $this->maker->getModuleFullNamespace() . '\\Cron'
+            $this->maker->getModuleNamespace() . '\\Cron'
         );
 
         $this->parameters['class_cron'] = $classTemplate->getClassName();
         $this->parameters['name_space_cron'] = $classTemplate->getClassNamespace();
-        $this->parameters['use_observer'] = $classTemplate->getClassNamespace().'\\'.$classTemplate->getClassName();
-        $this->parameters['observer_snake_case'] = Format::asSnakeCase($this->parameters['use_observer']);
+        $this->parameters['use_cron'] = $classTemplate->getClassNamespace().'\\'.$classTemplate->getClassName();
+        $this->parameters['snake_case_cron'] = Format::asSnakeCase($this->parameters['use_cron']);
         $filePath = [
             'cron.tpl.php' => $classTemplate->getClassFile(),
             'crontab.tpl.php' => 'etc/crontab.xml'

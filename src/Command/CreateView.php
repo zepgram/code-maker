@@ -50,13 +50,13 @@ class CreateView extends BaseCommand
     {
         $viewModelClass = new ClassTemplate(
             $this->parameters['action'],
-            $this->maker->getModuleFullNamespace() . '\\ViewModel'
+            $this->maker->getModuleNamespace() . '\\ViewModel'
         );
 
         $controller = $this->parameters['controller'];
         $controllerClass = new ClassTemplate(
             $this->parameters['action'],
-            $this->maker->getModuleFullNamespace() . '\\Controller' . "\\$controller"
+            $this->maker->getModuleNamespace() . '\\Controller' . "\\$controller"
         );
 
         // controller variables

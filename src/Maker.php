@@ -13,13 +13,9 @@ namespace Zepgram\CodeMaker;
 
 class Maker implements MakerInterface
 {
-    private $appDirectory;
-
     private $moduleNamespace;
 
-    private $moduleName;
-
-    private $moduleFullNamespace;
+    private $absolutePath;
 
     private $templateSkeleton = [];
 
@@ -29,50 +25,26 @@ class Maker implements MakerInterface
 
     private $isInitialized;
 
-    public function getAppDirectory()
-    {
-        return $this->appDirectory;
-    }
-
-    public function setAppDirectory($appDirectory)
-    {
-        $this->appDirectory = $appDirectory;
-
-        return $this;
-    }
-
     public function getModuleNamespace()
     {
         return $this->moduleNamespace;
     }
 
-    public function setModuleNamespace($moduleNamespace)
+    public function setModuleNamespace(string $moduleNamespace)
     {
         $this->moduleNamespace = $moduleNamespace;
 
         return $this;
     }
 
-    public function getModuleName()
+    public function getAbsolutePath()
     {
-        return $this->moduleName;
+        return $this->absolutePath;
     }
 
-    public function setModuleName($moduleName)
+    public function setAbsolutePath(string $absolutePath)
     {
-        $this->moduleName = $moduleName;
-
-        return $this;
-    }
-
-    public function getModuleFullNamespace()
-    {
-        return $this->moduleFullNamespace;
-    }
-
-    public function setModuleFullNamespace($moduleFullNamespace)
-    {
-        $this->moduleFullNamespace = $moduleFullNamespace;
+        $this->absolutePath = $absolutePath;
 
         return $this;
     }
@@ -82,7 +54,7 @@ class Maker implements MakerInterface
         return $this->templateSkeleton;
     }
 
-    public function setTemplateSkeleton($templateSkeleton)
+    public function setTemplateSkeleton(array $templateSkeleton)
     {
         $this->templateSkeleton = $templateSkeleton;
 

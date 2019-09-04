@@ -32,7 +32,7 @@ class ClassTemplate
     public function __construct(string $className, string $fullNamespace)
     {
         $this->className = $this->formatClassName($className);
-        $this->fullNamespace = $fullNamespace;
+        $this->fullNamespace = Format::ucwords($fullNamespace);
     }
 
     /**
@@ -91,10 +91,14 @@ class ClassTemplate
      */
     public function getPathForNamespace()
     {
+        $names = [];
         $beforeClassName = explode('\\', $this->fullNamespace);
         unset($beforeClassName[0], $beforeClassName[1]);
+        foreach ($beforeClassName as $name) {
+            $names[] = Format::ucwords($name);
+        }
 
-        return str_replace('\\', '/', implode('\\', $beforeClassName));
+        return str_replace('\\', '/', implode('\\', $names));
     }
 
     /**

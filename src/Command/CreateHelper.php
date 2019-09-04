@@ -47,7 +47,7 @@ class CreateHelper extends BaseCommand
     {
         $classTemplate = new ClassTemplate(
             $this->parameters['class_name'],
-            $this->maker->getModuleFullNamespace(). '\\Helper'
+            $this->maker->getModuleNamespace(). '\\Helper'
         );
 
         $this->parameters['class_helper'] = $classTemplate->getClassName();

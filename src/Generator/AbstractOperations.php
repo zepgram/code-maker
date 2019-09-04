@@ -27,14 +27,10 @@ abstract class AbstractOperations
         'crontab.xml',
         'events.xml',
         'di.xml',
+        'widget.xml',
         'system.xml',
-        'config.xml'
+        'config.xml',
     ];
-
-    /**
-     * @var string
-     */
-    protected $moduleDirectory;
 
     /**
      * @var array
@@ -50,6 +46,11 @@ abstract class AbstractOperations
      * @var array
      */
     protected $filesAppend;
+
+    /**
+     * @var Maker
+     */
+    protected $maker;
 
     /**
      * Write templates
@@ -126,7 +127,7 @@ abstract class AbstractOperations
      */
     public function getAbsoluteFilePath($path)
     {
-        return $this->moduleDirectory . $path;
+        return $this->maker->getAbsolutePath() . DIRECTORY_SEPARATOR . $path;
     }
 
     /**

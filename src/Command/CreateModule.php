@@ -35,12 +35,4 @@ class CreateModule extends BaseCommand
     {
         return false;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        parent::execute($input, $output);
-    }
 }

@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -22,7 +21,7 @@ use Zepgram\CodeMaker\Generator\Templates;
 
 class BaseCommand extends Command
 {
-    const MAGENTO_DEVELOPMENT_DIRECTORY = '/app/code/';
+    const MAGENTO_DEVELOPMENT_DIRECTORY = '/app/code';
 
     /**
      * @var Maker
@@ -40,55 +39,19 @@ class BaseCommand extends Command
     public $parameters;
 
     /**
-     * Set maker instance
-     */
-    private function setMaker()
-    {
-        list($namespace, $moduleName) = explode('_', $this->module);
-        $namespace = Format::ucwords($namespace);
-        $moduleName = Format::ucwords($moduleName);
-        $templatesParameters = [
-            'module_name' => $moduleName,
-            'module_namespace' => $namespace,
-            'lower_namespace' => Format::lowercase($namespace),
-            'lower_module' => Format::lowercase($moduleName)
-        ];
-        $this->maker = new Maker();
-        $this->maker->setAppDirectory(getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY)
-            ->setModuleNamespace($namespace)
-            ->setModuleName($moduleName)
-            ->setModuleFullNamespace($namespace . "\\" . $moduleName)
-            ->setTemplateSkeleton([$this->getCommandSkeleton()])
-            ->setTemplateParameters($templatesParameters);
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getCommandSkeleton()
-    {
-        return explode(':', $this->getName())[1];
-    }
-
-    /**
-     * @param string $statement
-     * @param array $files
-     * @param OutputInterface $output
-     */
-    private function printFiles(string $statement, array $files, OutputInterface $output)
-    {
-        foreach ($files as $fileName => $content) {
-            $output->writeln("<info>$statement</info>: $fileName");
-        }
-    }
-
-    /**
      * @return bool
      */
     protected function isModuleInitialized()
     {
-        return file_exists($this->maker->getAppDirectory().$this->maker->getModuleNamespace().
-            DIRECTORY_SEPARATOR.$this->maker->getModuleName().'/registration.php');
+        return file_exists($this->maker->getAbsolutePath().'/registration.php');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getParameters()
+    {
+        return [];
     }
 
     /**
@@ -156,13 +119,56 @@ class BaseCommand extends Command
 
         // Print
         $output->write("\n");
+        $output->write("<comment>--- Module $this->module ---</comment>\r\n");
         if (!empty($append) && is_array($append)) {
-            $this->printFiles('append', $append, $output);
+            $this->printFiles('modified', $append, $output);
         }
         if (!empty($created) && is_array($created)) {
             $this->printFiles('created', $created, $output);
         }
         $output->write("\n");
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getCommandSkeleton()
+    {
+        return explode(':', $this->getName())[1];
+    }
+
+    /**
+     * @param string $statement
+     * @param array $files
+     * @param OutputInterface $output
+     */
+    private function printFiles(string $statement, array $files, OutputInterface $output)
+    {
+        foreach ($files as $fileName => $content) {
+            $output->writeln("<info>$statement</info>: $fileName");
+        }
+    }
+
+    /**
+     * Set maker instance
+     */
+    private function setMaker()
+    {
+        list($vendor, $moduleName) = explode('_', $this->module);
+        $vendor = Format::ucwords($vendor);
+        $moduleName = Format::ucwords($moduleName);
+        $appDirectory = getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY;
+
+        $this->maker = new Maker();
+        $this->maker->setModuleNamespace($vendor . "\\" . $moduleName)
+            ->setAbsolutePath("$appDirectory/$vendor/$moduleName")
+            ->setTemplateSkeleton([$this->getCommandSkeleton()])
+            ->setTemplateParameters([
+                'module_name'      => $moduleName,
+                'module_namespace' => $vendor,
+                'lower_namespace'  => Format::lowercase($vendor),
+                'lower_module'     => Format::lowercase($moduleName)
+            ]);
     }
 
     /**
@@ -172,7 +178,7 @@ class BaseCommand extends Command
      *
      * @return Question
      */
-    protected function formattedQuestion($question, $comment = false, $default = null)
+    private function formattedQuestion($question, $comment = false, $default = null)
     {
         if ($comment) {
             $default = $default ? $comment : null;
@@ -188,7 +194,7 @@ class BaseCommand extends Command
      *
      * @return ChoiceQuestion
      */
-    protected function formattedChoiceQuestion(string $parameter, array $values)
+    private function formattedChoiceQuestion(string $parameter, array $values)
     {
         return new ChoiceQuestion(
             "Please select your $parameter",
@@ -198,20 +204,12 @@ class BaseCommand extends Command
     }
 
     /**
-     * @return array
-     */
-    protected function getParameters()
-    {
-        return [];
-    }
-
-    /**
      * @param            $input
      * @param            $output
      *
      * @return array
      */
-    protected function askParameters($input, $output)
+    private function askParameters($input, $output)
     {
         $answers = [];
         foreach ($this->getParameters() as $parameter => list($comment, $function)) {

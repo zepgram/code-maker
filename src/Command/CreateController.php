@@ -54,7 +54,7 @@ class CreateController extends BaseCommand
         $classScope = $isBackend ? '\\Controller\\Adminhtml' : '\\Controller';
         $classTemplate = new ClassTemplate(
             $this->parameters['action'],
-            $this->maker->getModuleFullNamespace() . $classScope . "\\$controller"
+            $this->maker->getModuleNamespace() . $classScope . "\\$controller"
         );
 
         $this->parameters['router_id'] = $isBackend ? 'admin' : 'standard';

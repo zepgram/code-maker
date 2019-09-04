@@ -47,7 +47,7 @@ class CreateBlock extends BaseCommand
     {
         $classTemplate = new ClassTemplate(
             $this->parameters['block_name'],
-            $this->maker->getModuleFullNamespace() . '\\Block'
+            $this->maker->getModuleNamespace() . '\\Block'
         );
 
         $this->parameters['class_block'] = $classTemplate->getClassName();

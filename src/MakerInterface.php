@@ -13,25 +13,17 @@ namespace Zepgram\CodeMaker;
 
 interface MakerInterface
 {
-    public function getAppDirectory();
-
-    public function setAppDirectory($appDirectory);
-
     public function getModuleNamespace();
 
-    public function setModuleNamespace($namespace);
+    public function setModuleNamespace(string $moduleNamespace);
 
-    public function getModuleName();
+    public function getAbsolutePath();
 
-    public function setModuleName($moduleNamespace);
-
-    public function getModuleFullNamespace();
-
-    public function setModuleFullNamespace($moduleFullNamespace);
+    public function setAbsolutePath(string $absolutePath);
 
     public function getTemplateSkeleton();
 
-    public function setTemplateSkeleton($templateSkeleton);
+    public function setTemplateSkeleton(array $templateSkeleton);
 
     public function getTemplateParameters();
 
@@ -41,7 +33,7 @@ interface MakerInterface
 
     public function setFilesPath(array $filesPath);
 
-    public function setIsInitialized(bool $isInitialized);
-
     public function getIsInitialized();
+
+    public function setIsInitialized(bool $isInitialized);
 }

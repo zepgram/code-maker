@@ -17,11 +17,6 @@ use Zepgram\CodeMaker\FileManager;
 class Templates extends AbstractOperations
 {
     /**
-     * @var Maker
-     */
-    protected $maker;
-
-    /**
      * Templates constructor.
      *
      * @param Maker $maker
@@ -31,7 +26,6 @@ class Templates extends AbstractOperations
         $this->maker = $maker;
         $this->writeAppDirectories();
         $this->setFilesStatements();
-        $this->handleAppendFiles();
     }
 
     /**
@@ -39,13 +33,7 @@ class Templates extends AbstractOperations
      */
     public function writeAppDirectories()
     {
-        $appDirectory = $this->maker->getAppDirectory();
-        $namespaceDirectory = $appDirectory.$this->maker->getModuleNamespace().DIRECTORY_SEPARATOR;
-        $this->moduleDirectory = $namespaceDirectory.$this->maker->getModuleName().DIRECTORY_SEPARATOR;
-
-        FileManager::mkdir($appDirectory);
-        FileManager::mkdir($namespaceDirectory);
-        FileManager::mkdir($this->moduleDirectory);
+        FileManager::mkdir($this->maker->getAbsolutePath());
 
         if (!$this->maker->getIsInitialized()) {
             $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
@@ -104,10 +92,5 @@ class Templates extends AbstractOperations
             }
             $this->addWriteOperation($path, $content);
         }
-    }
-
-    public function handleAppendFiles()
-    {
-
     }
 }
