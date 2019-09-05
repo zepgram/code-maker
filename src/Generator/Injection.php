@@ -68,10 +68,12 @@ class Injection
         } else {
             // append to construct
             $bracketBefore = strstr($construct, ')', true);
-            $instanceValue = $this->parameters['source_class_name'].' $'.$this->parameters['parameter'];
+            $bracketBefore = $this->removeLastOccurence("\n", ',', $bracketBefore);
+            $instanceValue = "\r\n".str_pad('',8, ' ', STR_PAD_LEFT).$this->parameters['source_class_name'].' $'.$this->parameters['parameter'];
             $parameter = strstr($content, $instanceValue);
             if ($parameter === false) {
-                $headerContent = $constructBefore . $bracketBefore . ", $instanceValue) \r\n" . str_pad('{',5, ' ', STR_PAD_LEFT);
+                $lastLine = substr(rtrim($bracketBefore), -1) !== ',' ? ',' : '';
+                $headerContent = $constructBefore.$bracketBefore.$lastLine.$instanceValue."\r\n" . str_pad(') {',7, ' ', STR_PAD_LEFT);
                 $variables = strstr($construct, '{');
                 $variables = $this->removeFirstOccurrence($variables, '{');
                 $param = $this->parameters['parameter'];
@@ -98,6 +100,18 @@ class Injection
         return [$path, $fileContent];
     }
 
+    public function removeLastOccurence($search, $replace, $subject)
+    {
+        $pos = strrpos($subject, $search);
+
+        if($pos !== false)
+        {
+            $subject = substr_replace($subject, $replace, $pos, strlen($search));
+        }
+
+        return $subject;
+    }
+    
     /**
      * @param $str
      * @param $strFind
