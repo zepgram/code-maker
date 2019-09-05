@@ -16,12 +16,12 @@ class FormatClass
     /**
      * @var string|null
      */
-    private $className;
+    protected $className;
 
     /**
      * @var string
      */
-    private $moduleNamespace;
+    protected $moduleNamespace;
 
     /**
      * ClassGenerator constructor.

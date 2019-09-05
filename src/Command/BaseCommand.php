@@ -12,11 +12,16 @@
 namespace Zepgram\CodeMaker;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
+use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
+use Zepgram\CodeMaker\File\Management;
 use Zepgram\CodeMaker\Generator\Templates;
 
 class BaseCommand extends Command
@@ -37,22 +42,6 @@ class BaseCommand extends Command
      * @var array
      */
     public $parameters;
-
-    /**
-     * @return bool
-     */
-    protected function isModuleInitialized()
-    {
-        return file_exists($this->maker->getAbsolutePath().'/registration.php');
-    }
-
-    /**
-     * @return array
-     */
-    protected function getParameters()
-    {
-        return [];
-    }
 
     /**
      * @param InputInterface  $input
@@ -116,37 +105,56 @@ class BaseCommand extends Command
         $templates->generate();
         $append = $templates->getAppendOperation();
         $created = $templates->getWriteOperation();
+        $injected = $templates->getInjectionOperation();
 
         // Print
-        $output->write("\n");
-        $output->write("<comment>--- Module $this->module ---</comment>\r\n");
-        if (!empty($append) && is_array($append)) {
-            $this->printFiles('modified', $append, $output);
+        if (empty($append) && empty($created) && empty($injected)) {
+            $output->writeln("\nNo change detected");
+            return;
         }
-        if (!empty($created) && is_array($created)) {
-            $this->printFiles('created', $created, $output);
-        }
-        $output->write("\n");
+        $this->printFiles(['created' => $created, 'modified' => $append, 'injected' => $injected], $output);
     }
 
     /**
      * @return mixed
      */
-    private function getCommandSkeleton()
+    protected function getCommandSkeleton()
     {
         return explode(':', $this->getName())[1];
     }
 
     /**
-     * @param string $statement
-     * @param array $files
+     * @return bool
+     */
+    protected function isModuleInitialized()
+    {
+        return file_exists(Management::$moduleDirectory.'/registration.php');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getParameters()
+    {
+        return [];
+    }
+
+    /**
+     * @param array $statements
      * @param OutputInterface $output
      */
-    private function printFiles(string $statement, array $files, OutputInterface $output)
+    private function printFiles(array $statements, OutputInterface $output)
     {
-        foreach ($files as $fileName => $content) {
-            $output->writeln("<info>$statement</info>: $fileName");
+        $output->write("\n");
+        $output->writeln("--- $this->module ---");
+        foreach ($statements as $state => $statement) {
+            if (!empty($statement)) {
+                foreach ($statement as $fileName => $content) {
+                    $output->writeln("<info>$state</info>: $fileName");
+                }
+            }
         }
+        $output->write("\n");
     }
 
     /**
@@ -158,10 +166,11 @@ class BaseCommand extends Command
         $vendor = FormatString::ucwords($vendor);
         $moduleName = FormatString::ucwords($moduleName);
         $appDirectory = getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY;
+        Management::setMagentoAppDirectory($appDirectory);
+        Management::setModuleDirectory("$appDirectory/$vendor/$moduleName");
 
         $this->maker = new Maker();
         $this->maker->setModuleNamespace($vendor . "\\" . $moduleName)
-            ->setAbsolutePath("$appDirectory/$vendor/$moduleName")
             ->setTemplateSkeleton([$this->getCommandSkeleton()])
             ->setTemplateParameters([
                 'module_name'      => $moduleName,
@@ -187,6 +196,7 @@ class BaseCommand extends Command
 
         return new Question("<info>$question</info>:\r\n > ");
     }
+
 
     /**
      * @param string $parameter

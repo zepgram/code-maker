@@ -27,51 +27,6 @@ class Templates extends Operations
         $this->writeAppDirectories();
         $this->setFilesStatements();
     }
-
-    /**
-     * Write app directories
-     */
-    public function writeAppDirectories()
-    {
-        Management::mkdir($this->maker->getAbsolutePath());
-
-        if (!$this->maker->getIsInitialized()) {
-            $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
-                ->setFilesPath(array_merge([
-                    'module.tpl.php'       => 'etc/module.xml',
-                    'registration.tpl.php' => 'registration.php',
-                    'composer.tpl.php'     => 'composer.json'
-                ], $this->maker->getFilesPath()));
-        }
-    }
-
-    /**
-     * @return array
-     */
-    protected function getTemplates()
-    {
-        $templates = [];
-        $templateDirectories = $this->maker->getTemplateSkeleton();
-        foreach ($templateDirectories as $templateDirectory) {
-            $absolutePathToSkeletons = dirname(__DIR__) . '/Resources/skeleton/'.$templateDirectory;
-            if (!is_dir($absolutePathToSkeletons)) {
-                throw new \RuntimeException("Template not found for '$templateDirectory'");
-            }
-
-            $skeletons = Management::scanDir($absolutePathToSkeletons);
-            foreach ($skeletons as $skeleton) {
-                $filePath = $this->maker->getFilesPath();
-                if (isset($filePath[$skeleton])) {
-                    $templates[$filePath[$skeleton]] = Management::parseTemplate(
-                        "$absolutePathToSkeletons/$skeleton",
-                        $this->maker->getTemplateParameters()
-                    );
-                }
-            }
-        }
-
-        return $templates;
-    }
     
     /**
      * {@inheritdoc}
@@ -92,5 +47,59 @@ class Templates extends Operations
             }
             $this->addWriteOperation($path, $content);
         }
+        $classInjection = $this->maker->getInjection();
+        if ($classInjection instanceof Injection) {
+            list($path, $content) = $classInjection->appendInjection();
+            if ($path && $content) {
+                $this->addInjectionOperation($path, $content);
+            }
+        }
+    }
+
+    /**
+     * Write app directories
+     */
+    private function writeAppDirectories()
+    {
+        Management::mkdir(Management::$moduleDirectory);
+
+        if (!$this->maker->getIsInitialized()) {
+            $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
+                ->setFilesPath(array_merge([
+                    'module.tpl.php'       => 'etc/module.xml',
+                    'registration.tpl.php' => 'registration.php',
+                    'composer.tpl.php'     => 'composer.json'
+                ], $this->maker->getFilesPath()));
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function getTemplates()
+    {
+        $templates = [];
+        $templateDirectories = $this->maker->getTemplateSkeleton();
+        foreach ($templateDirectories as $templateDirectory) {
+            $absolutePathToSkeletons = dirname(__DIR__) . '/Resources/skeleton/'.$templateDirectory;
+            if (!is_dir($absolutePathToSkeletons)) {
+                throw new \RuntimeException("Template not found for '$templateDirectory'");
+            }
+
+            $skeletons = Management::scanDir($absolutePathToSkeletons);
+            foreach ($skeletons as $skeleton) {
+                $filePath = $this->maker->getFilesPath();
+                if (isset($filePath[$skeleton])) {
+                    $fileName = $filePath[$skeleton];
+                    $templateContent = Management::parseTemplate(
+                        "$absolutePathToSkeletons/$skeleton",
+                        $this->maker->getTemplateParameters()
+                    );
+                    $templates[$fileName] = $templateContent;
+                }
+            }
+        }
+
+        return $templates;
     }
 }

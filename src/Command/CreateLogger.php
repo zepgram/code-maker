@@ -16,9 +16,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\FormatClass;
 use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\Generator\Injection;
+use Zepgram\CodeMaker\Generator\Templates;
 
 class CreateLogger extends BaseCommand
 {
+    const PSR_LOGGER_CLASS = 'Psr\Log\LoggerInterface';
+
     protected static $defaultName = 'create:logger';
 
     /**
@@ -36,7 +40,7 @@ class CreateLogger extends BaseCommand
     protected function getParameters()
     {
         return [
-            'class_injection' => ['Zepgram\Test\Helper\Data', 'ucwords']
+            'class_injection' => ['Zepgram/Test/Helper/Data', 'ucwords']
         ];
     }
 
@@ -45,23 +49,31 @@ class CreateLogger extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $loggerPath = explode('\\', $this->maker->getModuleNamespace());
+        $loggerFile = FormatString::asSnakeCase($loggerPath[0].'/'.$loggerPath[1]).'.log';
+
+        $this->parameters['logger_handler'] = $this->maker->getModuleNamespace().'\\Logger\\Handler';
+        $this->parameters['logger_class'] = $this->maker->getModuleNamespace().'\\Logger\\Logger';
+        $this->parameters['logger_file'] = $loggerFile;
+        $this->parameters['injected_class'] = $this->parameters['logger_class'];
+        $this->parameters['parameter'] = $this->getCommandSkeleton();
+
         $classTemplate = new FormatClass(
             $this->maker->getModuleNamespace(),
             $this->parameters['class_injection']
         );
-
-        // todo: check if targeted class for injection exist
-
-        // todo: if file exist, read it and add the dependency
-
-        // todo: if file doesn't exist
-        // -> return that virtual class as been created but targeted class could not be injected
+        $injection = new Injection(
+            $classTemplate->getFileName(),
+            self::PSR_LOGGER_CLASS,
+            $this->getCommandSkeleton()
+        );
 
         $filePath = [
-            'di.tpl.php' => 'etc/di.xml'
+            'di.tpl.php' => 'etc/di.xml',
         ];
         $this->maker->setTemplateParameters($this->parameters)
-            ->setFilesPath($filePath);
+            ->setFilesPath($filePath)
+            ->setInjection($injection);
 
         parent::execute($input, $output);
     }

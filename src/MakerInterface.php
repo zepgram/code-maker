@@ -17,10 +17,6 @@ interface MakerInterface
 
     public function setModuleNamespace(string $moduleNamespace);
 
-    public function getAbsolutePath();
-
-    public function setAbsolutePath(string $absolutePath);
-
     public function getTemplateSkeleton();
 
     public function setTemplateSkeleton(array $templateSkeleton);

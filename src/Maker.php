@@ -11,11 +11,11 @@
 
 namespace Zepgram\CodeMaker;
 
+use Zepgram\CodeMaker\Generator\Injection;
+
 class Maker implements MakerInterface
 {
     private $moduleNamespace;
-
-    private $absolutePath;
 
     private $templateSkeleton = [];
 
@@ -25,6 +25,8 @@ class Maker implements MakerInterface
 
     private $isInitialized;
 
+    private $injection;
+
     public function getModuleNamespace()
     {
         return $this->moduleNamespace;
@@ -33,18 +35,6 @@ class Maker implements MakerInterface
     public function setModuleNamespace(string $moduleNamespace)
     {
         $this->moduleNamespace = $moduleNamespace;
-
-        return $this;
-    }
-
-    public function getAbsolutePath()
-    {
-        return $this->absolutePath;
-    }
-
-    public function setAbsolutePath(string $absolutePath)
-    {
-        $this->absolutePath = $absolutePath;
 
         return $this;
     }
@@ -98,6 +88,18 @@ class Maker implements MakerInterface
     public function setIsInitialized(bool $isInitialized)
     {
         $this->isInitialized = $isInitialized;
+
+        return $this;
+    }
+
+    public function getInjection()
+    {
+        return $this->injection;
+    }
+
+    public function setInjection(Injection $injection)
+    {
+        $this->injection = $injection;
 
         return $this;
     }

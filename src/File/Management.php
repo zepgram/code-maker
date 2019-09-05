@@ -14,6 +14,32 @@ namespace Zepgram\CodeMaker\File;
 class Management
 {
     /**
+     * @var string
+     */
+    public static $magentoAppDirectory;
+
+    /**
+     * @var string
+     */
+    public static $moduleDirectory;
+
+    /**
+     * @param $path
+     */
+    public static function setMagentoAppDirectory($path)
+    {
+        self::$magentoAppDirectory = $path;
+    }
+
+    /**
+     * @param $path
+     */
+    public static function setModuleDirectory($path)
+    {
+        self::$moduleDirectory = $path;
+    }
+
+    /**
      * @param string $templatePath
      * @param array  $parameters
      *
@@ -62,18 +88,38 @@ class Management
         return (self::mkdir(dirname($directory)) and mkdir($directory));
     }
 
+    /**
+     * @param $filePath
+     *
+     * @return false|string
+     */
+    public static function readFile($filePath)
+    {
+        if (!file_exists($filePath)) {
+            throw new \RuntimeException("File $filePath doesn't exist.");
+        }
+
+        return file($filePath);
+    }
 
     /**
      * @param $filePath
-     * @param $content
      *
      * @return bool
      */
-    public static function isContentIdentical($filePath, $content)
+    public static function contentFile($filePath)
     {
-        return $content === file_get_contents($filePath);
+        $filePath = self::$magentoAppDirectory . DIRECTORY_SEPARATOR . $filePath;
+        if (!file_exists($filePath)) {
+            throw new \RuntimeException("File $filePath doesn't exist.");
+        }
+
+        return file_get_contents($filePath);
     }
 
+    /**
+     * @param $filePath
+     */
     public static function createFileDirectories($filePath)
     {
         $exploded = explode(DIRECTORY_SEPARATOR, $filePath);
