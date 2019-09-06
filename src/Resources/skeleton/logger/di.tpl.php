@@ -13,4 +13,9 @@
       </argument>
     </arguments>
   </virtualType>
+  <type name="<?= $class_injection ?>">
+    <arguments>
+      <argument name="<?= $parameter ?>" xsi:type="object"><?= $injected_class ?></argument>
+    </arguments>
+  </type>
 </config>

@@ -36,7 +36,8 @@ class Templates extends Operations
         foreach ($this->getTemplates() as $path => $content) {
             $filePath = $this->getAbsoluteFilePath($path);
             // must be append
-            if (Management::fileExist($filePath) && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
+            if (Management::fileExist($filePath) && !$this->maker->getInjection()
+                && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
                 $this->addAppendOperation($path, $content);
                 continue;
             }
@@ -95,12 +96,7 @@ class Templates extends Operations
                         "$absolutePathToSkeletons/$skeleton",
                         $this->maker->getTemplateParameters()
                     );
-                    if (isset($templates[$fileName])) {
-                        // merge di.xml
-                        $templates[$fileName] = Management::mergeContentXml($templates[$fileName], $templateContent);
-                    } else {
-                        $templates[$fileName] = $templateContent;
-                    }
+                    $templates[$fileName] = $templateContent;
                 }
             }
         }
