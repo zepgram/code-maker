@@ -95,7 +95,12 @@ class Templates extends Operations
                         "$absolutePathToSkeletons/$skeleton",
                         $this->maker->getTemplateParameters()
                     );
-                    $templates[$fileName] = $templateContent;
+                    if (isset($templates[$fileName])) {
+                        // merge di.xml
+                        $templates[$fileName] = Management::mergeContentXml($templates[$fileName], $templateContent);
+                    } else {
+                        $templates[$fileName] = $templateContent;
+                    }
                 }
             }
         }

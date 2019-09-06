@@ -109,7 +109,7 @@ class Management
      */
     public static function contentFile($filePath)
     {
-        $filePath = self::$magentoAppDirectory . DIRECTORY_SEPARATOR . $filePath;
+        $filePath = self::$moduleDirectory. DIRECTORY_SEPARATOR . $filePath;
         if (!file_exists($filePath)) {
             throw new \RuntimeException("File $filePath doesn't exist.");
         }
@@ -145,6 +145,24 @@ class Management
     }
 
     /**
+     * @param $xmlOne
+     * @param $xmlTwo
+     *
+     * @return bool
+     */
+    public static function mergeContentXml($xmlOne, $xmlTwo)
+    {
+        $file = new SimpleXmlExtend($xmlOne);
+        $append = new SimpleXmlExtend($xmlTwo);
+        $asChange = $file->appendXML($append->children());
+        if ($asChange) {
+            return $file->asXML();
+        }
+
+        return $asChange;
+    }
+
+    /**
      * @param $filePath
      * @param $content
      *
@@ -166,7 +184,7 @@ class Management
      * @param $filePath
      * @param $content
      */
-    public static function saveXml($filePath, $content)
+    public static function saveXml($filePath, $content, $save = true)
     {
         $xml = new \DomDocument('1.0');
         $xml->preserveWhiteSpace = false;

@@ -62,44 +62,48 @@ class Injection
 
         // create construct
         if ($construct === false) {
-            $absolutePathToSkeleton = dirname(__DIR__) . '/Resources/skeleton/virtual/construct.tpl.php';
+            $absolutePathToSkeleton = dirname(__DIR__) . '/Resources/skeleton/injection/construct.tpl.php';
             $appendContent = Management::parseTemplate($absolutePathToSkeleton, $this->parameters);
             $fileContent = $classHeader.'{'.$appendContent.$classContent;
-        } else {
-            // append to construct
-            $bracketBefore = strstr($construct, ')', true);
-            $bracketBefore = $this->removeLastOccurence("\n", ',', $bracketBefore);
-            $instanceValue = "\r\n".str_pad('',8, ' ', STR_PAD_LEFT).$this->parameters['source_class_name'].' $'.$this->parameters['parameter'];
-            $parameter = strstr($content, $instanceValue);
-            if ($parameter === false) {
-                $lastLine = substr(rtrim($bracketBefore), -1) !== ',' ? ',' : '';
-                $headerContent = $constructBefore.$bracketBefore.$lastLine.$instanceValue."\r\n" . str_pad(') {',7, ' ', STR_PAD_LEFT);
-                $variables = strstr($construct, '{');
-                $variables = $this->removeFirstOccurrence($variables, '{');
-                $param = $this->parameters['parameter'];
-                $variableValue = "\r\n". str_pad('$',9, ' ', STR_PAD_LEFT) . 'this->'.$param.' = $'.$param.';';
-                $variable = strstr($content, $variableValue);
-                if ($variable === false && isset($headerContent)) {
-                    $fileContent = $headerContent . $variableValue . $variables;
-                    $classHeaderBefore = strstr($fileContent, 'use', true);
-                    $classHeaderAppend = strstr($fileContent, 'use');
-                    $use = strstr($fileContent, $this->parameters['source_class']);
-                    if ($use === false) {
-                        $classHeaderAppend = 'use ' . $this->parameters['source_class'] . ";\r\n" . $classHeaderAppend;
-                        $fileContent = $classHeaderBefore . $classHeaderAppend;
-                    }
+
+            return [$filePath, $fileContent];
+        }
+
+        // append to construct
+        $bracketBefore = strstr($construct, ')', true);
+        $bracketBefore = $this->removeLastOccurence("\n", ',', $bracketBefore);
+        $instanceValue = "\r\n".str_pad('',8, ' ', STR_PAD_LEFT).$this->parameters['source_class_name'].' $'.$this->parameters['parameter'];
+        $parameter = strstr($content, $instanceValue);
+        if ($parameter === false) {
+            $lastLine = substr(rtrim($bracketBefore), -1) !== ',' ? ',' : '';
+            $headerContent = $constructBefore.$bracketBefore.$lastLine.$instanceValue."\r\n" . str_pad(') {',7, ' ', STR_PAD_LEFT);
+            $variables = strstr($construct, '{');
+            $variables = $this->removeFirstOccurrence($variables, '{');
+            $param = $this->parameters['parameter'];
+            $variableValue = "\r\n". str_pad('$',9, ' ', STR_PAD_LEFT) . 'this->'.$param.' = $'.$param.';';
+            $variable = strstr($content, $variableValue);
+            if ($variable === false && isset($headerContent)) {
+                $fileContent = $headerContent . $variableValue . $variables;
+                $classHeaderBefore = strstr($fileContent, 'use', true);
+                $classHeaderAppend = strstr($fileContent, 'use');
+                $use = strstr($fileContent, $this->parameters['source_class']);
+                if ($use === false) {
+                    $classHeaderAppend = 'use ' . $this->parameters['source_class'] . ";\r\n" . $classHeaderAppend;
+                    $fileContent = $classHeaderBefore . $classHeaderAppend;
                 }
             }
         }
 
-
-        $path = explode('/', $filePath);
-        unset($path[0],$path[1]);
-        $path = implode('/', $path);
-
-        return [$path, $fileContent];
+        return [$filePath, $fileContent];
     }
 
+    /**
+     * @param $search
+     * @param $replace
+     * @param $subject
+     *
+     * @return mixed
+     */
     public function removeLastOccurence($search, $replace, $subject)
     {
         $pos = strrpos($subject, $search);

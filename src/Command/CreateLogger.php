@@ -40,7 +40,7 @@ class CreateLogger extends BaseCommand
     protected function getParameters()
     {
         return [
-            'class_injection' => ['Zepgram/Test/Helper/Data', 'ucwords']
+            'class_injection' => ['Helper/Data', 'ucwords']
         ];
     }
 
@@ -68,10 +68,12 @@ class CreateLogger extends BaseCommand
             $this->getCommandSkeleton()
         );
 
+        $this->parameters['class_injection'] = $classTemplate->getUse();
         $filePath = [
             'di.tpl.php' => 'etc/di.xml',
         ];
         $this->maker->setTemplateParameters($this->parameters)
+            ->setTemplateSkeleton(['logger', 'injection'])
             ->setFilesPath($filePath)
             ->setInjection($injection);
 
