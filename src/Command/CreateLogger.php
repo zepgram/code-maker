@@ -17,7 +17,6 @@ use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\FormatClass;
 use Zepgram\CodeMaker\FormatString;
 use Zepgram\CodeMaker\Generator\Injection;
-use Zepgram\CodeMaker\Generator\Templates;
 
 class CreateLogger extends BaseCommand
 {
@@ -45,6 +44,7 @@ class CreateLogger extends BaseCommand
     }
 
     /**
+     * @todo: resolve xml merge
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)

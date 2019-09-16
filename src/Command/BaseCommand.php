@@ -12,10 +12,6 @@
 namespace Zepgram\CodeMaker;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
@@ -247,5 +243,42 @@ class BaseCommand extends Command
         }
 
         return $answers;
+    }
+
+    /**
+     * @param array $fields
+     * @param bool  $isFirstField
+     *
+     * @return string|string[]|null
+     */
+    protected function askForNextField($input, $output, array $fields, bool $isFirstField)
+    {
+        if ($isFirstField) {
+            $questionText = 'New property name (press <return> to stop adding fields)';
+        } else {
+            $questionText = 'Add another property? Enter the property name (or press <return> to stop adding fields)';
+        }
+        $question = $this->formattedQuestion($questionText);
+        $helper    = $this->getHelper('question');
+        $fieldName = $helper->ask($input, $output, $question);
+
+        foreach ($fields as $field) {
+            if ($field) {
+                if (in_array(strtolower($fieldName), array_map(FormatString::class . '::lowercase', $field), false)) {
+                    $output->writeln(sprintf('<error>The "%s" property already exists.</error>', $fieldName));
+
+                    return false;
+                }
+            }
+        }
+
+        if (!$fieldName) {
+            return null;
+        }
+
+        $question = $this->formattedChoiceQuestion('type', ['string','int','bool','array']);
+        $fieldType = $helper->ask($input,$output, $question);
+
+        return ['value' => FormatString::asSnakeCase($fieldName), 'type' => $fieldType];
     }
 }

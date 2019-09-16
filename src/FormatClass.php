@@ -45,7 +45,7 @@ class FormatClass
         $className = explode('/', $className);
         $subDirectories = [];
         foreach ($className as $string) {
-            $subDirectories[] = FormatString::asCamelCase($string);
+            $subDirectories[] = FormatString::asPascaleCase($string);
         }
 
         return implode('/', $subDirectories);
