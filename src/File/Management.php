@@ -184,7 +184,7 @@ class Management
      * @param $filePath
      * @param $content
      */
-    public static function saveXml($filePath, $content, $save = true)
+    public static function saveXml($filePath, $content)
     {
         $xml = new \DomDocument('1.0');
         $xml->preserveWhiteSpace = false;

@@ -47,7 +47,7 @@ class BaseCommand extends Command
     {
         $output->write("\n");
         $helper = $this->getHelper('question');
-        $question = $this->formattedQuestion('Enter the name of the module', 'Zepgram_Test', true);
+        $question = $this->formattedQuestion('Enter the name of the module', 'Zepgram_Dev', true);
         $question->setValidator(static function ($answer) {
             if (!is_string($answer) || strpos($answer, '_') === false) {
                 throw new \RuntimeException(

@@ -19,9 +19,9 @@ class Cli extends Application
 {
     const COMMAND_NAME_SPACE = 'Zepgram\CodeMaker\Command';
 
-    const COMPOSER_FILE = 'composer.json';
+    const CONFIG_FILE = 'app/etc/config.php';
 
-    const MAGENTO_REPOSITORY = 'https://repo.magento.com';
+    const MODULE_ARRAY_KEY = 'modules';
 
     /**
      * {@inheritdoc}
@@ -37,10 +37,10 @@ class Cli extends Application
      */
     private function validateMagentoPath()
     {
-        if (!file_exists(self::COMPOSER_FILE)) {
+        if (!file_exists(self::CONFIG_FILE)) {
             throw new \RuntimeException('You must be in magento2 root directory.');
         }
-        if (strpos(file_get_contents(self::COMPOSER_FILE), self::MAGENTO_REPOSITORY) === false) {
+        if (strpos(file_get_contents(self::CONFIG_FILE), self::MODULE_ARRAY_KEY) === false) {
             throw new \RuntimeException('You are not in a magento2 application.');
         }
     }
