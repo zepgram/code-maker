@@ -3,24 +3,22 @@
  * This file is part of Zepgram\CodeMaker\Command
  *
  * @package    Zepgram\CodeMaker\Command
- * @file       CreateCron.php
- * @date       03 09 2019 14:30
+ * @file       CreateGraphQl.php
+ * @date       18 11 2019 14:21
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 
 namespace Zepgram\CodeMaker\Command;
 
-
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\FormatClass;
-use Zepgram\CodeMaker\FormatString;
 
-class CreateCron extends BaseCommand
+class CreateGraphQl extends BaseCommand
 {
-    protected static $defaultName = 'create:cron';
+    protected static $defaultName = 'create:graph-ql';
 
     /**
      * {@inheritdoc}
@@ -28,7 +26,7 @@ class CreateCron extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Create cron');
+            ->setDescription('Create GraphQl');
     }
 
     /**
@@ -37,8 +35,7 @@ class CreateCron extends BaseCommand
     protected function getParameters()
     {
         return [
-            'cron_name' => ['Job', 'ucwords'],
-            'schedule' => ['* * * * *', null]
+            'resolver_name' => ['Example', 'ucwords'],
         ];
     }
 
@@ -49,16 +46,14 @@ class CreateCron extends BaseCommand
     {
         $classTemplate = new FormatClass(
             $this->maker->getModuleNamespace(),
-            'Cron/'.$this->parameters['cron_name']
+            'Model/Resolver/'.$this->parameters['resolver_name']
         );
 
-        $this->parameters['class_cron'] = $classTemplate->getName();
-        $this->parameters['name_space_cron'] = $classTemplate->getNamespace();
-        $this->parameters['use_cron'] = $classTemplate->getUse();
-        $this->parameters['snake_case_cron'] = FormatString::asSnakeCase($this->parameters['use_cron']);
+        $this->parameters['class_resolver'] = $classTemplate->getName();
+        $this->parameters['name_space_resolver'] = $classTemplate->getNamespace();
         $filePath = [
-            'cron.tpl.php' => $classTemplate->getFileName(),
-            'crontab.tpl.php' => 'etc/crontab.xml'
+            'resolver.tpl.php' => $classTemplate->getFileName(),
+            'schema.tpl.graphqls' => 'etc/schema.graphqls'
         ];
         $this->maker->setTemplateParameters($this->parameters)
             ->setFilesPath($filePath);
