@@ -65,7 +65,8 @@ class CreateLogger extends BaseCommand
         $injection = new Injection(
             $classTemplate->getFileName(),
             self::PSR_LOGGER_CLASS,
-            $this->getCommandSkeleton()
+            $this->getCommandSkeleton(),
+            $this->maker->getModuleDirectory()
         );
 
         $this->parameters['class_injection'] = $classTemplate->getUse();

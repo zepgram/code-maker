@@ -31,8 +31,10 @@ class CreateModule extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    protected function isModuleInitialized()
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        return false;
+        parent::execute($input, $output);
+
+        $this->maker->setIsInitialized(false);
     }
 }

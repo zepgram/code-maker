@@ -23,12 +23,14 @@ class Injection
      * @param string $targetClass
      * @param string $sourceClass
      * @param string $parameter
+     * @param string $directoryPath
      */
-    public function __construct(string $targetClass, string $sourceClass, string $parameter)
+    public function __construct(string $targetClass, string $sourceClass, string $parameter, string $directoryPath)
     {
         $this->parameters['target_class'] = $targetClass;
         $this->parameters['source_class'] = $sourceClass;
         $this->parameters['parameter'] = $parameter;
+        $this->parameters['directory_path'] = $directoryPath;
     }
 
     /**
@@ -42,7 +44,7 @@ class Injection
         $filePath = $this->parameters['target_class'];
         $fileName = explode('\\', $this->parameters['source_class']);
         $this->parameters['source_class_name'] = array_pop($fileName);
-        $content = Management::contentFile($filePath);
+        $content = Management::contentFile($this->parameters['directory_path'].DIRECTORY_SEPARATOR.$filePath);
 
         // content
         $baseContent = strstr($content, '{');
@@ -71,7 +73,7 @@ class Injection
 
         // append to construct
         $bracketBefore = strstr($construct, ')', true);
-        $bracketBefore = $this->removeLastOccurence("\n", ',', $bracketBefore);
+        $bracketBefore = $this->removeLastOccurrence("\n", ',', $bracketBefore);
         $instanceValue = "\r\n".str_pad('',8, ' ', STR_PAD_LEFT).$this->parameters['source_class_name'].' $'.$this->parameters['parameter'];
         $parameter = strstr($content, $instanceValue);
         if ($parameter === false) {
@@ -104,12 +106,10 @@ class Injection
      *
      * @return mixed
      */
-    public function removeLastOccurence($search, $replace, $subject)
+    public function removeLastOccurrence($search, $replace, $subject)
     {
         $pos = strrpos($subject, $search);
-
-        if($pos !== false)
-        {
+        if ($pos !== false) {
             $subject = substr_replace($subject, $replace, $pos, strlen($search));
         }
 
@@ -117,19 +117,18 @@ class Injection
     }
     
     /**
-     * @param $str
+     * @param $subject
      * @param $strFind
      *
      * @return mixed
      */
-    public function removeFirstOccurrence($str, $strFind)
+    public function removeFirstOccurrence($subject, $strFind)
     {
-        $pos = strpos($str, $strFind);
-
+        $pos = strpos($subject, $strFind);
         if ($pos !== false) {
-            $str = substr_replace($str, '', $pos, strlen($strFind));
+            $subject = substr_replace($subject, '', $pos, strlen($strFind));
         }
 
-        return $str;
+        return $subject;
     }
 }

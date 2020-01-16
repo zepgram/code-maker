@@ -11,11 +11,16 @@
 
 namespace Zepgram\CodeMaker;
 
+use Zepgram\CodeMaker\File\Management;
 use Zepgram\CodeMaker\Generator\Injection;
 
-class Maker implements MakerInterface
+class Maker
 {
+    private $moduleDirectory;
+
     private $moduleNamespace;
+
+    private $isInitialized;
 
     private $templateSkeleton = [];
 
@@ -23,9 +28,41 @@ class Maker implements MakerInterface
 
     private $filesPath = [];
 
-    private $isInitialized;
-
     private $injection;
+
+    public function __construct($module, $template)
+    {
+        list($vendorName, $moduleName) = explode('_', $module);
+        $vendorName = FormatString::ucwords($vendorName);
+        $moduleName = FormatString::ucwords($moduleName);
+
+        $magentoDirectory = getcwd() . Management::DEVELOPMENT_DIRECTORY;
+        $moduleDirectory = "$magentoDirectory/$vendorName/$moduleName";
+        $moduleNamespace = $vendorName . "\\" . $moduleName;
+
+        $this->setModuleDirectory($moduleDirectory)
+            ->setModuleNamespace($moduleNamespace)
+            ->setTemplateSkeleton([$template])
+            ->setTemplateParameters([
+                'module_name'      => $moduleName,
+                'module_namespace' => $vendorName,
+                'lower_namespace'  => FormatString::lowercase($vendorName),
+                'lower_module'     => FormatString::lowercase($moduleName)
+            ])
+            ->setIsInitialized();
+    }
+
+    public function getModuleDirectory()
+    {
+        return $this->moduleDirectory;
+    }
+
+    public function setModuleDirectory(string $moduleDirectory)
+    {
+        $this->moduleDirectory = $moduleDirectory;
+
+        return $this;
+    }
 
     public function getModuleNamespace()
     {
@@ -35,6 +72,21 @@ class Maker implements MakerInterface
     public function setModuleNamespace(string $moduleNamespace)
     {
         $this->moduleNamespace = $moduleNamespace;
+
+        return $this;
+    }
+
+    public function getIsInitialized()
+    {
+        return $this->isInitialized;
+    }
+
+    public function setIsInitialized(bool $isInitialized = null)
+    {
+        $this->isInitialized = file_exists($this->getModuleDirectory().DIRECTORY_SEPARATOR.Management::REGISTRATION_FILE);
+        if ($isInitialized !== null) {
+            $this->isInitialized = $isInitialized;
+        }
 
         return $this;
     }
@@ -76,18 +128,6 @@ class Maker implements MakerInterface
     public function setFilesPath(array $filePath)
     {
         $this->filesPath = $filePath;
-
-        return $this;
-    }
-
-    public function getIsInitialized()
-    {
-        return $this->isInitialized;
-    }
-
-    public function setIsInitialized(bool $isInitialized)
-    {
-        $this->isInitialized = $isInitialized;
 
         return $this;
     }

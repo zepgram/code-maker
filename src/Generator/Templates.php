@@ -62,7 +62,7 @@ class Templates extends Operations
      */
     private function writeAppDirectories()
     {
-        Management::mkdir(Management::$moduleDirectory);
+        Management::mkdir($this->maker->getModuleDirectory());
 
         if (!$this->maker->getIsInitialized()) {
             $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))

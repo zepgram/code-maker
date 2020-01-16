@@ -16,28 +16,12 @@ class Management
     /**
      * @var string
      */
-    public static $magentoAppDirectory;
+    const DEVELOPMENT_DIRECTORY = '/app/code';
 
     /**
      * @var string
      */
-    public static $moduleDirectory;
-
-    /**
-     * @param $path
-     */
-    public static function setMagentoAppDirectory($path)
-    {
-        self::$magentoAppDirectory = $path;
-    }
-
-    /**
-     * @param $path
-     */
-    public static function setModuleDirectory($path)
-    {
-        self::$moduleDirectory = $path;
-    }
+    const REGISTRATION_FILE = 'registration.php';
 
     /**
      * @param string $templatePath
@@ -109,7 +93,6 @@ class Management
      */
     public static function contentFile($filePath)
     {
-        $filePath = self::$moduleDirectory. DIRECTORY_SEPARATOR . $filePath;
         if (!file_exists($filePath)) {
             throw new \RuntimeException("File $filePath doesn't exist.");
         }

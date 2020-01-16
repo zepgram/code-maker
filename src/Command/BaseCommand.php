@@ -22,17 +22,10 @@ use Zepgram\CodeMaker\Generator\Templates;
 
 class BaseCommand extends Command
 {
-    const MAGENTO_DEVELOPMENT_DIRECTORY = '/app/code';
-
     /**
      * @var Maker
      */
     public $maker;
-
-    /**
-     * @var string
-     */
-    public $module;
 
     /**
      * @var array
@@ -59,8 +52,8 @@ class BaseCommand extends Command
         });
         $question->setMaxAttempts(2);
 
-        $this->module = $helper->ask($input, $output, $question);
-        $this->setMaker();
+        $module = $helper->ask($input, $output, $question);
+        $this->maker = new Maker($module, $this->getCommandSkeleton());
 
         if (!empty($this->getParameters())) {
             $this->parameters = $this->askParameters($input, $output);
@@ -77,9 +70,6 @@ class BaseCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Is module initialized
-        $this->maker->setIsInitialized($this->isModuleInitialized());
-
         // Templates
         $templates = new Templates($this->maker);
 
@@ -120,14 +110,6 @@ class BaseCommand extends Command
     }
 
     /**
-     * @return bool
-     */
-    protected function isModuleInitialized()
-    {
-        return file_exists(Management::$moduleDirectory.'/registration.php');
-    }
-
-    /**
      * @return array
      */
     protected function getParameters()
@@ -141,8 +123,9 @@ class BaseCommand extends Command
      */
     private function printFiles(array $statements, OutputInterface $output)
     {
+        $moduleName = $this->maker->getModuleDirectory();
         $output->write("\n");
-        $output->writeln("--- $this->module ---");
+        $output->writeln("--- $moduleName ---");
         foreach ($statements as $state => $statement) {
             if (!empty($statement)) {
                 foreach ($statement as $fileName => $content) {
@@ -154,36 +137,13 @@ class BaseCommand extends Command
     }
 
     /**
-     * Set maker instance
-     */
-    private function setMaker()
-    {
-        list($vendor, $moduleName) = explode('_', $this->module);
-        $vendor = FormatString::ucwords($vendor);
-        $moduleName = FormatString::ucwords($moduleName);
-        $appDirectory = getcwd() . self::MAGENTO_DEVELOPMENT_DIRECTORY;
-        Management::setMagentoAppDirectory($appDirectory);
-        Management::setModuleDirectory("$appDirectory/$vendor/$moduleName");
-
-        $this->maker = new Maker();
-        $this->maker->setModuleNamespace($vendor . "\\" . $moduleName)
-            ->setTemplateSkeleton([$this->getCommandSkeleton()])
-            ->setTemplateParameters([
-                'module_name'      => $moduleName,
-                'module_namespace' => $vendor,
-                'lower_namespace'  => FormatString::lowercase($vendor),
-                'lower_module'     => FormatString::lowercase($moduleName)
-            ]);
-    }
-
-    /**
-     * @param      $question
-     * @param bool $comment
+     * @param string $question
+     * @param string $comment
      * @param null $default
      *
      * @return Question
      */
-    private function formattedQuestion($question, $comment = false, $default = null)
+    private function formattedQuestion(string $question, string $comment = null, $default = null)
     {
         if ($comment) {
             $default = $default ? $comment : null;
@@ -210,8 +170,8 @@ class BaseCommand extends Command
     }
 
     /**
-     * @param            $input
-     * @param            $output
+     * @param $input
+     * @param $output
      *
      * @return array
      */

@@ -38,10 +38,10 @@ class Cli extends Application
     private function validateMagentoPath()
     {
         if (!file_exists(self::CONFIG_FILE)) {
-            throw new \RuntimeException('You must be in magento2 root directory.');
+            throw new \RuntimeException('You must run this command in magento root directory.');
         }
         if (strpos(file_get_contents(self::CONFIG_FILE), self::MODULE_ARRAY_KEY) === false) {
-            throw new \RuntimeException('You are not in a magento2 application.');
+            throw new \RuntimeException('You are not in magento2 application.');
         }
     }
 

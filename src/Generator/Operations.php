@@ -153,7 +153,7 @@ abstract class Operations
      */
     public function getAbsoluteFilePath($path)
     {
-        return Management::$moduleDirectory . DIRECTORY_SEPARATOR . $path;
+        return $this->maker->getModuleDirectory().DIRECTORY_SEPARATOR.$path;
     }
 
     /**
