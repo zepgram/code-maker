@@ -41,8 +41,5 @@
         "psr-4": {
             "Zepgram\\CodeMaker\\": "src"
         }
-    },
-    "require-dev": {
-        "ergebnis/composer-normalize": "^2.3"
     }
 }
