@@ -6,14 +6,12 @@ on:
 
 jobs:
   php-cs-fixer:
-    steps:
-    - uses: actions/checkout@v2
+    runs-on: ubuntu-latest
 
     - name: OSKAR-PHP-CS-Fixer
       uses: OskarStark/php-cs-fixer-ga@2.16.1.2
   composer-normalize:
-    steps:
-    - uses: actions/checkout@v2
+    runs-on: ubuntu-latest
 
     - name: composer-normalize-action
       uses: ergebnis/composer-normalize-action@0.7.0
