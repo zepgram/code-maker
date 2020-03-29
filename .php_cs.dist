@@ -1,12 +1,9 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
-    ->exclude('tests/Fixtures')
-    ->in(__DIR__)
-    ->append([__DIR__.'/php-cs-fixer']);
+$finder = PhpCsFixer\Finder::create()->in(__DIR__);
 
 $config = PhpCsFixer\Config::create()
-    ->setRiskyAllowed(true)
+    ->setRiskyAllowed(false)
     ->setRules([
         '@PSR1' => true,
         '@PSR2' => true,
