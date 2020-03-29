@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 on:
@@ -7,13 +5,9 @@ on:
     branches: [ develop ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-
+  php-cs-fixer:
     - name: OSKAR-PHP-CS-Fixer
       uses: OskarStark/php-cs-fixer-ga@2.16.1.2
-
+  composer-normalize:
     - name: composer-normalize-action
       uses: ergebnis/composer-normalize-action@0.7.0
