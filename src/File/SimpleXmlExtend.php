@@ -26,8 +26,7 @@ class SimpleXmlExtend extends SimpleXMLElement
      *
      * @return bool
      */
-    public function appendXML($append)
-    {
+    public function appendXML($append              ) {
         // do not add a node already in file
         foreach ($this->children() as $base) {
             if ($append->asXML() === $base->asXML()) {
