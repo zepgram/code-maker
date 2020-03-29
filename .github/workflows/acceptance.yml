@@ -1,8 +1,9 @@
-name: "Continuous Integration"
+name: "CI"
 
 on:
   push:
-    branches: [ develop ]
+    branches-ignore:
+      - 'master'
 
 jobs:
   php-cs-fixer:
@@ -15,7 +16,7 @@ jobs:
       - name: Push
         run: |
           .github/push.sh \
-          "Benjamin Calef" "zepgram@gmail.com" "php-cs-fixer" \
+          "zepgram@gmail.com" "Benjamin Calef" "php-cs-fixer" \
           "${{ secrets.GITHUB_SECRET_TOKEN }}" "${{ secrets.GITHUB_PUBLIC_TOKEN }}"
   composer-normalize:
     name: Composer-Normalize
@@ -29,5 +30,5 @@ jobs:
       - name: Push
         run: |
           .github/push.sh \
-          "Benjamin Calef" "zepgram@gmail.com" "composer-normalize" \
+          "zepgram@gmail.com" "Benjamin Calef" "composer-normalize" \
           "${{ secrets.GITHUB_SECRET_TOKEN }}" "${{ secrets.GITHUB_PUBLIC_TOKEN }}"
