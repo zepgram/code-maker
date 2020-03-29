@@ -13,10 +13,6 @@ namespace Zepgram\CodeMaker\File;
 
 class Management
 {
-
-
-
-
     /**
      * @var string
      */
@@ -173,8 +169,7 @@ class Management
      * @param $filePath
      * @param $content
      */
-    public static function saveXml($filePath, $content)
-    {
+    public static function saveXml($filePath, $content) {
         $xml = new \DomDocument('1.0');
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
