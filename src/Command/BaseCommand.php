@@ -250,7 +250,7 @@ class BaseCommand extends Command
         }
 
         $question = $this->formattedChoiceQuestion('type', ['string','int','bool','array']);
-        $fieldType = $helper->ask($input,$output, $question);
+        $fieldType = $helper->ask($input, $output, $question);
 
         return ['value' => FormatString::asSnakeCase($fieldName), 'type' => $fieldType];
     }

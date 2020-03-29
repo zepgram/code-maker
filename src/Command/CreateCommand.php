@@ -50,7 +50,7 @@ class CreateCommand extends BaseCommand
             'Console/Command/'.$this->parameters['class_command']
         );
 
-        $commandNode = lcfirst(explode('\\',$classTemplate->getNamespace())[1]).$classTemplate->getName();
+        $commandNode = lcfirst(explode('\\', $classTemplate->getNamespace())[1]).$classTemplate->getName();
         $this->parameters['class_command'] = $classTemplate->getName();
         $this->parameters['class_command_node'] = $commandNode;
         $this->parameters['name_space_command'] = $classTemplate->getNamespace();

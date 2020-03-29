@@ -68,7 +68,9 @@ class Management
         if (is_dir($directory)) {
             return;
         }
-        if (@mkdir($directory) || file_exists($directory)) return true;
+        if (@mkdir($directory) || file_exists($directory)) {
+            return true;
+        }
         return (self::mkdir(dirname($directory)) and mkdir($directory));
     }
 

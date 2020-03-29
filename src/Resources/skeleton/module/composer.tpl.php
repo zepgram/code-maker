@@ -1,5 +1,6 @@
 <?php
 use Zepgram\CodeMaker\FormatString;
+
 ?>
 <?= "{\n" ?>
   "name": "<?= $lower_namespace ?>/module-<?= FormatString::asKebabCase($module_name) ?>",
