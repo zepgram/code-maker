@@ -5,16 +5,19 @@ on:
     branches: [ develop ]
 
 jobs:
-  composer-normalize:
-    name: "composer-normalize"
-
-    runs-on: "ubuntu-latest"
-
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2.0.0"
-
+      - uses: actions/checkout@v2
+      - name: PHP-CS-Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
+  composer-normalize:
+    name: Composer-Normalize
+    runs-on: ubuntu-latest
+    steps:
+        uses: actions/checkout@v2
       - name: composer-normalize-action
-        uses: ergebnis/composer-normalize-action@0.7.0
+        uses: docker://ergebnis/composer-normalize-action:latest
         env:
           COMPOSER_HOME: /root/.composer
