@@ -14,5 +14,5 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v2.0.0"
 
-      - name: "Run composer normalize"
-        uses: "docker://ergebnis/composer-normalize-action:latest"
+      - name: composer-normalize-action
+        uses: ergebnis/composer-normalize-action@0.7.0
