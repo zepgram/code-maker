@@ -9,3 +9,5 @@ if [ "$(git diff --name-status --exit-code)" ]; then
   ssh-keyscan github.com >>~/.ssh/known_hosts
   git push
 fi
+
+exit 0
