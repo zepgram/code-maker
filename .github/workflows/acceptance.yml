@@ -15,4 +15,4 @@ jobs:
         uses: "actions/checkout@v2.0.0"
 
       - name: composer-normalize-action
-        uses: ergebnis/composer-normalize-action@0.7.0
+        uses: ergebnis/composer-normalize-action@0.6.0
