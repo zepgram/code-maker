@@ -11,7 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: PHP-CS-Fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
+        uses: docker://oskarstark/php-cs-fixer-ga:latest
+        run:
+          .github/push.sh "Benjamin Calef" "zepgram@gmail.com" "php-cs-fixer"
   composer-normalize:
     name: Composer-Normalize
     runs-on: ubuntu-latest
