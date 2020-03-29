@@ -51,15 +51,13 @@ class Cli extends Application
     /**
      * @throws \RuntimeException
      */
-    private function validateMagentoVersion()
-    {
+    private function validateMagentoVersion(){
         $magentoComposerJson = json_decode(file_get_contents('vendor/magento/magento2-base/composer.json'));
         if (version_compare($magentoComposerJson->version, self::MAGENTO_VERSION, '<')) {
             throw new \RuntimeException(
                 'Zepgram code maker is only compatible with magento version >= '. self::MAGENTO_VERSION
             );
-        }
-    }
+        }}
 
     /**
      * @return array
