@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: PHP-CS-Fixer
         uses: docker://oskarstark/php-cs-fixer-ga:latest
-      - name: push
+      - name: Push
         run: |
           .github/push.sh "Benjamin Calef" "zepgram@gmail.com" "php-cs-fixer" "${{ secrets.GITHUB_SECRET_TOKEN }}"
   composer-normalize:
@@ -24,3 +24,6 @@ jobs:
         uses: docker://ergebnis/composer-normalize-action:latest
         env:
           COMPOSER_HOME: /root/.composer
+      - name: Push
+        run: |
+          .github/push.sh "Benjamin Calef" "zepgram@gmail.com" "php-cs-fixer" "${{ secrets.GITHUB_SECRET_TOKEN }}"

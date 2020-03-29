@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ "$(git diff --name-status --exit-code)" ]; then
   git config --local user.email "$1"
