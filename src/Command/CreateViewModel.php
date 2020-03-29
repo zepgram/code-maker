@@ -1,12 +1,11 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker\Command for Caudalie
+ * This file is part of Zepgram\CodeMaker\Command
  *
  * @package    Zepgram\CodeMaker\Command
  * @file       CreateViewModel.php
  * @date       30 09 2019 16:33
- * @author     bcalef <benjamin.calef@caudalie.com>
- * @copyright  2019 Caudalie Copyright (c) (https://caudalie.com)
+ * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 

@@ -26,7 +26,7 @@ class CreateCommand extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Create console');
+            ->setDescription('Create console command');
     }
 
     /**

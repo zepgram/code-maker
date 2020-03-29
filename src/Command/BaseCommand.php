@@ -23,6 +23,19 @@ use Zepgram\CodeMaker\Generator\Templates;
 class BaseCommand extends Command
 {
     /**
+     * @var array
+     */
+    const MAGENTO_AREA = [
+        'base',
+        'frontend',
+        'adminhtml',
+        'crontab',
+        'webapi_rest',
+        'webapi_soap',
+        'graphql'
+    ];
+
+    /**
      * @var Maker
      */
     public $maker;

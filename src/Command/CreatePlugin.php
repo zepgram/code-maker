@@ -1,12 +1,11 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker\Command for Caudalie
+ * This file is part of Zepgram\CodeMaker\Command
  *
  * @package    Zepgram\CodeMaker\Command
  * @file       CreateCron.php
  * @date       03 09 2019 14:01
- * @author     bcalef <benjamin.calef@caudalie.com>
- * @copyright  2019 Caudalie Copyright (c) (https://caudalie.com)
+ * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 
@@ -38,7 +37,7 @@ class CreatePlugin extends BaseCommand
     protected function getParameters()
     {
         return [
-            'scope' => ['choice_question', ['global','frontend','adminhtml']],
+            'area' => ['choice_question', self::MAGENTO_AREA],
             'plugin_name' => ['QueryText', 'ucwords'],
             'target_class' => ['Magento\CatalogSearch\Block\Result', 'ucwords']
         ];
@@ -49,7 +48,7 @@ class CreatePlugin extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $scope = $this->parameters['scope'] === 'global' ? '' : $this->parameters['scope'];
+        $area = $this->parameters['area'] === 'base' ? '' : $this->parameters['area'];
         $classTemplate = new FormatClass(
             $this->maker->getModuleNamespace(),
             'Plugin/'.$this->parameters['plugin_name']
@@ -61,7 +60,7 @@ class CreatePlugin extends BaseCommand
         $this->parameters['use_plugin'] = $classTemplate->getUse();
         $this->parameters['snake_case_plugin'] = FormatString::asSnakeCase($this->parameters['use_plugin']);
         $this->parameters['target_class_name'] = array_pop($targetClassName);
-        $eventPath = $scope ? "etc/$scope/di.xml" : 'etc/di.xml';
+        $eventPath = $area ? "etc/$area/di.xml" : 'etc/di.xml';
         $filePath = [
             'plugin.tpl.php' => $classTemplate->getFileName(),
             'di.tpl.php' => $eventPath

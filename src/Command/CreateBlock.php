@@ -36,6 +36,7 @@ class CreateBlock extends BaseCommand
     protected function getParameters()
     {
         return [
+            'area' => ['choice_question', ['frontend','adminhtml']],
             'block_name' => ['Data', 'ucwords']
         ];
     }
@@ -45,15 +46,22 @@ class CreateBlock extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $format = new FormatClass(
+        $area = $this->parameters['area'];
+        $isBackend = $area === 'adminhtml';
+        $classArea = $isBackend ? 'Block/Adminhtml' : 'Block';
+
+        $classTemplate = new FormatClass(
             $this->maker->getModuleNamespace(),
-            'Block/'.$this->parameters['block_name']
+            $classArea . "/" . $this->parameters['block_name']
         );
 
-        $this->parameters['class_block'] = $format->getName();
-        $this->parameters['name_space_block'] = $format->getNamespace();
+        $this->parameters['dependencies'] = $isBackend ?
+            ['Magento\Backend\Block\Template', 'Magento\Backend\Block\Template\Context'] :
+            ['Magento\Framework\View\Element\Template', 'Magento\Framework\View\Element\Template\Context'];
+        $this->parameters['class_block'] = $classTemplate->getName();
+        $this->parameters['name_space_block'] = $classTemplate->getNamespace();
         $filePath = [
-            'block.tpl.php' => $format->getFileName(),
+            'block.tpl.php' => $classTemplate->getFileName(),
         ];
         $this->maker->setTemplateParameters($this->parameters)
             ->setFilesPath($filePath);

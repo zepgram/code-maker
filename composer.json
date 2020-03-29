@@ -14,7 +14,8 @@
         "php": "^7.0",
         "symfony/console": "^2.8.0|^3.0.0|^4.0.0",
         "ext-simplexml": "*",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

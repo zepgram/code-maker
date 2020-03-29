@@ -14,18 +14,14 @@ namespace Zepgram\CodeMaker;
 class FormatString
 {
     /**
-     * @param      $value
-     *
-     * @param bool $upper
+     * @param string $value
+     * @param bool   $upper
      *
      * @return string|string[]|null
      */
-    public static function asSnakeCase($value, $upper = false)
+    public static function asSnakeCase(string $value, $upper = false)
     {
-        $value = trim($value);
-        $value = preg_replace('/[^a-zA-Z0-9' . '_]/', '_', $value);
-        $value = preg_replace('/(?<=\\w)([A-Z])/', '_$1', $value);
-        $value = preg_replace('/_{2,}/', '_', $value);
+        $value = self::caseFormatter('_', $value);
         $value = self::lowercase($value);
         if ($upper) {
             $value = strtoupper($value);
@@ -35,13 +31,40 @@ class FormatString
     }
 
     /**
-     * @param $value
+     * @param string $value
+     * @param bool   $upper
+     *
+     * @return string
+     */
+    public static function asKebabCase(string $value, $upper = false)
+    {
+        $value = self::caseFormatter('-', $value);
+        $value = self::lowercase($value);
+        if ($upper) {
+            $value = strtoupper($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param string $value
      *
      * @return string|string[]|null
      */
-    public static function asUpperSnakeCase($value)
+    public static function asUpperSnakeCase(string $value)
     {
         return self::asSnakeCase($value, true);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string|string[]|null
+     */
+    public static function asUpperKebabCase(string $value)
+    {
+        return self::asKebabCase($value, true);
     }
 
     /**
@@ -87,5 +110,21 @@ class FormatString
     public static function ucwords(string $string)
     {
         return ucwords(trim($string));
+    }
+
+    /**
+     * @param string $stringCard
+     * @param string $value
+     *
+     * @return string|string[]|null
+     */
+    private static function caseFormatter(string $stringCard, string $value)
+    {
+        $value = trim($value);
+        $value = preg_replace('/[^a-zA-Z0-9' . '_]/', $stringCard, $value);
+        $value = preg_replace('/(?<=\\w)([A-Z])/', $stringCard.'$1', $value);
+        $value = preg_replace('/_{2,}/', $stringCard, $value);
+
+        return $value;
     }
 }

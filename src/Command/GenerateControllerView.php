@@ -18,9 +18,9 @@ use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\FormatString;
 use Zepgram\CodeMaker\FormatClass;
 
-class CreateView extends BaseCommand
+class GenerateControllerView extends BaseCommand
 {
-    protected static $defaultName = 'create:view';
+    protected static $defaultName = 'generate:controller-view';
 
     /**
      * {@inheritdoc}

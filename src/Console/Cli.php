@@ -23,12 +23,15 @@ class Cli extends Application
 
     const MODULE_ARRAY_KEY = 'modules';
 
+    const MAGENTO_VERSION = '2.3.0';
+
     /**
      * {@inheritdoc}
      */
     protected function getDefaultCommands()
     {
         $this->validateMagentoPath();
+        $this->validateMagentoVersion();
         return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
     }
 
@@ -42,6 +45,19 @@ class Cli extends Application
         }
         if (strpos(file_get_contents(self::CONFIG_FILE), self::MODULE_ARRAY_KEY) === false) {
             throw new \RuntimeException('You are not in magento2 application.');
+        }
+    }
+
+    /**
+     * @throws \RuntimeException
+     */
+    private function validateMagentoVersion()
+    {
+        $magentoComposerJson = json_decode(file_get_contents('vendor/magento/magento2-base/composer.json'));
+        if (version_compare($magentoComposerJson->version, self::MAGENTO_VERSION, '<')) {
+            throw new \RuntimeException(
+                'Zepgram code maker is only compatible with magento version >= '. self::MAGENTO_VERSION
+            );
         }
     }
 

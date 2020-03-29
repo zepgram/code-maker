@@ -18,7 +18,7 @@ use Zepgram\CodeMaker\FormatClass;
 
 class CreateGraphQl extends BaseCommand
 {
-    protected static $defaultName = 'create:graph-ql';
+    protected static $defaultName = 'create:resolver-graph-ql';
 
     /**
      * {@inheritdoc}
@@ -26,7 +26,7 @@ class CreateGraphQl extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Create GraphQl');
+            ->setDescription('Create Resolver GraphQl');
     }
 
     /**

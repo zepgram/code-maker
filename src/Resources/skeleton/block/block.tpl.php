@@ -2,8 +2,9 @@
 
 namespace <?= $name_space_block ?>;
 
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
+<?php foreach ($dependencies as $dependency): ?>
+use <?= "$dependency;\r\n" ?>
+<?php endforeach; ?>
 
 /**
  * Class <?= $class_block ?>.

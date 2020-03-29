@@ -1,17 +1,15 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker\Command for Caudalie
+ * This file is part of Zepgram\CodeMaker\Command
  *
  * @package    Zepgram\CodeMaker\Command
  * @file       CreateCron.php
  * @date       03 09 2019 14:01
- * @author     bcalef <benjamin.calef@caudalie.com>
- * @copyright  2019 Caudalie Copyright (c) (https://caudalie.com)
+ * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
 
 namespace Zepgram\CodeMaker\Command;
-
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,7 +36,7 @@ class CreateObserver extends BaseCommand
     protected function getParameters()
     {
         return [
-            'scope' => ['choice_question', ['global','frontend','adminhtml']],
+            'area' => ['choice_question', self::MAGENTO_AREA],
             'observer_name' => ['CustomerRegister', 'ucwords'],
             'event' => ['customer_register_success', null]
         ];
@@ -49,7 +47,7 @@ class CreateObserver extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $scope = $this->parameters['scope'] === 'global' ? '' : $this->parameters['scope'];
+        $area = $this->parameters['area'] === 'base' ? '' : $this->parameters['area'];
         $classTemplate = new FormatClass(
             $this->maker->getModuleNamespace(),
             'Observer/'.$this->parameters['observer_name']
@@ -59,7 +57,7 @@ class CreateObserver extends BaseCommand
         $this->parameters['name_space_observer'] = $classTemplate->getNamespace();
         $this->parameters['use_observer'] = $classTemplate->getUse();
         $this->parameters['snake_case_observer'] = FormatString::asSnakeCase($this->parameters['use_observer']);
-        $eventPath = $scope ? "etc/$scope/events.xml" : 'etc/events.xml';
+        $eventPath = $area ? "etc/$area/events.xml" : 'etc/events.xml';
         $filePath = [
             'observer.tpl.php' => $classTemplate->getFileName(),
             'events.tpl.php' => $eventPath

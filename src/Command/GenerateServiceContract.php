@@ -18,9 +18,9 @@ use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\FormatClass;
 use Zepgram\CodeMaker\FormatString;
 
-class CreateServiceContract extends BaseCommand
+class GenerateServiceContract extends BaseCommand
 {
-    protected static $defaultName = 'create:service-contract';
+    protected static $defaultName = 'generate:service-contract';
 
     /**
      * {@inheritdoc}
@@ -90,7 +90,6 @@ class CreateServiceContract extends BaseCommand
             'entity-management-interface.tpl.php' => 'Api/'.$modelEntity->getName().'ManagementInterface.php',
             'entity-management.tpl.php' => 'Model/'.$modelEntity->getName().'Management.php',
             'search-results-interface.tpl.php' => 'Api/Data/'.$modelEntity->getName().'SearchResultsInterface.php',
-            'hydrator.tpl.php' => 'Model/EntityManager/'.$modelEntity->getName().'Hydrator.php',
             'di.tpl.php' => 'etc/di.xml'
         ];
         $this->maker->setTemplateParameters($this->parameters)

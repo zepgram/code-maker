@@ -47,7 +47,7 @@ class Maker
                 'module_name'      => $moduleName,
                 'module_namespace' => $vendorName,
                 'lower_namespace'  => FormatString::lowercase($vendorName),
-                'lower_module'     => FormatString::lowercase($moduleName)
+                'lower_module'     => FormatString::lowercase($moduleName),
             ])
             ->setIsInitialized();
     }
