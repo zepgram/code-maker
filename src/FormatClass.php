@@ -68,7 +68,7 @@ class FormatClass
         if ($className === null) {
             $className = $this->className;
         }
-        return explode('/',$className)[0];
+        return explode('/', $className)[0];
     }
 
     /**
