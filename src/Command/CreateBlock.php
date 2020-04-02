@@ -45,16 +45,13 @@ class CreateBlock extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $area = $this->parameters['area'];
-        $isBackend = $area === 'adminhtml';
-        $classArea = $isBackend ? 'Block/Adminhtml' : 'Block';
-
         $classTemplate = new FormatClass(
             $this->maker->getModuleNamespace(),
-            $classArea . "/" . $this->parameters['block_name']
+            'Block/' . $this->parameters['block_name'],
+            $this->parameters['area']
         );
 
-        $this->parameters['dependencies'] = $isBackend ?
+        $this->parameters['dependencies'] = $classTemplate->isBackend() ?
             ['Magento\Backend\Block\Template', 'Magento\Backend\Block\Template\Context'] :
             ['Magento\Framework\View\Element\Template', 'Magento\Framework\View\Element\Template\Context'];
         $this->parameters['class_block'] = $classTemplate->getName();

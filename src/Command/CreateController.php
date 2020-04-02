@@ -14,6 +14,7 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
+use Zepgram\CodeMaker\Constraint;
 use Zepgram\CodeMaker\FormatClass;
 
 class CreateController extends BaseCommand
@@ -37,8 +38,8 @@ class CreateController extends BaseCommand
         return [
             'area' => ['choice_question', ['frontend','adminhtml']],
             'router' => ['subscriber', 'asSnakeCase'],
-            'controller' => ['Update', 'asCamelCase'],
-            'action' => ['Index', 'asCamelCase'],
+            'controller' => ['Update', 'asCamelCaseNoSlash'],
+            'action' => ['Index', 'asCamelCaseNoSlash'],
         ];
     }
 
@@ -47,24 +48,21 @@ class CreateController extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // todo: handle controller and action parameters (no separator allowed)
         $area = $this->parameters['area'];
         $controller = $this->parameters['controller'];
-        $isBackend = $area === 'adminhtml';
-        $classArea = $isBackend ? 'Controller/Adminhtml' : 'Controller';
-
         $classTemplate = new FormatClass(
             $this->maker->getModuleNamespace(),
-            $classArea . "/$controller/" . $this->parameters['action']
+            "Controller/$controller/" . $this->parameters['action'],
+            $area
         );
 
-        $this->parameters['router_id'] = $isBackend ? 'admin' : 'standard';
-        $this->parameters['dependencies'] = $isBackend ?
+        $this->parameters['router_id'] = $classTemplate->isBackend() ? 'admin' : 'standard';
+        $this->parameters['dependencies'] = $classTemplate->isBackend() ?
             ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
             ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
         $this->parameters['action'] = $classTemplate->getName();
         $this->parameters['name_space_controller'] = $classTemplate->getNamespace();
-        $this->parameters['route_id'] = $classTemplate->getRouterId($this->parameters['router']);
+        $this->parameters['route_id'] = $classTemplate->getRouteId($this->parameters['router']);
         $filePath = [
             'controller.tpl.php' => $classTemplate->getFileName(),
             'routes.tpl.php'     => "etc/$area/routes.xml"

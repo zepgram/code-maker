@@ -36,8 +36,7 @@ class Templates extends Operations
         foreach ($this->getTemplates() as $path => $content) {
             $filePath = $this->getAbsoluteFilePath($path);
             // must be append
-            if (Management::fileExist($filePath) && !$this->maker->getInjection()
-                && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
+            if (Management::fileExist($filePath) && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
                 $this->addAppendOperation($path, $content);
                 continue;
             }
@@ -47,13 +46,6 @@ class Templates extends Operations
                 continue;
             }
             $this->addWriteOperation($path, $content);
-        }
-        $classInjection = $this->maker->getInjection();
-        if ($classInjection instanceof Injection) {
-            list($path, $content) = $classInjection->appendInjection();
-            if ($path && $content) {
-                $this->addInjectionOperation($path, $content);
-            }
         }
     }
 

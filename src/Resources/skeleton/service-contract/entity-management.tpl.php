@@ -11,5 +11,5 @@ use <?= $name_space_api ?>\<?= $class_entity ?>RepositoryInterface;
  */
 class <?= $class_entity ?>Management implements <?= $class_entity ?>ManagementInterface
 {
-    // @todo: put your business code here
+    // put your business code here
 }

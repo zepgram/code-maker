@@ -36,9 +36,10 @@ class GenerateControllerView extends BaseCommand
     protected function getParameters()
     {
         return [
+            'area' => ['choice_question', ['frontend','adminhtml']],
             'router' => ['hello', 'asSnakeCase'],
-            'controller' => ['Index', 'asCamelCase'],
-            'action' => ['Index', 'asCamelCase']
+            'controller' => ['Index', 'asSanitizeCamelCase'],
+            'action' => ['Index', 'asSanitizeCamelCase']
         ];
     }
 
@@ -52,21 +53,22 @@ class GenerateControllerView extends BaseCommand
             'ViewModel/'.$this->parameters['action']
         );
 
-        // todo: handle controller and action parameters (no separator allowed)
+        $area = $this->parameters['area'];
         $controller = $this->parameters['controller'];
         $controllerClass = new FormatClass(
             $this->maker->getModuleNamespace(),
-            "Controller/$controller/".$this->parameters['action']
+            "Controller/$controller/" . $this->parameters['action'],
+            $area
         );
 
         // controller variables
         $this->parameters['controller'] = $controllerClass->getName();
         $this->parameters['name_space_controller'] = $controllerClass->getNamespace();
-        $this->parameters['router_id'] = 'standard';
-        $this->parameters['route_id'] = $controllerClass->getRouterId($this->parameters['router']);
-        $this->parameters['dependencies'] = [
-            'Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'
-        ];
+        $this->parameters['router_id'] = $controllerClass->isBackend() ? 'admin' : 'standard';
+        $this->parameters['dependencies'] = $controllerClass->isBackend() ?
+            ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
+            ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
+        $this->parameters['route_id'] = $controllerClass->getRouteId($this->parameters['router']);
 
         // view model variables
         $this->parameters['class_view_model'] = $viewModelClass->getName();
@@ -77,11 +79,11 @@ class GenerateControllerView extends BaseCommand
         $template = $this->parameters['template'];
 
         $filePath = [
-            'routes.tpl.php' => 'etc/frontend/routes.xml',
+            'routes.tpl.php' => "etc/$area/routes.xml",
             'controller.tpl.php' => $controllerClass->getFileName(),
             'view-model.tpl.php' => $viewModelClass->getFileName(),
-            'layout.tpl.php' => "view/frontend/layout/$route_action.xml",
-            'template.tpl.php' => "view/frontend/templates/$template.phtml"
+            'layout.tpl.php' => "view/$area/layout/$route_action.xml",
+            'template.tpl.php' => "view/$area/templates/$template.phtml"
         ];
 
         $this->maker->setTemplateParameters($this->parameters)

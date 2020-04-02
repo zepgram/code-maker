@@ -12,10 +12,13 @@
 namespace Zepgram\CodeMaker;
 
 use Zepgram\CodeMaker\File\Management;
-use Zepgram\CodeMaker\Generator\Injection;
 
 class Maker
 {
+    private $vendorName;
+
+    private $moduleName;
+
     private $moduleDirectory;
 
     private $moduleNamespace;
@@ -28,28 +31,31 @@ class Maker
 
     private $filesPath = [];
 
-    private $injection;
-
     public function __construct($module, $template)
     {
-        list($vendorName, $moduleName) = explode('_', $module);
-        $vendorName = FormatString::ucwords($vendorName);
-        $moduleName = FormatString::ucwords($moduleName);
+        list($this->vendorName, $this->moduleName) = explode('_', $module);
+        FormatString::ucwords($this->vendorName);
+        FormatString::ucwords($this->moduleName);
 
         $magentoDirectory = getcwd() . Management::DEVELOPMENT_DIRECTORY;
-        $moduleDirectory = "$magentoDirectory/$vendorName/$moduleName";
-        $moduleNamespace = $vendorName . "\\" . $moduleName;
+        $moduleDirectory  = "$magentoDirectory/$this->vendorName/$this->moduleName";
+        $moduleNamespace  = $this->vendorName . "\\" . $this->moduleName;
 
         $this->setModuleDirectory($moduleDirectory)
             ->setModuleNamespace($moduleNamespace)
             ->setTemplateSkeleton([$template])
             ->setTemplateParameters([
-                'module_name'      => $moduleName,
-                'module_namespace' => $vendorName,
-                'lower_namespace'  => FormatString::lowercase($vendorName),
-                'lower_module'     => FormatString::lowercase($moduleName),
+                'module_name'      => $this->moduleName,
+                'module_namespace' => $this->vendorName,
+                'lower_namespace'  => FormatString::lowercase($this->vendorName),
+                'lower_module'     => FormatString::lowercase($this->moduleName),
             ])
             ->setIsInitialized();
+    }
+
+    public function getModuleName()
+    {
+        return $this->vendorName . $this->moduleName;
     }
 
     public function getModuleDirectory()
@@ -128,18 +134,6 @@ class Maker
     public function setFilesPath(array $filePath)
     {
         $this->filesPath = $filePath;
-
-        return $this;
-    }
-
-    public function getInjection()
-    {
-        return $this->injection;
-    }
-
-    public function setInjection(Injection $injection)
-    {
-        $this->injection = $injection;
 
         return $this;
     }

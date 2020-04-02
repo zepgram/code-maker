@@ -14,82 +14,94 @@ namespace Zepgram\CodeMaker;
 class FormatString
 {
     /**
-     * @param string $value
+     * @param string $string
      * @param bool   $upper
      *
      * @return string|string[]|null
      */
-    public static function asSnakeCase(string $value, $upper = false)
+    public static function asSnakeCase(string $string, $upper = false)
     {
-        $value = self::caseFormatter('_', $value);
-        $value = self::lowercase($value);
+        $string = self::caseFormatter('_', $string);
+        $string = self::lowercase($string);
         if ($upper) {
-            $value = strtoupper($value);
+            $string = strtoupper($string);
         }
 
-        return $value;
+        return $string;
     }
 
     /**
-     * @param string $value
+     * @param string $string
      * @param bool   $upper
      *
      * @return string
      */
-    public static function asKebabCase(string $value, $upper = false)
+    public static function asKebabCase(string $string, $upper = false)
     {
-        $value = self::caseFormatter('-', $value);
-        $value = self::lowercase($value);
+        $string = self::caseFormatter('-', $string);
+        $string = self::lowercase($string);
         if ($upper) {
-            $value = strtoupper($value);
+            $string = strtoupper($string);
         }
 
-        return $value;
+        return $string;
     }
 
     /**
-     * @param string $value
+     * @param string $string
      *
      * @return string|string[]|null
      */
-    public static function asUpperSnakeCase(string $value)
+    public static function asUpperSnakeCase(string $string)
     {
-        return self::asSnakeCase($value, true);
+        return self::asSnakeCase($string, true);
     }
 
     /**
-     * @param string $value
+     * @param string $string
      *
      * @return string|string[]|null
      */
-    public static function asUpperKebabCase(string $value)
+    public static function asUpperKebabCase(string $string)
     {
-        return self::asKebabCase($value, true);
+        return self::asKebabCase($string, true);
     }
 
     /**
-     * @param string $str
+     * @param string $string
      *
      * @return string
      */
-    public static function asCamelCase(string $str)
+    public static function asCamelCase(string $string)
     {
-        $str = strtr(self::ucwords(strtr($str, ['_' => ' ', '.' => ' ', '\\' => ' '])), [' ' => '']);
-        $str[0] = strtolower($str[0]);
+        $string    = strtr(self::ucwords(strtr($string, ['_' => ' ', '.' => ' ', '\\' => ' '])), [' ' => '']);
+        $string[0] = strtolower($string[0]);
 
-        return $str;
+        return $string;
     }
 
     /**
-     * @param string $str
+     * @param string $string
      *
      * @return string
      */
-    public static function asPascaleCase(string $str)
+    public static function asCamelCaseNoSlash(string $string)
     {
-        $str[0] = strtoupper($str[0]);
+        $string = self::sanitizeNeedle($string, '/');
 
-        return strtr(self::ucwords(strtr($str, ['_' => ' ', '.' => ' ', '\\' => ' '])), [' ' => '']);
+        return self::asCamelCase($string);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function asPascaleCase(string $string)
+    {
+        $string[0] = strtoupper($string[0]);
+
+        return strtr(self::ucwords(strtr($string, ['_' => ' ', '.' => ' ', '\\' => ' '])), [' ' => '']);
     }
 
     /**
@@ -110,6 +122,18 @@ class FormatString
     public static function ucwords(string $string)
     {
         return ucwords(trim($string));
+    }
+
+    /**
+     * @param string $string
+     *
+     * @param string $needle
+     *
+     * @return string
+     */
+    public static function sanitizeNeedle(string $string, string $needle)
+    {
+        return str_replace($needle, '', $string);
     }
 
     /**

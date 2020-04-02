@@ -14,14 +14,10 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatClass;
 use Zepgram\CodeMaker\FormatString;
-use Zepgram\CodeMaker\Generator\Injection;
 
 class CreateLogger extends BaseCommand
 {
-    const PSR_LOGGER_CLASS = 'Psr\Log\LoggerInterface';
-
     protected static $defaultName = 'create:logger';
 
     /**
@@ -38,8 +34,11 @@ class CreateLogger extends BaseCommand
      */
     protected function getParameters()
     {
+        $loggerPath = explode('\\', $this->maker->getModuleNamespace());
+        $loggerFile = FormatString::asSnakeCase($loggerPath[0].'/'.$loggerPath[1]).'.log';
+
         return [
-            'class_injection' => ['Helper/Data', 'ucwords']
+            'filename' => [$loggerFile, 'lowercase']
         ];
     }
 
@@ -49,34 +48,16 @@ class CreateLogger extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $loggerPath = explode('\\', $this->maker->getModuleNamespace());
-        $loggerFile = FormatString::asSnakeCase($loggerPath[0].'/'.$loggerPath[1]).'.log';
-
+        $this->parameters['logger_file'] = $this->parameters['filename'];
         $this->parameters['logger_handler'] = $this->maker->getModuleNamespace().'\\Logger\\Handler';
         $this->parameters['logger_class'] = $this->maker->getModuleNamespace().'\\Logger\\Logger';
-        $this->parameters['logger_file'] = $loggerFile;
-        $this->parameters['injected_class'] = $this->parameters['logger_class'];
-        $this->parameters['parameter'] = $this->getCommandSkeleton();
 
-        $classTemplate = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            $this->parameters['class_injection']
-        );
-        $injection = new Injection(
-            $classTemplate->getFileName(),
-            self::PSR_LOGGER_CLASS,
-            $this->getCommandSkeleton(),
-            $this->maker->getModuleDirectory()
-        );
-
-        $this->parameters['class_injection'] = $classTemplate->getUse();
         $filePath = [
             'di.tpl.php' => 'etc/di.xml',
         ];
         $this->maker->setTemplateParameters($this->parameters)
-            ->setTemplateSkeleton(['logger', 'injection'])
-            ->setFilesPath($filePath)
-            ->setInjection($injection);
+            ->setTemplateSkeleton(['logger'])
+            ->setFilesPath($filePath);
 
         parent::execute($input, $output);
     }

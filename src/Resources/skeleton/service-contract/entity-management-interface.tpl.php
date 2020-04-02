@@ -9,5 +9,5 @@ use <?= $use_class_entity_interface ?>;
  */
 interface <?= $class_entity ?>ManagementInterface
 {
-    // @todo: create your interface methods
+    // create your interface methods
 }

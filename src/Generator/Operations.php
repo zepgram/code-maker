@@ -44,11 +44,6 @@ abstract class Operations
     protected $filesAppend;
 
     /**
-     * @var array
-     */
-    protected $filesInjection;
-
-    /**
      * @var Maker
      */
     protected $maker;
@@ -69,11 +64,6 @@ abstract class Operations
                 if (!$asChange) {
                     unset($this->filesAppend[$path]);
                 }
-            }
-        }
-        if ($this->filesInjection) {
-            foreach ($this->filesInjection as $path => $content) {
-                Management::writeFiles($this->getAbsoluteFilePath($path), $content);
             }
         }
     }
@@ -103,14 +93,6 @@ abstract class Operations
     }
 
     /**
-     * @return array
-     */
-    public function getInjectionOperation()
-    {
-        return $this->filesInjection;
-    }
-
-    /**
      * @param $filePath
      * @param $content
      */
@@ -135,15 +117,6 @@ abstract class Operations
     protected function addAppendOperation($filePath, $content)
     {
         $this->filesAppend[$filePath] = $content;
-    }
-
-    /**
-     * @param $filePath
-     * @param $content
-     */
-    public function addInjectionOperation($filePath, $content)
-    {
-        $this->filesInjection[$filePath] = $content;
     }
 
     /**

@@ -24,13 +24,20 @@ class FormatClass
     protected $moduleNamespace;
 
     /**
+     * @var string
+     */
+    protected $area;
+
+    /**
      * ClassGenerator constructor.
      *
-     * @param string $className
-     * @param string $moduleNamespace
+     * @param string      $moduleNamespace
+     * @param string      $className
+     * @param string|null $area
      */
-    public function __construct(string $moduleNamespace, string $className)
+    public function __construct(string $moduleNamespace, string $className, string $area = '')
     {
+        $this->area = $area;
         $this->moduleNamespace = $moduleNamespace;
         $this->className = $this->format($className);
     }
@@ -40,15 +47,28 @@ class FormatClass
      *
      * @return string
      */
-    private function format($className)
+    private function format(string $className)
     {
-        $className = explode('/', $className);
+        $classNameExploded = explode('/', $className);
         $subDirectories = [];
-        foreach ($className as $string) {
+        foreach ($classNameExploded as $key => $string) {
+            $baseClassDirectory = $this->getBaseClassDirectory($className);
+            if ($key === 1 && $this->isBackend() &&
+                ($baseClassDirectory === 'Block' || $baseClassDirectory === 'Controller')) {
+                $subDirectories[] = 'Adminhtml';
+            }
             $subDirectories[] = FormatString::asPascaleCase($string);
         }
 
         return implode('/', $subDirectories);
+    }
+
+    public function getBaseClassDirectory(string $className = null)
+    {
+        if ($className === null) {
+            $className = $this->className;
+        }
+        return explode('/',$className)[0];
     }
 
     /**
@@ -97,7 +117,7 @@ class FormatClass
      *
      * @return string
      */
-    public function getRouterId($router)
+    public function getRouteId(string $router)
     {
         $moduleName = explode('\\', $this->moduleNamespace)[1];
 
@@ -109,11 +129,19 @@ class FormatClass
      *
      * @return string
      */
-    public function getLayoutRoute($router)
+    public function getLayoutRoute(string $router)
     {
         $controllerPath = explode('/', $this->className);
         unset($controllerPath[0]);
 
-        return $this->getRouterId($router).'_'.FormatString::asSnakeCase(implode('/', $controllerPath));
+        return $this->getRouteId($router).'_'.FormatString::asSnakeCase(implode('/', $controllerPath));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBackend()
+    {
+        return $this->area === 'adminhtml';
     }
 }

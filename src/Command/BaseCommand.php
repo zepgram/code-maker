@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Zepgram\CodeMaker\File\Management;
 use Zepgram\CodeMaker\Generator\Templates;
 
 class BaseCommand extends Command
@@ -53,6 +52,7 @@ class BaseCommand extends Command
     {
         $output->write("\n");
         $helper = $this->getHelper('question');
+
         $question = $this->formattedQuestion('Enter the name of the module', 'Zepgram_Dev', true);
         $question->setValidator(static function ($answer) {
             if (!is_string($answer) || strpos($answer, '_') === false) {
@@ -104,14 +104,13 @@ class BaseCommand extends Command
         $templates->generate();
         $append = $templates->getAppendOperation();
         $created = $templates->getWriteOperation();
-        $injected = $templates->getInjectionOperation();
 
         // Print
-        if (empty($append) && empty($created) && empty($injected)) {
+        if (empty($append) && empty($created)) {
             $output->writeln("\nNo change detected");
             return;
         }
-        $this->printFiles(['created' => $created, 'modified' => $append, 'injected' => $injected], $output);
+        $this->printFiles(['created' => $created, 'modified' => $append], $output);
     }
 
     /**

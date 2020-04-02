@@ -18,20 +18,20 @@ interface <?= $class_entity ?>Interface
 <?php foreach ($entity_fields as $field): ?>
 <?php $fieldName = FormatString::asPascaleCase($field['value']); ?>
 <?php $fieldParameter = FormatString::asCamelCase($field['value']); ?>
-     /**
-      * Get <?= "$fieldName\n" ?>
-      *
-      * @return <?= $field['type']."\n" ?>
-      */
-     public function get<?= $fieldName ?>();
+    /**
+     * Get <?= "$fieldName\n" ?>
+     *
+     * @return <?= $field['type']."\n" ?>
+     */
+    public function get<?= $fieldName ?>();
 
-     /**
-      * Set <?= "$fieldName\n" ?>
-      *
-      * @param <?= $field['type'] ?> $<?= "$fieldParameter\n" ?>
-      * @return $this<?= "\n" ?>
-      */
-     public function set<?= $fieldName ?>(<?= $field['type'] ?> $<?= $fieldParameter ?>);
+    /**
+     * Set <?= "$fieldName\n" ?>
+     *
+     * @param <?= $field['type'] ?> $<?= "$fieldParameter\n" ?>
+     * @return $this<?= "\n" ?>
+     */
+    public function set<?= $fieldName ?>(<?= $field['type'] ?> $<?= $fieldParameter ?>);
 <?php if ($field['value'] !== end($entity_fields)['value']):
 echo "\n";
 endif?>

@@ -32,6 +32,7 @@ class Cli extends Application
     {
         $this->validateMagentoPath();
         $this->validateMagentoVersion();
+
         return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
     }
 
@@ -59,6 +60,7 @@ class Cli extends Application
                 'Zepgram code maker is only compatible with magento version >= '. self::MAGENTO_VERSION
             );
         }
+        // @todo: set magento version in config to be able to load the correct version constraint
     }
 
     /**
