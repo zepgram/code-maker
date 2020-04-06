@@ -124,6 +124,11 @@ class FormatString
         return ucwords(trim($string));
     }
 
+    public static function ucfirst(string $string)
+    {
+        return ucfirst(trim($string));
+    }
+
     /**
      * @param string $string
      *
@@ -139,9 +144,19 @@ class FormatString
      *
      * @return string
      */
-    public static function getPhrase(string $string)
+    public static function getPhraseUcWord(string $string)
     {
         return self::ucwords(strtr($string, ['_' => ' ', '.' => ' ', '\\' => ' ']));
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function getPhrase(string $string)
+    {
+        return self::ucfirst(strtr($string, ['_' => ' ', '.' => ' ', '\\' => ' ']));
     }
 
     /**

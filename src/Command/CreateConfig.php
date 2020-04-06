@@ -84,7 +84,7 @@ class CreateConfig extends BaseCommand
             throw new InvalidArgumentException('Config path should be a valid path.');
         }
 
-        $sectionGroup = explode('/',$configPath);
+        $sectionGroup = explode('/', $configPath);
         $configEntity = new FormatClass(
             $this->maker->getModuleNamespace(),
             'Model/Config'

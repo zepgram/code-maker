@@ -166,6 +166,7 @@ class BaseCommand extends Command
      */
     private function formattedQuestion(string $question, string $comment = null, $default = null)
     {
+        $question = FormatString::getPhrase($question);
         if ($comment) {
             $default = $default ? $comment : null;
             return new Question("<info>$question (e.g. <comment>$comment</comment>)</info>:\r\n > ", $default);
@@ -183,8 +184,9 @@ class BaseCommand extends Command
      */
     private function formattedChoiceQuestion(string $parameter, array $values)
     {
+        $parameter = FormatString::getPhrase($parameter);
         return new ChoiceQuestion(
-            "Please select your $parameter",
+            "Please select parameter '$parameter'",
             $values,
             $values[0]
         );
@@ -293,7 +295,7 @@ class BaseCommand extends Command
                 $question = $this->formattedChoiceQuestion($parameter, $option);
             } else {
                 $parameter = $option;
-                $question = $this->formattedQuestion("Add option '$option' for field '$fieldName' (optional)");
+                $question = $this->formattedQuestion("Add '$option' for field '$fieldName' (optional)");
             }
 
             $fields[FormatString::asSnakeCase($fieldName)][$parameter] = $helper->ask($input, $output, $question);

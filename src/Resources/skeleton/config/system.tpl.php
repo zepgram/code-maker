@@ -7,20 +7,20 @@ use Zepgram\CodeMaker\FormatString;
     <system>
         <?php if ($is_new_tab): ?>
         <tab id="<?= $section ?>" translate="label">
-            <label><?= FormatString::getPhrase($section) ?></label>
+            <label><?= FormatString::getPhraseUcWord($section) ?></label>
         </tab>
         <?php endif; ?>
         <section id="<?= $section ?>" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label><?= FormatString::getPhrase($section) ?></label>
+            <label><?= FormatString::getPhraseUcWord($section) ?></label>
             <tab><?= $section ?></tab>
             <resource><?= $resource_id ?></resource>
             <group id="<?= $group ?>" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label><?= FormatString::getPhrase($group) ?></label>
+                <label><?= FormatString::getPhraseUcWord($group) ?></label>
                 <?php foreach ($config_fields as $field => $options): ?>
                 <field id="<?= $field ?>" translate="label comment" type="<?= $options['type'] ?>" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label><?= FormatString::getPhrase($field) ?></label>
+                    <label><?= FormatString::getPhraseUcWord($field) ?></label>
                     <?php if ($options['comment'] !== null): ?>
-                    <comment><?= $options['comment'] ?></comment>
+                    <comment><?= FormatString::getPhrase($options['comment']) ?></comment>
                     <?php endif; ?>
                 </field>
                 <?php endforeach; ?>
