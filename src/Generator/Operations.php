@@ -26,6 +26,7 @@ abstract class Operations
         'widget.xml',
         'system.xml',
         'config.xml',
+        'acl.xml'
     ];
 
     /**

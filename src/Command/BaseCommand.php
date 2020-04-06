@@ -12,6 +12,7 @@
 namespace Zepgram\CodeMaker;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
@@ -130,6 +131,14 @@ class BaseCommand extends Command
     }
 
     /**
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [];
+    }
+
+    /**
      * @param array $statements
      * @param OutputInterface $output
      */
@@ -218,25 +227,60 @@ class BaseCommand extends Command
     }
 
     /**
-     * @param array $fields
-     * @param bool  $isFirstField
+     * @param $input
+     * @param $output
+     * @param $fields
+     *
+     * @return array
+     */
+    protected function sequencedQuestion($input, $output, array $fields = [])
+    {
+        $isFirstField = true;
+        while (true) {
+            if ($isFirstField) {
+                $questionText = 'New property name (press <return> to stop adding fields)';
+            } else {
+                $questionText = 'Add another property? Enter the property name (or press <return> to stop adding fields)';
+            }
+            $isFirstField = false;
+            $newField = $this->askForNextField($input, $output, $fields, $questionText);
+
+            if (null === $newField) {
+                break;
+            }
+            if ($newField) {
+                $fields = $newField;
+            }
+        }
+
+        if (empty($fields)) {
+            throw new InvalidArgumentException('Please enter at least one field.');
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @param        $input
+     * @param        $output
+     * @param array  $fields
+     * @param string $questionText
      *
      * @return string|string[]|null
      */
-    protected function askForNextField($input, $output, array $fields, bool $isFirstField)
+    protected function askForNextField($input, $output, array $fields, string $questionText)
     {
-        if ($isFirstField) {
-            $questionText = 'New property name (press <return> to stop adding fields)';
-        } else {
-            $questionText = 'Add another property? Enter the property name (or press <return> to stop adding fields)';
-        }
         $question = $this->formattedQuestion($questionText);
-        $helper    = $this->getHelper('question');
+        $helper = $this->getHelper('question');
         $fieldName = $helper->ask($input, $output, $question);
 
-        foreach ($fields as $field) {
-            if ($field) {
-                if (in_array(strtolower($fieldName), array_map(FormatString::class . '::lowercase', $field), false)) {
+        if (!$fieldName) {
+            return null;
+        }
+
+        foreach ($fields as $fieldKey => $values) {
+            if ($fieldKey) {
+                if (FormatString::asSnakeCase($fieldName) === FormatString::asSnakeCase($fieldKey)) {
                     $output->writeln(sprintf('<error>The "%s" property already exists.</error>', $fieldName));
 
                     return false;
@@ -244,13 +288,17 @@ class BaseCommand extends Command
             }
         }
 
-        if (!$fieldName) {
-            return null;
+        foreach ($this->getOptions() as $parameter => $option) {
+            if (is_array($option)) {
+                $question = $this->formattedChoiceQuestion($parameter, $option);
+            } else {
+                $parameter = $option;
+                $question = $this->formattedQuestion("Add option '$option' for field '$fieldName' (optional)");
+            }
+
+            $fields[FormatString::asSnakeCase($fieldName)][$parameter] = $helper->ask($input, $output, $question);
         }
 
-        $question = $this->formattedChoiceQuestion('type', ['string','int','bool','array']);
-        $fieldType = $helper->ask($input, $output, $question);
-
-        return ['value' => FormatString::asSnakeCase($fieldName), 'type' => $fieldType];
+        return $fields;
     }
 }

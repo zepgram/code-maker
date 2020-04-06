@@ -14,10 +14,10 @@ use Magento\Framework\DataObject;
  */
 class <?= $class_entity ?> extends DataObject implements <?= $class_entity ?>Interface
 {
-<?php foreach ($entity_fields as $field): ?>
-<?php $fieldName = FormatString::asPascaleCase($field['value']); ?>
-<?php $fieldConst = FormatString::asUpperSnakeCase($field['value']); ?>
-<?php $fieldParameter = FormatString::asCamelCase($field['value']); ?>
+<?php foreach ($entity_fields as $field => $option): ?>
+<?php $fieldName = FormatString::asPascaleCase($field); ?>
+<?php $fieldConst = FormatString::asUpperSnakeCase($field); ?>
+<?php $fieldParameter = FormatString::asCamelCase($field); ?>
     /**
      * {@inheritdoc}
      */
@@ -29,13 +29,13 @@ class <?= $class_entity ?> extends DataObject implements <?= $class_entity ?>Int
     /**
      * {@inheritdoc}
      */
-    public function set<?= $fieldName ?>(<?= $field['type'] ?> $<?= $fieldParameter ?>)
+    public function set<?= $fieldName ?>(<?= $option['type'] ?> $<?= $fieldParameter ?>)
     {
         $this->setData(self::<?= $fieldConst ?>, $<?= $fieldParameter ?>);
 
         return $this;
     }
-<?php if ($field['value'] !== end($entity_fields)['value']):
+<?php if ($field !== array_key_last($entity_fields)):
 echo "\n";
 endif?>
 <?php endforeach; ?>

@@ -26,7 +26,7 @@ class CreateGraphQl extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Create Resolver GraphQl');
+            ->setDescription('Create resolver graphQL');
     }
 
     /**
@@ -35,7 +35,7 @@ class CreateGraphQl extends BaseCommand
     protected function getParameters()
     {
         return [
-            'resolver_name' => ['Example', 'ucwords'],
+            'resolver_name' => ['Wishlist', 'ucwords'],
         ];
     }
 

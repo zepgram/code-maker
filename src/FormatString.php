@@ -127,6 +127,26 @@ class FormatString
     /**
      * @param string $string
      *
+     * @return string
+     */
+    public static function uppercase(string $string)
+    {
+        return strtoupper(trim($string));
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function getPhrase(string $string)
+    {
+        return self::ucwords(strtr($string, ['_' => ' ', '.' => ' ', '\\' => ' ']));
+    }
+
+    /**
+     * @param string $string
+     *
      * @param string $needle
      *
      * @return string

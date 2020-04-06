@@ -41,6 +41,22 @@ class GenerateServiceContract extends BaseCommand
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getOptions()
+    {
+        return [
+            'type' => [
+                'string',
+                'int',
+                'float',
+                'bool',
+                'array'
+            ]
+        ];
+    }
+
+    /**
      * @todo: resolve xml merge
      * {@inheritdoc}
      */
@@ -55,31 +71,18 @@ class GenerateServiceContract extends BaseCommand
             'Api/Data/'.$this->parameters['class_name'].'Interface'
         );
 
+        $this->parameters['entity_fields'] = $this->sequencedQuestion($input, $output);
+
         $this->parameters['class_entity'] = $modelEntity->getName();
         $this->parameters['class_entity_param'] = FormatString::asCamelCase($modelEntity->getName());
         $this->parameters['name_space_entity'] = $modelEntity->getNamespace();
         $this->parameters['use_class_entity'] = $modelEntity->getUse();
-        $this->parameters['name_space_hydrator'] = $modelEntity->getNamespace().'\EntityManager';
 
         $this->parameters['class_entity_interface'] = $interfaceEntity->getName();
         $this->parameters['name_space_api'] = str_replace('\Data', '', $interfaceEntity->getNamespace());
         $this->parameters['name_space_api_data'] = $interfaceEntity->getNamespace();
         $this->parameters['use_class_entity_interface'] = $interfaceEntity->getUse();
 
-        $isFirstField = true;
-        $fields[] = ['value' => 'id', 'type' => 'int'];
-        while (true) {
-            $newField  = $this->askForNextField($input, $output, $fields, $isFirstField);
-            $isFirstField = false;
-
-            if (null === $newField) {
-                break;
-            }
-            if ($newField) {
-                $fields[] = $newField;
-            }
-        }
-        $this->parameters['entity_fields'] = $fields;
 
         $filePath = [
             'entity.tpl.php' => $modelEntity->getFileName(),

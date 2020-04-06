@@ -55,7 +55,7 @@ class Maker
 
     public function getModuleName()
     {
-        return $this->vendorName . $this->moduleName;
+        return $this->vendorName . '_' . $this->moduleName;
     }
 
     public function getModuleDirectory()
