@@ -1,15 +1,15 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_block ?>;
+namespace <?= $namespace_block ?>;
 
 <?php foreach ($dependencies as $dependency): ?>
 use <?= "$dependency;\r\n" ?>
 <?php endforeach; ?>
 
 /**
- * Class <?= $class_block ?>.
+ * Class <?= $name_block ?>.
  */
-class <?= $class_block ?> extends Template
+class <?= $name_block ?> extends Template
 {
     public function __construct(Context $context, array $data = [])
     {

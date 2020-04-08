@@ -3,7 +3,7 @@
   <type name="Magento\Framework\Console\CommandListInterface">
     <arguments>
       <argument name="commands" xsi:type="array">
-        <item name="<?= $class_command_node ?>" xsi:type="object"><?= $use_command ?></item>
+        <item name="<?= $use_snake_case_command ?>" xsi:type="object"><?= $use_command ?></item>
       </argument>
     </arguments>
   </type>

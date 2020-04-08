@@ -1,9 +1,9 @@
 <?php
-use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\Str;
 
 ?>
 <?= "{\n" ?>
-  "name": "<?= $lower_namespace ?>/module-<?= FormatString::asKebabCase($module_name) ?>",
+  "name": "<?= $lower_namespace ?>/module-<?= Str::asKebabCase($module_name) ?>",
   "description": "<?= $module_namespace ?> <?= $module_name ?>",
   "type": "magento2-module",
   "version": "0.0.1",

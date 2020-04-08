@@ -1,14 +1,14 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_helper ?>;
+namespace <?= $namespace_helper ?>;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 
 /**
- * Class <?= $class_helper ?>.
+ * Class <?= $name_helper ?>.
  */
-class <?= $class_helper ?> extends AbstractHelper
+class <?= $name_helper ?> extends AbstractHelper
 {
     public function __construct(Context $context)
     {

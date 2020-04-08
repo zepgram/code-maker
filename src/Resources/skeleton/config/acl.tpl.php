@@ -1,5 +1,5 @@
 <?php
-use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\Str;
 
 ?>
 <?= "<?xml version=\"1.0\"?>\n" ?>
@@ -9,7 +9,7 @@ use Zepgram\CodeMaker\FormatString;
             <resource id="Magento_Backend::stores">
                 <resource id="Magento_Backend::stores_settings">
                     <resource id="Magento_Config::config">
-                        <resource id="<?= $resource_id ?>" title="<?= FormatString::ucwords($section) ?> Section" translate="title"/>
+                        <resource id="<?= $resource_id ?>" title="<?= Str::ucwords($section) ?> Section" translate="title"/>
                     </resource>
                 </resource>
             </resource>

@@ -18,7 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Zepgram\CodeMaker\Generator\Templates;
+use Zepgram\CodeMaker\Renderer\Templates;
+use Zepgram\CodeMaker\Editor\Entities;
 
 class BaseCommand extends Command
 {
@@ -39,6 +40,11 @@ class BaseCommand extends Command
      * @var Maker
      */
     public $maker;
+
+    /**
+     * @var Entities
+     */
+    public $entities;
 
     /**
      * @var array
@@ -68,9 +74,14 @@ class BaseCommand extends Command
 
         $module = $helper->ask($input, $output, $question);
         $this->maker = new Maker($module, $this->getCommandSkeleton());
+        $this->entities = new Entities($this->maker);
 
         if (!empty($this->getParameters())) {
             $this->parameters = $this->askParameters($input, $output);
+        }
+
+        if (!empty($this->getOptions())) {
+            $this->parameters['option_fields'] = $this->askOptions($input, $output);
         }
     }
 
@@ -84,8 +95,9 @@ class BaseCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Templates
-        $templates = new Templates($this->maker);
+        // Populate entities
+        $this->entities->populate($this->parameters);
+        $templates = $this->entities->initTemplates();
 
         // Handle confirmation
         $confirmed = $templates->getConfirmOperation();
@@ -166,7 +178,7 @@ class BaseCommand extends Command
      */
     private function formattedQuestion(string $question, string $comment = null, $default = null)
     {
-        $question = FormatString::getPhrase($question);
+        $question = Str::getPhrase($question);
         if ($comment) {
             $default = $default ? $comment : null;
             return new Question("<info>$question (e.g. <comment>$comment</comment>)</info>:\r\n > ", $default);
@@ -184,7 +196,7 @@ class BaseCommand extends Command
      */
     private function formattedChoiceQuestion(string $parameter, array $values)
     {
-        $parameter = FormatString::getPhrase($parameter);
+        $parameter = Str::getPhrase($parameter);
         return new ChoiceQuestion(
             "Please select parameter '$parameter'",
             $values,
@@ -219,8 +231,8 @@ class BaseCommand extends Command
                 return $answer;
             });
             $value = $helper->ask($input, $output, $question);
-            if (method_exists(FormatString::class, $function)) {
-                $value = FormatString::$function($value);
+            if (method_exists(Str::class, $function)) {
+                $value = Str::$function($value);
             }
             $answers[$parameter] = $value;
         }
@@ -231,12 +243,12 @@ class BaseCommand extends Command
     /**
      * @param $input
      * @param $output
-     * @param $fields
      *
      * @return array
      */
-    protected function sequencedQuestion($input, $output, array $fields = [])
+    protected function askOptions($input, $output)
     {
+        $fields = [];
         $isFirstField = true;
         while (true) {
             if ($isFirstField) {
@@ -282,7 +294,7 @@ class BaseCommand extends Command
 
         foreach ($fields as $fieldKey => $values) {
             if ($fieldKey) {
-                if (FormatString::asSnakeCase($fieldName) === FormatString::asSnakeCase($fieldKey)) {
+                if (Str::asSnakeCase($fieldName) === Str::asSnakeCase($fieldKey)) {
                     $output->writeln(sprintf('<error>The "%s" property already exists.</error>', $fieldName));
 
                     return false;
@@ -298,7 +310,7 @@ class BaseCommand extends Command
                 $question = $this->formattedQuestion("Add '$option' for field '$fieldName' (optional)");
             }
 
-            $fields[FormatString::asSnakeCase($fieldName)][$parameter] = $helper->ask($input, $output, $question);
+            $fields[Str::asSnakeCase($fieldName)][$parameter] = $helper->ask($input, $output, $question);
         }
 
         return $fields;

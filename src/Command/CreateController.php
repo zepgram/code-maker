@@ -14,8 +14,6 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\Constraint;
-use Zepgram\CodeMaker\FormatClass;
 
 class CreateController extends BaseCommand
 {
@@ -50,26 +48,12 @@ class CreateController extends BaseCommand
     {
         $area = $this->parameters['area'];
         $controller = $this->parameters['controller'];
-        $classTemplate = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            "Controller/$controller/" . $this->parameters['action'],
-            $area
-        );
-
-        $this->parameters['router_id'] = $classTemplate->isBackend() ? 'admin' : 'standard';
-        $this->parameters['dependencies'] = $classTemplate->isBackend() ?
+        $this->parameters['dependencies'] = $this->parameters['area'] === 'adminhtml' ?
             ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
             ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
-        $this->parameters['action'] = $classTemplate->getName();
-        $this->parameters['name_space_controller'] = $classTemplate->getNamespace();
-        $this->parameters['route_id'] = $classTemplate->getRouteId($this->parameters['router']);
-        $filePath = [
-            'controller.tpl.php' => $classTemplate->getFileName(),
-            'routes.tpl.php'     => "etc/$area/routes.xml"
-        ];
 
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setFilesPath($filePath);
+        $this->entities->addEntity("Controller/$controller/" . $this->parameters['action'], 'controller.tpl.php');
+        $this->entities->addFile('routes.tpl.php', "etc/$area/routes.xml");
 
         parent::execute($input, $output);
     }

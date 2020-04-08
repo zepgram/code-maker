@@ -1,24 +1,21 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_entity ?>;
+namespace <?= $namespace_entity_repository ?>;
 
-use <?= $use_class_entity_interface ?>;
-use <?= $name_space_api ?>\<?= $class_entity ?>RepositoryInterface;
-use Magento\Framework\Api\Search\SearchResult;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\CouldNotSaveException;
+use <?= $use_entity_interface ?>;
+use <?= $use_entity_repository_interface ?>;
 
 /**
- * Class <?= $class_entity ?>Repository.
+ * Class <?= $name_entity_repository ?>.
  */
-class <?= $class_entity ?>Repository implements <?= $class_entity ?>RepositoryInterface
+class <?= $name_entity_repository ?> implements <?= "$name_entity_repository_interface\r\n" ?>
 {
     /**
      * {@inheritdoc}
      */
-    public function save(<?= $class_entity ?>Interface $<?= $class_entity_param ?>)
+    public function save(<?= $name_entity_interface ?> $<?= $name_camel_case_entity ?>)
     {
         throw new LocalizedException(__('Service not yet implemented.'));
     }
@@ -42,7 +39,7 @@ class <?= $class_entity ?>Repository implements <?= $class_entity ?>RepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function delete(<?= $class_entity ?>Interface $<?= $class_entity_param ?>)
+    public function delete(<?= $name_entity_interface ?> $<?= $name_camel_case_entity ?>)
     {
         throw new LocalizedException(__('Service not yet implemented.'));
     }

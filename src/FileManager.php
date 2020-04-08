@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of Zepgram\CodeMaker\File
+ * This file is part of Zepgram\CodeMaker
  *
  * @package    Zepgram\CodeMaker
  * @file       Management.php
@@ -9,9 +9,11 @@
  * @license    proprietary
  */
 
-namespace Zepgram\CodeMaker\File;
+namespace Zepgram\CodeMaker;
 
-class Management
+use Zepgram\CodeMaker\Xml\SimpleXmlExtend;
+
+class FileManager
 {
     /**
      * @var string

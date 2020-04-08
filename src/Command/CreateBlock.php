@@ -14,7 +14,6 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatClass;
 
 class CreateBlock extends BaseCommand
 {
@@ -45,22 +44,11 @@ class CreateBlock extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $classTemplate = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            'Block/' . $this->parameters['block_name'],
-            $this->parameters['area']
-        );
-
-        $this->parameters['dependencies'] = $classTemplate->isBackend() ?
+        $this->parameters['dependencies'] = $this->parameters['area'] === 'adminhtml' ?
             ['Magento\Backend\Block\Template', 'Magento\Backend\Block\Template\Context'] :
             ['Magento\Framework\View\Element\Template', 'Magento\Framework\View\Element\Template\Context'];
-        $this->parameters['class_block'] = $classTemplate->getName();
-        $this->parameters['name_space_block'] = $classTemplate->getNamespace();
-        $filePath = [
-            'block.tpl.php' => $classTemplate->getFileName(),
-        ];
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setFilesPath($filePath);
+
+        $this->entities->addEntity('Block/'.$this->parameters['block_name'], 'block.tpl.php');
 
         parent::execute($input, $output);
     }

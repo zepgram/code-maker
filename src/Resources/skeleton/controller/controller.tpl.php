@@ -1,26 +1,29 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_controller ?>;
+namespace <?= $namespace_controller ?>;
 
 <?php foreach ($dependencies as $dependency): ?>
 use <?= "$dependency;\r\n" ?>
 <?php endforeach; ?>
 
 /**
- * Class <?= $action ?>.
+ * Class <?= $name_controller ?>.
  */
-class <?= $action ?> extends Action
+class <?= $name_controller ?> extends Action
 {
     /**
-     * <?= $action ?> constructor.
+     * <?= $name_controller ?> constructor.
      *
-     * @param Context     $context
+     * @param Context $context
      */
     public function __construct(Context $context)
     {
         parent::__construct($context);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
 <?php if (isset($template)): ?>

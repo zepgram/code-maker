@@ -11,33 +11,47 @@
 
 namespace Zepgram\CodeMaker;
 
-use Zepgram\CodeMaker\File\Management;
+use Zepgram\CodeMaker\FileManager;
 
 class Maker
 {
+    /** @var string */
     private $vendorName;
 
+    /** @var string */
     private $moduleName;
 
+    /** @var string */
     private $moduleDirectory;
 
+    /** @var string */
     private $moduleNamespace;
 
+    /** @var bool */
     private $isInitialized;
 
+    /** @var array */
     private $templateSkeleton = [];
 
+    /** @var array */
     private $templateParameters = [];
 
+    /** @var array */
     private $filesPath = [];
 
-    public function __construct($module, $template)
+    /**
+     * Maker constructor.
+     *
+     * @param string $module
+     * @param string $template
+     */
+    public function __construct(string $module, string $template)
     {
         list($this->vendorName, $this->moduleName) = explode('_', $module);
-        FormatString::ucwords($this->vendorName);
-        FormatString::ucwords($this->moduleName);
+        Str::ucwords($this->vendorName);
+        Str::ucwords($this->moduleName);
 
-        $magentoDirectory = getcwd() . Management::DEVELOPMENT_DIRECTORY;
+        $magentoDirectory = getcwd() . FileManager::DEVELOPMENT_DIRECTORY;
         $moduleDirectory  = "$magentoDirectory/$this->vendorName/$this->moduleName";
         $moduleNamespace  = $this->vendorName . "\\" . $this->moduleName;
 
@@ -47,8 +61,8 @@ class Maker
             ->setTemplateParameters([
                 'module_name'      => $this->moduleName,
                 'module_namespace' => $this->vendorName,
-                'lower_namespace'  => FormatString::lowercase($this->vendorName),
-                'lower_module'     => FormatString::lowercase($this->moduleName),
+                'lower_namespace'  => Str::lowercase($this->vendorName),
+                'lower_module'     => Str::lowercase($this->moduleName),
             ])
             ->setIsInitialized();
     }
@@ -89,7 +103,7 @@ class Maker
 
     public function setIsInitialized(bool $isInitialized = null)
     {
-        $this->isInitialized = file_exists($this->getModuleDirectory().DIRECTORY_SEPARATOR.Management::REGISTRATION_FILE);
+        $this->isInitialized = file_exists($this->getModuleDirectory().DIRECTORY_SEPARATOR.FileManager::REGISTRATION_FILE);
         if ($isInitialized !== null) {
             $this->isInitialized = $isInitialized;
         }

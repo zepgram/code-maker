@@ -1,6 +1,6 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_command ?>;
+namespace <?= $namespace_command ?>;
 
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -8,9 +8,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class <?= $class_command ?>.
+ * Class <?= $name_command ?>.
  */
-class <?= $class_command ?> extends Command
+class <?= $name_command ?> extends Command
 {
     /**
      * Initialization of the command.

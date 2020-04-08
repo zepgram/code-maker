@@ -1,6 +1,6 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_resolver ?>;
+namespace <?= $namespace_resolver ?>;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -10,9 +10,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
-* Class <?= $class_resolver ?>.
+* Class <?= $name_resolver ?>.
 */
-class <?= "$class_resolver" ?> implements ResolverInterface
+class <?= "$name_resolver" ?> implements ResolverInterface
 {
     /**
      * @param Field            $field
@@ -25,5 +25,6 @@ class <?= "$class_resolver" ?> implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        return [];
     }
 }

@@ -14,8 +14,6 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatClass;
-use Zepgram\CodeMaker\FormatString;
 
 class CreateObserver extends BaseCommand
 {
@@ -47,23 +45,10 @@ class CreateObserver extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $area = $this->parameters['area'] === 'base' ? '' : $this->parameters['area'];
-        $classTemplate = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            'Observer/'.$this->parameters['observer_name']
-        );
-
-        $this->parameters['class_observer'] = $classTemplate->getName();
-        $this->parameters['name_space_observer'] = $classTemplate->getNamespace();
-        $this->parameters['use_observer'] = $classTemplate->getUse();
-        $this->parameters['snake_case_observer'] = FormatString::asSnakeCase($this->parameters['use_observer']);
+        $area = $this->parameters['area'] === 'base' ? false : $this->parameters['area'];
         $eventPath = $area ? "etc/$area/events.xml" : 'etc/events.xml';
-        $filePath = [
-            'observer.tpl.php' => $classTemplate->getFileName(),
-            'events.tpl.php' => $eventPath
-        ];
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setFilesPath($filePath);
+        $this->entities->addEntity('Observer/'.$this->parameters['observer_name'], 'observer.tpl.php');
+        $this->entities->addFile('events.tpl.php', $eventPath);
 
         parent::execute($input, $output);
     }

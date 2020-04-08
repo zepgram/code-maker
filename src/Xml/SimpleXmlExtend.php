@@ -8,7 +8,7 @@
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
-namespace Zepgram\CodeMaker\File;
+namespace Zepgram\CodeMaker\Xml;
 
 use SimpleXMLElement;
 

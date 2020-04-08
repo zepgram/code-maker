@@ -3,8 +3,8 @@
     <default>
         <<?= $section ?>>
             <<?= $group ?>>
-                <?php foreach ($config_fields as $field => $options): ?>
-                <<?= $field ?>><?= $options['default_value'] ?></<?= $field ?>>
+                <?php foreach ($option_fields as $field => $options): ?>
+                <<?= $field ?>><?= $options['default_value'] ?? '0' ?></<?= $field ?>>
                 <?php endforeach; ?>
             </<?= $group ?>>
         </<?= $section ?>>

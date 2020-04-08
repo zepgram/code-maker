@@ -14,8 +14,6 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatClass;
-use Zepgram\CodeMaker\FormatString;
 
 class CreateViewModel extends BaseCommand
 {
@@ -45,24 +43,7 @@ class CreateViewModel extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $viewModelClass = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            'ViewModel/'.$this->parameters['action']
-        );
-
-        // view model variables
-        $this->parameters['class_view_model'] = $viewModelClass->getName();
-        $this->parameters['name_space_view_model'] = $viewModelClass->getNamespace();
-        $this->parameters['use_view_model'] = $viewModelClass->getUse();
-        $this->parameters['template'] = FormatString::asSnakeCase($this->parameters['action']);
-
-        $filePath = [
-            'view-model.tpl.php' => $viewModelClass->getFileName(),
-        ];
-
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setTemplateSkeleton(['view'])
-            ->setFilesPath($filePath);
+        $this->entities->addEntity('ViewModel/'.$this->parameters['action'], 'view_model.tpl.php');
 
         parent::execute($input, $output);
     }

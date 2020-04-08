@@ -8,8 +8,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatClass;
-use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\Str;
 
 class CreateConfig extends BaseCommand
 {
@@ -27,7 +26,7 @@ class CreateConfig extends BaseCommand
     protected function getParameters()
     {
         return [
-            'is_new_tab' => ['choice_question', ['yes','no']],
+            'is_new_section' => ['choice_question', ['no','yes']],
             'config_path' => ['sales/general', '']
         ];
     }
@@ -85,34 +84,24 @@ class CreateConfig extends BaseCommand
         }
 
         $sectionGroup = explode('/', $configPath);
-        $configEntity = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            'Model/Config'
-        );
-        $configFields = $this->sequencedQuestion($input, $output);
-
-        $this->parameters['is_new_tab'] = $this->parameters['is_new_tab'] === 'yes' ? true : false;
-        $this->parameters['class_entity'] = $configEntity->getName();
-        $this->parameters['name_space_entity'] = $configEntity->getNamespace();
-        $this->parameters['config_fields'] = $configFields;
+        $this->parameters['is_new_section'] = $this->parameters['is_new_section'] === 'yes' ? true : false;
         $this->parameters['section'] = $sectionGroup[0];
         $this->parameters['group'] = $sectionGroup[1];
         $this->parameters['resource_id'] = $this->maker->getModuleName() . '::config_' . $sectionGroup[0];
-        foreach ($this->parameters['config_fields'] as $config => $configOptions) {
+
+        foreach ($this->parameters['option_fields'] as $config => $configOptions) {
             $xmlPath = $configPath . '/' . $config;
-            $constPath = FormatString::uppercase(str_replace('/', '_', $xmlPath));
-            $this->parameters['config_fields'][$config]['const'] = $constPath;
-            $this->parameters['config_fields'][$config]['xml'] = $xmlPath;
+            $constPath = Str::uppercase(str_replace('/', '_', $xmlPath));
+            $this->parameters['option_fields'][$config]['const'] = $constPath;
+            $this->parameters['option_fields'][$config]['xml'] = $xmlPath;
         }
 
-        $filePath = [
-            'config.tpl.php' => $configEntity->getFileName(),
-            'system.tpl.php' => 'etc/adminhtml/system.xml',
-            'config_xml.tpl.php' => 'etc/config.xml',
-            'acl.tpl.php' => 'etc/acl.xml',
-        ];
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setFilesPath($filePath);
+        $this->entities->addEntity('Model/Config', 'config.tpl.php');
+        $this->entities->addFile('system.tpl.php', 'etc/adminhtml/system.xml');
+        $this->entities->addFile('config_xml.tpl.php', 'etc/config.xml');
+        if ($this->parameters['is_new_section']) {
+            $this->entities->addFile('acl.tpl.php', 'etc/acl.xml');
+        }
 
         parent::execute($input, $output);
     }

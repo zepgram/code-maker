@@ -1,23 +1,23 @@
 <?php
-use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\Str;
 
 ?>
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_entity ?>;
+namespace <?= $namespace_entity ?>;
 
-use <?= $use_class_entity_interface ?>;
 use Magento\Framework\DataObject;
+use <?= $use_entity_interface ?>;
 
 /**
- * Class <?= $class_entity ?>.
+ * Class <?= $name_entity ?>.
  */
-class <?= $class_entity ?> extends DataObject implements <?= $class_entity ?>Interface
+class <?= $name_entity ?> extends DataObject implements <?= "$name_entity_interface\r\n" ?>
 {
-<?php foreach ($entity_fields as $field => $option): ?>
-<?php $fieldName = FormatString::asPascaleCase($field); ?>
-<?php $fieldConst = FormatString::asUpperSnakeCase($field); ?>
-<?php $fieldParameter = FormatString::asCamelCase($field); ?>
+<?php foreach ($option_fields as $field => $option): ?>
+<?php $fieldName = Str::asPascaleCase($field); ?>
+<?php $fieldConst = Str::asUpperSnakeCase($field); ?>
+<?php $fieldParameter = Str::asCamelCase($field); ?>
     /**
      * {@inheritdoc}
      */
@@ -35,7 +35,7 @@ class <?= $class_entity ?> extends DataObject implements <?= $class_entity ?>Int
 
         return $this;
     }
-<?php if ($field !== array_key_last($entity_fields)):
+<?php if ($field !== array_key_last($option_fields)):
 echo "\n";
 endif?>
 <?php endforeach; ?>

@@ -1,19 +1,19 @@
 <?php
-use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\Str;
 
 ?>
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_entity ?>;
+namespace <?= $namespace_config ?>;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class <?= $class_entity ?>.
+ * Class <?= $name_config ?>.
  */
-class <?= "$class_entity\n"?>
+class <?= "$name_config\n"?>
 {
-<?php foreach ($config_fields as $option): ?>
+<?php foreach ($option_fields as $option): ?>
     const <?= $option['const'] ?> = '<?= $option['xml']."';\n" ?>
 <?php endforeach; ?>
 
@@ -23,7 +23,7 @@ class <?= "$class_entity\n"?>
     private $scopeConfig;
 
     /**
-     * <?= $class_entity ?> constructor.
+     * <?= $name_config ?> constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      */
@@ -33,8 +33,8 @@ class <?= "$class_entity\n"?>
         $this->scopeConfig = $scopeConfig;
     }
 
-<?php foreach ($config_fields as $field => $option): ?>
-<?php $fieldName = FormatString::asPascaleCase($field); ?>
+<?php foreach ($option_fields as $field => $option): ?>
+<?php $fieldName = Str::asPascaleCase($field); ?>
     /**
      * Get <?= "$fieldName\n" ?>
      *

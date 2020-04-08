@@ -9,9 +9,9 @@
  * @license    proprietary
  */
 
-namespace Zepgram\CodeMaker\Generator;
+namespace Zepgram\CodeMaker\Renderer;
 
-use Zepgram\CodeMaker\File\Management;
+use Zepgram\CodeMaker\FileManager;
 use Zepgram\CodeMaker\Maker;
 
 abstract class Operations
@@ -56,12 +56,12 @@ abstract class Operations
     {
         if ($this->filesWrite) {
             foreach ($this->filesWrite as $path => $content) {
-                Management::writeFiles($this->getAbsoluteFilePath($path), $content);
+                FileManager::writeFiles($this->getAbsoluteFilePath($path), $content);
             }
         }
         if ($this->filesAppend) {
             foreach ($this->filesAppend as $path => $content) {
-                $asChange = Management::appendXmlFiles($this->getAbsoluteFilePath($path), $content);
+                $asChange = FileManager::appendXmlFiles($this->getAbsoluteFilePath($path), $content);
                 if (!$asChange) {
                     unset($this->filesAppend[$path]);
                 }

@@ -27,13 +27,13 @@
         "chmod": [
             {
                 "mask": "0755",
-                "path": "bin/zepgram"
+                "path": "bin/maker"
             }
         ],
         "map": [
             [
-                "src/dist/bin/zepgram",
-                "bin/zepgram"
+                "src/dist/bin/maker",
+                "bin/maker"
             ]
         ]
     },

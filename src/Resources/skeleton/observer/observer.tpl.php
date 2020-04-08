@@ -1,14 +1,14 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_observer ?>;
+namespace <?= $namespace_observer ?>;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class <?= $class_observer ?>.
+ * Class <?= $name_observer ?>.
  */
-class <?= $class_observer ?> implements ObserverInterface
+class <?= $name_observer ?> implements ObserverInterface
 {
     /**
      * @param Observer $observer

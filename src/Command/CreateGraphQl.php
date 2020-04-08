@@ -14,11 +14,10 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatClass;
 
 class CreateGraphQl extends BaseCommand
 {
-    protected static $defaultName = 'create:resolver-graph-ql';
+    protected static $defaultName = 'create:graph-ql';
 
     /**
      * {@inheritdoc}
@@ -35,7 +34,9 @@ class CreateGraphQl extends BaseCommand
     protected function getParameters()
     {
         return [
-            'resolver_name' => ['Wishlist', 'ucwords'],
+            'resolver_name' => ['AddItem', 'ucwords'],
+            'type' => ['choice_question', ['query','mutation']],
+            'description' => ['Add item', 'getPhrase']
         ];
     }
 
@@ -44,19 +45,8 @@ class CreateGraphQl extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $classTemplate = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            'Model/Resolver/'.$this->parameters['resolver_name']
-        );
-
-        $this->parameters['class_resolver'] = $classTemplate->getName();
-        $this->parameters['name_space_resolver'] = $classTemplate->getNamespace();
-        $filePath = [
-            'resolver.tpl.php' => $classTemplate->getFileName(),
-            'schema.tpl.graphqls' => 'etc/schema.graphqls'
-        ];
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setFilesPath($filePath);
+        $this->entities->addEntity('Model/Resolver/'.$this->parameters['resolver_name'], 'resolver.tpl.php');
+        $this->entities->addFile('schema.tpl.php', 'etc/schema.graphqls');
 
         parent::execute($input, $output);
     }

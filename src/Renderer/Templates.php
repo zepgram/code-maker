@@ -9,10 +9,10 @@
  * @license    proprietary
  */
 
-namespace Zepgram\CodeMaker\Generator;
+namespace Zepgram\CodeMaker\Renderer;
 
 use Zepgram\CodeMaker\Maker;
-use Zepgram\CodeMaker\File\Management;
+use Zepgram\CodeMaker\FileManager;
 
 class Templates extends Operations
 {
@@ -36,12 +36,12 @@ class Templates extends Operations
         foreach ($this->getTemplates() as $path => $content) {
             $filePath = $this->getAbsoluteFilePath($path);
             // must be append
-            if (Management::fileExist($filePath) && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
+            if (FileManager::fileExist($filePath) && in_array(basename($filePath), self::APPEND_TEMPLATES, true)) {
                 $this->addAppendOperation($path, $content);
                 continue;
             }
             // must be confirmed
-            if (Management::fileExist($filePath)) {
+            if (FileManager::fileExist($filePath)) {
                 $this->addConfirmOperation($path, $content);
                 continue;
             }
@@ -54,7 +54,7 @@ class Templates extends Operations
      */
     private function writeAppDirectories()
     {
-        Management::mkdir($this->maker->getModuleDirectory());
+        FileManager::mkdir($this->maker->getModuleDirectory());
 
         if (!$this->maker->getIsInitialized()) {
             $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
@@ -79,12 +79,12 @@ class Templates extends Operations
                 throw new \RuntimeException("Template not found for '$templateDirectory'");
             }
 
-            $skeletons = Management::scanDir($absolutePathToSkeletons);
+            $skeletons = FileManager::scanDir($absolutePathToSkeletons);
             foreach ($skeletons as $skeleton) {
                 $filePath = $this->maker->getFilesPath();
                 if (isset($filePath[$skeleton])) {
                     $fileName = $filePath[$skeleton];
-                    $templateContent = Management::parseTemplate(
+                    $templateContent = FileManager::parseTemplate(
                         "$absolutePathToSkeletons/$skeleton",
                         $this->maker->getTemplateParameters()
                     );

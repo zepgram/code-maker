@@ -3,7 +3,7 @@
   <virtualType name="<?= $logger_handler ?>" type="Magento\Framework\Logger\Handler\Base">
     <arguments>
       <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
-      <argument name="fileName" xsi:type="string">var/log/<?= $logger_file ?></argument>
+      <argument name="fileName" xsi:type="string">var/log/<?= $filename ?></argument>
     </arguments>
   </virtualType>
   <virtualType name="<?= $logger_class ?>" type="Magento\Framework\Logger\Monolog">

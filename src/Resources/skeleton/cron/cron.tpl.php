@@ -1,11 +1,11 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_cron ?>;
+namespace <?= $namespace_cron ?>;
 
 /**
- * Class <?= $class_cron ?>.
+ * Class <?= $name_cron ?>.
  */
-class <?= "$class_cron\n" ?>
+class <?= "$name_cron\n" ?>
 {
     /**
      * Execute

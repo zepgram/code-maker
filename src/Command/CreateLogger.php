@@ -14,7 +14,7 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatString;
+use Zepgram\CodeMaker\Str;
 
 class CreateLogger extends BaseCommand
 {
@@ -35,10 +35,10 @@ class CreateLogger extends BaseCommand
     protected function getParameters()
     {
         $loggerPath = explode('\\', $this->maker->getModuleNamespace());
-        $loggerFile = FormatString::asSnakeCase($loggerPath[0].'/'.$loggerPath[1]).'.log';
+        $loggerFile = Str::asSnakeCase($loggerPath[0].'/'.$loggerPath[1]).'.log';
 
         return [
-            'filename' => [$loggerFile, 'lowercase']
+            'filename' => [$loggerFile, 'asSnakeCase']
         ];
     }
 
@@ -48,16 +48,9 @@ class CreateLogger extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->parameters['logger_file'] = $this->parameters['filename'];
         $this->parameters['logger_handler'] = $this->maker->getModuleNamespace().'\\Logger\\Handler';
         $this->parameters['logger_class'] = $this->maker->getModuleNamespace().'\\Logger\\Logger';
-
-        $filePath = [
-            'di.tpl.php' => 'etc/di.xml',
-        ];
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setTemplateSkeleton(['logger'])
-            ->setFilesPath($filePath);
+        $this->entities->addFile('di.tpl.php', 'etc/di.xml');
 
         parent::execute($input, $output);
     }

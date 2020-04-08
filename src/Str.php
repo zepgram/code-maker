@@ -11,7 +11,7 @@
 
 namespace Zepgram\CodeMaker;
 
-class FormatString
+class Str
 {
     /**
      * @param string $string
@@ -90,6 +90,16 @@ class FormatString
         $string = self::sanitizeNeedle($string, '/');
 
         return self::asCamelCase($string);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function asPascalCaseEscapedSlash(string $string)
+    {
+        return str_replace('\\', '\\\\', $string);
     }
 
     /**

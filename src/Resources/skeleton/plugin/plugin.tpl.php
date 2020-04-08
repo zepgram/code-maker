@@ -1,13 +1,13 @@
 <?= "<?php\n" ?>
 
-namespace <?= $name_space_plugin ?>;
+namespace <?= $namespace_plugin ?>;
 
 use <?= "$target_class" ?>;
 
 /**
- * Class <?= $class_plugin ?>.
+ * Class <?= $name_plugin ?>.
  */
-class <?= "$class_plugin\n" ?>
+class <?= "$name_plugin\n" ?>
 {
     /**
      * @param <?= $target_class_name ?> $subject

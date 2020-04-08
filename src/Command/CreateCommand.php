@@ -14,7 +14,6 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zepgram\CodeMaker\BaseCommand;
-use Zepgram\CodeMaker\FormatClass;
 
 class CreateCommand extends BaseCommand
 {
@@ -45,22 +44,8 @@ class CreateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $classTemplate = new FormatClass(
-            $this->maker->getModuleNamespace(),
-            'Console/Command/'.$this->parameters['class_command']
-        );
-
-        $commandNode = lcfirst(explode('\\', $classTemplate->getNamespace())[1]).$classTemplate->getName();
-        $this->parameters['class_command'] = $classTemplate->getName();
-        $this->parameters['class_command_node'] = $commandNode;
-        $this->parameters['name_space_command'] = $classTemplate->getNamespace();
-        $this->parameters['use_command'] = $classTemplate->getUse();
-        $filePath = [
-            'command.tpl.php' => $classTemplate->getFileName(),
-            'di.tpl.php' => 'etc/di.xml'
-        ];
-        $this->maker->setTemplateParameters($this->parameters)
-            ->setFilesPath($filePath);
+        $this->entities->addEntity('Console/Command/'.$this->parameters['class_command'], 'command.tpl.php');
+        $this->entities->addFile('di.tpl.php', 'etc/di.xml');
 
         parent::execute($input, $output);
     }
