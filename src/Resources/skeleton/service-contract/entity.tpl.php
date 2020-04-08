@@ -6,13 +6,13 @@ use Zepgram\CodeMaker\Str;
 
 namespace <?= $namespace_entity ?>;
 
-use Magento\Framework\DataObject;
+use <?= $use_extend ?? 'Magento\Framework\DataObject' ?>;
 use <?= $use_entity_interface ?>;
 
 /**
  * Class <?= $name_entity ?>.
  */
-class <?= $name_entity ?> extends DataObject implements <?= "$name_entity_interface\r\n" ?>
+class <?= $name_entity ?> extends <?= $name_extend ?? 'DataObject' ?> implements <?= "$name_entity_interface\r\n" ?>
 {
 <?php foreach ($option_fields as $field => $option): ?>
 <?php $fieldName = Str::asPascaleCase($field); ?>

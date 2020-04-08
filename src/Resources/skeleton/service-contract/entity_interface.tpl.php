@@ -29,6 +29,7 @@ interface <?= "$name_entity_interface\r\n" ?>
      * Set <?= "$fieldName\n" ?>
      *
      * @param <?= $option['type'] ?> $<?= "$fieldParameter\n" ?>
+     *
      * @return $this<?= "\n" ?>
      */
     public function set<?= $fieldName ?>(<?= $option['type'] ?> $<?= $fieldParameter ?>);
