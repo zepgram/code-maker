@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Zepgram\CodeMaker\Renderer\Templates;
 use Zepgram\CodeMaker\Editor\Entities;
 
 class BaseCommand extends Command
@@ -49,7 +48,7 @@ class BaseCommand extends Command
     /**
      * @var array
      */
-    public $parameters;
+    public $parameters = [];
 
     /**
      * @param InputInterface  $input
