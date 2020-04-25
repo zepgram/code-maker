@@ -22,11 +22,14 @@ class CreateModel extends BaseCommand
 
     protected $dbSchemaMapping = [
         'varchar' => 'string',
+        'mediumtext' => 'string',
+        'text' => 'string',
+        'timestamp' => 'string',
+        'timestamp_update' => 'string',
         'int' => 'int',
+        'smallint' => 'int',
         'boolean' => 'bool',
         'decimal' => 'float',
-        'timestamp' => 'string',
-        'text' => 'string',
     ];
 
     /**
@@ -56,9 +59,6 @@ class CreateModel extends BaseCommand
                 'default' => 'entity_id',
                 'formatter' => 'asSnakeCase'
             ],
-            'is_service_contract' => [
-                'yes_no_question'
-            ]
         ];
     }
 
@@ -70,34 +70,32 @@ class CreateModel extends BaseCommand
         return [
             'db_type' => [
                 'varchar',
+                'mediumtext',
+                'text',
                 'int',
+                'smallint',
                 'boolean',
                 'decimal',
                 'timestamp',
-                'text'
-            ]
+                'timestamp_on_update'
+            ],
+            'is_nullable' => [
+                'true',
+                'false'
+            ],
         ];
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
         foreach ($this->parameters['option_fields'] as $parameter => $type) {
-            $this->parameters['options_fields_db'][$this->dbSchemaMapping[$parameter]] = $type;
+            $this->parameters['option_fields'][$parameter]['type'] = $this->dbSchemaMapping[$type['db_type']];
         }
-        $this->entities->addEntity('Model/'.$this->parameters['entity_name'], 'model.tpl.php');
+
+        $this->entities->addEntity('Model/'.$this->parameters['entity_name'], 'entity.tpl.php');
         $this->entities->addEntity('Model/ResourceModel/'.$this->parameters['entity_name'], 'resource.tpl.php');
         $this->entities->addEntity('Model/ResourceModel/'.$this->parameters['entity_name'].'/Collection', 'collection.tpl.php');
         $this->entities->addFile('db_schema.tpl.php', 'etc/db_schema.xml');
-
-        if ($this->parameters['is_service_contract'] === true) {
-            $this->entities->addEntity('Model/'.$this->parameters['entity_name'].'Repository', 'entity_repository.tpl.php');
-            $this->entities->addEntity('Model/'.$this->parameters['entity_name'].'Management', 'entity_management.tpl.php');
-            $this->entities->addEntity('Api/Data/'.$this->parameters['entity_name'].'Interface', 'entity_interface.tpl.php');
-            $this->entities->addEntity('Api/Data/'.$this->parameters['entity_name'].'SearchResultsInterface', 'search_results_interface.tpl.php');
-            $this->entities->addEntity('Api/'.$this->parameters['entity_name'].'RepositoryInterface', 'entity_repository_interface.tpl.php');
-            $this->entities->addEntity('Api/'.$this->parameters['entity_name'].'ManagementInterface', 'entity_management_interface.tpl.php');
-            $this->entities->addFile('di.tpl.php', 'etc/di.xml');
-        }
 
         return parent::execute($input, $output);
     }

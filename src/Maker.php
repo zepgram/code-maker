@@ -11,8 +11,6 @@
 
 namespace Zepgram\CodeMaker;
 
-use Zepgram\CodeMaker\FileManager;
-
 class Maker
 {
     /** @var string */

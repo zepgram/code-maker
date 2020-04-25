@@ -310,6 +310,7 @@ abstract class BaseCommand extends Command
     protected function askForNextField($input, $output, array $fields, string $questionText)
     {
         $question = $this->formattedQuestion($questionText);
+        /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
         $fieldName = $helper->ask($input, $output, $question);
 

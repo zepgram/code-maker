@@ -6,20 +6,22 @@ use Zepgram\CodeMaker\Str;
 
 namespace <?= $namespace_entity ?>;
 
-<?php if (isset($name_resource)): ?>
 use Magento\Framework\Model\AbstractModel;
 use <?= $use_resource ?> as <?= $name_entity ?>Resource;
-<?php else: ?>
-use Magento\Framework\DataObject;
-<?php endif; ?>
-use <?= $use_entity_interface ?>;
 
 /**
  * Class <?= $name_entity ?>.
  */
-class <?= $name_entity ?> extends <?= isset($name_resource) ? 'AbstractModel' : 'DataObject' ?> implements <?= "$name_entity_interface\r\n" ?>
+class <?= $name_entity ?> extends AbstractModel
 {
-<?php if (isset($name_resource)): ?>
+<?php foreach ($option_fields as $field => $option): ?>
+    /** @var <?= $option['type'] ?> */
+    const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
+<?php if ($field !== array_key_last($option_fields)):
+echo "\n";
+endif?>
+<?php endforeach;  ?>
+
     /**
      * {@inheritdoc}
      */
@@ -43,13 +45,14 @@ class <?= $name_entity ?> extends <?= isset($name_resource) ? 'AbstractModel' : 
         $this->_init(<?= $name_entity ?>Resource::class);
     }
 
-<?php endif; ?>
 <?php foreach ($option_fields as $field => $option): ?>
 <?php $fieldName = Str::asPascaleCase($field); ?>
 <?php $fieldConst = Str::asUpperSnakeCase($field); ?>
 <?php $fieldParameter = Str::asCamelCase($field); ?>
     /**
-     * {@inheritdoc}
+     * Get <?= "$fieldName\n" ?>
+     *
+     * @return <?= $option['type']."\n" ?>
      */
     public function get<?= $fieldName ?>()
     {
@@ -57,7 +60,11 @@ class <?= $name_entity ?> extends <?= isset($name_resource) ? 'AbstractModel' : 
     }
 
     /**
-     * {@inheritdoc}
+     * Set <?= "$fieldName\n" ?>
+     *
+     * @param <?= $option['type'] ?> $<?= "$fieldParameter\n" ?>
+     *
+     * @return $this<?= "\n" ?>
      */
     public function set<?= $fieldName ?>(<?= $option['type'] ?> $<?= $fieldParameter ?>)
     {
@@ -66,7 +73,7 @@ class <?= $name_entity ?> extends <?= isset($name_resource) ? 'AbstractModel' : 
         return $this;
     }
 <?php if ($field !== array_key_last($option_fields)):
-echo "\n";
+    echo "\n";
 endif; ?>
 <?php endforeach; ?>
 }

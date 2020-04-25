@@ -12,7 +12,11 @@ namespace <?= $namespace_entity_interface ?>;
 interface <?= "$name_entity_interface\r\n" ?>
 {
 <?php foreach ($option_fields as $field => $option): ?>
-    const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\n" ?>
+    /** @var <?= $option['type'] ?> */
+    const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
+<?php if ($field !== array_key_last($option_fields)):
+echo "\n";
+endif?>
 <?php endforeach; ?>
 
 <?php foreach ($option_fields as $field => $option): ?>
