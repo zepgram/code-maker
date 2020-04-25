@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateBlock extends BaseCommand
 {
@@ -34,8 +33,14 @@ class CreateBlock extends BaseCommand
     protected function getParameters()
     {
         return [
-            'area' => ['choice_question', ['frontend','adminhtml']],
-            'block_name' => ['Data', 'ucwords']
+            'area' => [
+                'choice_question' => [
+                    'frontend', 'adminhtml'
+                ]
+            ],
+            'block_name' => [
+                'default' => 'Data', 'formatter' => 'ucwords'
+            ]
         ];
     }
 
@@ -48,7 +53,7 @@ class CreateBlock extends BaseCommand
             ['Magento\Backend\Block\Template', 'Magento\Backend\Block\Template\Context'] :
             ['Magento\Framework\View\Element\Template', 'Magento\Framework\View\Element\Template\Context'];
 
-        $this->entities->addEntity('Block/'.$this->parameters['block_name'], 'block.tpl.php');
+        $this->entities->addEntity('Block/' . $this->parameters['block_name'], 'block.tpl.php');
 
         parent::execute($input, $output);
     }

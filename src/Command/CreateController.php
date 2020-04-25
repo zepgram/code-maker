@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateController extends BaseCommand
 {
@@ -34,10 +33,23 @@ class CreateController extends BaseCommand
     protected function getParameters()
     {
         return [
-            'area' => ['choice_question', ['frontend','adminhtml']],
-            'router' => ['subscriber', 'asSnakeCase'],
-            'controller' => ['Update', 'asCamelCaseNoSlash'],
-            'action' => ['Index', 'asCamelCaseNoSlash'],
+            'area' => [
+                'choice_question' => [
+                    'frontend', 'adminhtml'
+                ]
+            ],
+            'router' => [
+                'default' => 'subscriber',
+                'formatter' => 'asSnakeCase'
+            ],
+            'controller' => [
+                'default' => 'Update',
+                'formatter' => 'asCamelCaseNoSlash'
+            ],
+            'action' => [
+                'default' => 'Index',
+                'formatter' => 'asCamelCaseNoSlash'
+            ]
         ];
     }
 

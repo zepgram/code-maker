@@ -9,18 +9,21 @@
  * @license    proprietary
  */
 
-namespace Zepgram\CodeMaker;
+namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Zepgram\CodeMaker\Editor\Entities;
+use Zepgram\CodeMaker\Maker;
+use Zepgram\CodeMaker\Str;
 
-class BaseCommand extends Command
+abstract class BaseCommand extends Command
 {
     /**
      * @var array
@@ -78,7 +81,6 @@ class BaseCommand extends Command
         if (!empty($this->getParameters())) {
             $this->parameters = $this->askParameters($input, $output);
         }
-
         if (!empty($this->getOptions())) {
             $this->parameters['option_fields'] = $this->askOptions($input, $output);
         }
@@ -136,10 +138,7 @@ class BaseCommand extends Command
     /**
      * @return array
      */
-    protected function getParameters()
-    {
-        return [];
-    }
+    abstract protected function getParameters();
 
     /**
      * @return array
@@ -204,6 +203,20 @@ class BaseCommand extends Command
     }
 
     /**
+     * @param string $parameter
+     * @return ChoiceQuestion
+     */
+    private function formattedYesNoQuestion(string $parameter)
+    {
+        $parameter = Str::getPhrase($parameter);
+        return new ChoiceQuestion(
+            "Please select parameter '$parameter'",
+            ['no','yes'],
+            'no'
+        );
+    }
+
+    /**
      * @param $input
      * @param $output
      *
@@ -212,28 +225,41 @@ class BaseCommand extends Command
     private function askParameters($input, $output)
     {
         $answers = [];
-        foreach ($this->getParameters() as $parameter => list($comment, $function)) {
+        foreach ($this->getParameters() as $parameter => $actions) {
+            /** @var QuestionHelper $helper */
             $helper = $this->getHelper('question');
-            if ($comment === 'choice_question') {
-                $question = $this->formattedChoiceQuestion($parameter, $function);
+
+            $choiceQuestion = $actions['choice_question'] ?? null;
+            if ($choiceQuestion) {
+                $question = $this->formattedChoiceQuestion($parameter, $choiceQuestion);
                 $answers[$parameter] = $helper->ask($input, $output, $question);
                 continue;
             }
-            $question = $this->formattedQuestion("Which value do you want for your $parameter", $comment, true);
+            $yesNoQuestion = $actions[0] ?? null;
+            if ($yesNoQuestion === 'yes_no_question') {
+                $question = $this->formattedYesNoQuestion($parameter);
+                $answers[$parameter] = $helper->ask($input, $output, $question) === 'yes';
+                continue;
+            }
+
+            $default = $actions['default'] ?? null;
+            $question = $this->formattedQuestion("Which value do you want for your $parameter", $default, true);
             $question->setValidator(static function ($answer) {
                 if (empty($answer)) {
                     throw new \RuntimeException(
-                        'Please enter a value'
+                        'Please enter a value.'
                     );
                 }
 
                 return $answer;
             });
-            $value = $helper->ask($input, $output, $question);
-            if (method_exists(Str::class, $function)) {
-                $value = Str::$function($value);
+            $answer = $helper->ask($input, $output, $question);
+
+            $formatter = $actions['formatter'] ?? null;
+            if (method_exists(Str::class, $formatter)) {
+                $answer = Str::$formatter($answer);
             }
-            $answers[$parameter] = $value;
+            $answers[$parameter] = $answer;
         }
 
         return $answers;

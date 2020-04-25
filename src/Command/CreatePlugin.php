@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreatePlugin extends BaseCommand
 {
@@ -34,9 +33,17 @@ class CreatePlugin extends BaseCommand
     protected function getParameters()
     {
         return [
-            'area' => ['choice_question', self::MAGENTO_AREA],
-            'plugin_name' => ['QueryText', 'ucwords'],
-            'target_class' => ['Magento\CatalogSearch\Block\Result', 'ucwords']
+            'area' => [
+                'choice_question' => self::MAGENTO_AREA
+            ],
+            'plugin_name' => [
+                'default' =>'QueryText',
+                'formatter' => 'ucwords'
+            ],
+            'target_class' => [
+                'default' => 'Magento\CatalogSearch\Block\Result',
+                'formatter' => 'ucwords'
+            ]
         ];
     }
 

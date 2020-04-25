@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\Str;
 
 class CreateLogger extends BaseCommand
@@ -38,7 +37,10 @@ class CreateLogger extends BaseCommand
         $loggerFile = Str::asSnakeCase($loggerPath[0].'/'.$loggerPath[1]).'.log';
 
         return [
-            'filename' => [$loggerFile, 'asSnakeCase']
+            'filename' => [
+                'default' => $loggerFile,
+                'formatter' => 'asSnakeCase'
+            ]
         ];
     }
 

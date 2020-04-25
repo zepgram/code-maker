@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateModule extends BaseCommand
 {
@@ -26,6 +25,14 @@ class CreateModule extends BaseCommand
     {
         $this->setName(self::$defaultName)
             ->setDescription('Create new module');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getParameters()
+    {
+        return [];
     }
 
     /**

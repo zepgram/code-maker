@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateObserver extends BaseCommand
 {
@@ -34,9 +33,16 @@ class CreateObserver extends BaseCommand
     protected function getParameters()
     {
         return [
-            'area' => ['choice_question', self::MAGENTO_AREA],
-            'observer_name' => ['CustomerRegister', 'ucwords'],
-            'event' => ['customer_register_success', null]
+            'area' => [
+                'choice_question' => self::MAGENTO_AREA
+            ],
+            'observer_name' => [
+                'default' => 'CustomerRegister',
+                'formatter' => 'ucwords'
+            ],
+            'event' => [
+                'default' => 'customer_register_success'
+            ]
         ];
     }
 

@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateViewModel extends BaseCommand
 {
@@ -34,7 +33,10 @@ class CreateViewModel extends BaseCommand
     protected function getParameters()
     {
         return [
-            'action' => ['Index', 'asCamelCase']
+            'action' => [
+                'default' => 'Index',
+                'formatter' => 'asCamelCase'
+            ]
         ];
     }
 

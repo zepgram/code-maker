@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateCommand extends BaseCommand
 {
@@ -34,8 +33,12 @@ class CreateCommand extends BaseCommand
     protected function getParameters()
     {
         return [
-            'class_command' => ['ConfigShow', 'ucwords'],
-            'command' => ['config:show', null]
+            'class_command' => [
+                'default' => 'ConfigShow', 'formatter' => 'ucwords'
+            ],
+            'command' => [
+                'default' => 'config:show'
+            ]
         ];
     }
 
@@ -44,7 +47,7 @@ class CreateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->entities->addEntity('Console/Command/'.$this->parameters['class_command'], 'command.tpl.php');
+        $this->entities->addEntity('Console/Command/' . $this->parameters['class_command'], 'command.tpl.php');
         $this->entities->addFile('di.tpl.php', 'etc/di.xml');
 
         parent::execute($input, $output);

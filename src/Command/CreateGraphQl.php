@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateGraphQl extends BaseCommand
 {
@@ -34,9 +33,18 @@ class CreateGraphQl extends BaseCommand
     protected function getParameters()
     {
         return [
-            'resolver_name' => ['AddItem', 'ucwords'],
-            'type' => ['choice_question', ['query','mutation']],
-            'description' => ['Add item', 'getPhrase']
+            'resolver_name' => [
+                'default' => 'AddItem',
+                'formatter' => 'ucwords'
+            ],
+            'type' => [
+                'choice_question' => [
+                    'query', 'mutation'
+                ]
+            ],
+            'description' => [
+                'default' => 'Add item', 'getPhrase'
+            ]
         ];
     }
 

@@ -7,7 +7,6 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 use Zepgram\CodeMaker\Str;
 
 class CreateConfig extends BaseCommand
@@ -26,8 +25,12 @@ class CreateConfig extends BaseCommand
     protected function getParameters()
     {
         return [
-            'is_new_section' => ['choice_question', ['no','yes']],
-            'config_path' => ['sales/general', '']
+            'is_new_section' => [
+                'yes_no_question'
+            ],
+            'config_path' => [
+                'default' => 'sales/general'
+            ]
         ];
     }
 
@@ -84,7 +87,6 @@ class CreateConfig extends BaseCommand
         }
 
         $sectionGroup = explode('/', $configPath);
-        $this->parameters['is_new_section'] = $this->parameters['is_new_section'] === 'yes' ? true : false;
         $this->parameters['section'] = $sectionGroup[0];
         $this->parameters['group'] = $sectionGroup[1];
         $this->parameters['resource_id'] = $this->maker->getModuleName() . '::config_' . $sectionGroup[0];

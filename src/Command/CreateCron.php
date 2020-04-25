@@ -13,7 +13,6 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zepgram\CodeMaker\BaseCommand;
 
 class CreateCron extends BaseCommand
 {
@@ -34,10 +33,20 @@ class CreateCron extends BaseCommand
     protected function getParameters()
     {
         return [
-            'cron_name' => ['Job', 'ucwords'],
-            'schedule' => ['* * * * *', null],
-            'cron_group' => ['default', 'asSnakeCase'],
-            'is_new_cron_group' => ['choice_question', ['no','yes']]
+            'cron_name' => [
+                'default' => 'Job',
+                'formatter' => 'ucwords'
+            ],
+            'schedule' => [
+                'default' => '* * * * *'
+            ],
+            'cron_group' => [
+                'default' => 'default',
+                'formatter' => 'asSnakeCase'
+            ],
+            'is_new_cron_group' => [
+                'yes_no_question'
+            ]
         ];
     }
 
@@ -48,7 +57,7 @@ class CreateCron extends BaseCommand
     {
         $this->entities->addEntity('Cron/'.$this->parameters['cron_name'], 'cron.tpl.php');
         $this->entities->addFile('crontab.tpl.php', 'etc/crontab.xml');
-        if ($this->parameters['is_new_cron_group'] === 'yes') {
+        if ($this->parameters['is_new_cron_group']) {
             $this->entities->addFile('cron_groups.tpl.php', 'etc/cron_groups.xml');
         }
 
