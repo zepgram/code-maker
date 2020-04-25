@@ -11,7 +11,7 @@ use Zepgram\CodeMaker\Str;
         $field = Str::asSnakeCase($field);
         $comment = Str::getPhraseUcWord($field);
         $isNullable = $option['is_nullable'];
-        switch($dbType):
+        switch ($dbType):
         case 'varchar':
         echo '<column name="'.$field.'" xsi:type="'.$dbType.'" nullable="'.$isNullable.'" length="255" comment="'.$comment.'"/>';
         break;
@@ -24,6 +24,7 @@ use Zepgram\CodeMaker\Str;
         case 'boolean':
         case 'text':
         case 'mediumtext':
+        case 'date':
         echo '<column name="'.$field.'" xsi:type="'.$dbType.'" nullable="'.$isNullable.'" comment="'.$comment.'"/>';
         break;
         case 'decimal':

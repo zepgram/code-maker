@@ -24,6 +24,7 @@ class CreateModel extends BaseCommand
         'varchar' => 'string',
         'mediumtext' => 'string',
         'text' => 'string',
+        'date' => 'string',
         'timestamp' => 'string',
         'timestamp_update' => 'string',
         'int' => 'int',
@@ -76,6 +77,7 @@ class CreateModel extends BaseCommand
                 'smallint',
                 'boolean',
                 'decimal',
+                'date',
                 'timestamp',
                 'timestamp_on_update'
             ],
