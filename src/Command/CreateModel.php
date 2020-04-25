@@ -26,7 +26,7 @@ class CreateModel extends BaseCommand
         'text' => 'string',
         'date' => 'string',
         'timestamp' => 'string',
-        'timestamp_update' => 'string',
+        'timestamp_on_update' => 'string',
         'int' => 'int',
         'smallint' => 'int',
         'boolean' => 'bool',

@@ -16,9 +16,27 @@ interface <?= "$name_entity_interface\r\n" ?>
     const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
 <?php if ($field !== array_key_last($option_fields)):
 echo "\n";
-endif?>
+endif; ?>
 <?php endforeach; ?>
 
+<?php if (isset($primary_key)): ?>
+    /**
+     * Get Entity Id
+     *
+     * @return int<?= "\n" ?>
+     */
+    public function getId();
+
+    /**
+     * Set Entity Id
+     *
+     * @param int $id
+     *
+     * @return $this<?= "\n" ?>
+     */
+    public function setId(int $id);
+
+<?php endif; ?>
 <?php foreach ($option_fields as $field => $option): ?>
 <?php $fieldName = Str::asPascaleCase($field); ?>
 <?php $fieldParameter = Str::asCamelCase($field); ?>
