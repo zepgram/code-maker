@@ -1,7 +1,8 @@
 <?php
 use Zepgram\CodeMaker\Str;
+
 $module_name = $module_namespace.'_'.$module_name;
-$title = Str::getPhraseUcWord($module_name);
+$title = Str::getPhraseUcWord($module_namespace);
 $table_title = Str::getPhraseUcWord($table_name);
 ?>
 <?= "<?xml version=\"1.0\"?>\n" ?>

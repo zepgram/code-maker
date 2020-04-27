@@ -89,7 +89,7 @@ case 'boolean': ?>
         </column>
 <?php break; ?>
 <?php default: ?>
-        <column name="<?= $field ?>" sortOrder="10">
+        <column name="<?= $field ?>">
             <settings>
                 <filter>text</filter>
                 <label translate="true"><?= $comment ?></label>

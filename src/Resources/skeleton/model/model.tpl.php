@@ -1,5 +1,6 @@
 <?php
 use Zepgram\CodeMaker\Str;
+
 $implements = "\r\n";
 ?>
 <?= "<?php\n" ?>
