@@ -6,6 +6,7 @@ namespace Zepgram\CodeMaker\Editor;
 
 use Zepgram\CodeMaker\Maker;
 use Zepgram\CodeMaker\Renderer\Templates;
+use Zepgram\CodeMaker\Str;
 
 class Entities
 {
@@ -58,7 +59,7 @@ class Entities
                 $parameters["use_$entityKey"] = $class->getUse();
                 $parameters["use_snake_case_$entityKey"] = $class->getUseSnakeCase();
                 $parameters["use_escaped_$entityKey"] = $class->getUseEscaped();
-                $parameters["route_id"] = $class->getRouteId();
+                $parameters["route_id"] = Str::asSnakeCase($this->maker->getModuleName());
                 $parameters["router_id"] = $class->isBackend() ? 'admin' : 'standard';
 
                 $this->files[$originFile] = $class->getFileName();

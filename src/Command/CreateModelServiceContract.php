@@ -31,16 +31,16 @@ class CreateModelServiceContract extends CreateModel
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->entities->addEntity('Model/'.$this->parameters['entity_name'], 'entity.tpl.php');
-        $this->entities->addEntity('Model/'.$this->parameters['entity_name'].'Repository', 'entity_repository.tpl.php');
-        $this->entities->addEntity('Model/'.$this->parameters['entity_name'].'Management', 'entity_management.tpl.php');
-        $this->entities->addEntity('Api/Data/'.$this->parameters['entity_name'].'Interface', 'entity_interface.tpl.php');
-        $this->entities->addEntity('Api/Data/'.$this->parameters['entity_name'].'SearchResultsInterface', 'search_results_interface.tpl.php');
-        $this->entities->addEntity('Api/'.$this->parameters['entity_name'].'RepositoryInterface', 'entity_repository_interface.tpl.php');
-        $this->entities->addEntity('Api/'.$this->parameters['entity_name'].'ManagementInterface', 'entity_management_interface.tpl.php');
+        $this->isServiceContract = true;
+        $this->parameters['entity_name'] = $this->parameters['model_name'];
+        $this->entities->addEntity('Model/'.$this->parameters['model_name'], 'entity.tpl.php');
+        $this->entities->addEntity('Model/'.$this->parameters['model_name'].'Repository', 'entity_repository.tpl.php');
+        $this->entities->addEntity('Model/'.$this->parameters['model_name'].'Management', 'entity_management.tpl.php');
+        $this->entities->addEntity('Api/Data/'.$this->parameters['model_name'].'Interface', 'entity_interface.tpl.php');
+        $this->entities->addEntity('Api/Data/'.$this->parameters['model_name'].'SearchResultsInterface', 'search_results_interface.tpl.php');
+        $this->entities->addEntity('Api/'.$this->parameters['model_name'].'RepositoryInterface', 'entity_repository_interface.tpl.php');
+        $this->entities->addEntity('Api/'.$this->parameters['model_name'].'ManagementInterface', 'entity_management_interface.tpl.php');
         $this->entities->addFile('di.tpl.php', 'etc/di.xml');
-
-        $this->maker->setTemplateSkeleton(['model','service-contract']);
 
         return parent::execute($input, $output);
     }

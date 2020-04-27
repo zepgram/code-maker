@@ -13,6 +13,7 @@ namespace Zepgram\CodeMaker\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zepgram\CodeMaker\Entity\Controller;
 
 class CreateController extends BaseCommand
 {
@@ -58,14 +59,8 @@ class CreateController extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $area = $this->parameters['area'];
-        $controller = $this->parameters['controller'];
-        $this->parameters['dependencies'] = $this->parameters['area'] === 'adminhtml' ?
-            ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
-            ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
-
-        $this->entities->addEntity("Controller/$controller/" . $this->parameters['action'], 'controller.tpl.php');
-        $this->entities->addFile('routes.tpl.php', "etc/$area/routes.xml");
+        $controller = new Controller();
+        $this->entities = $controller->create($this->parameters, $this->entities);
 
         parent::execute($input, $output);
     }

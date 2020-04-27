@@ -1,4 +1,5 @@
 <?= "<?php\n" ?>
+declare(strict_types=1);
 
 namespace <?= $namespace_entity_repository ?>;
 
@@ -30,9 +31,11 @@ use <?= $useResource ?>;
 use <?= $use_collection ?>;
 use <?= $useCollectionFactory ?>;
 <?php else: ?>
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
 use <?= $use_entity_interface ?>;
 use <?= $use_entity_repository_interface ?>;
+use <?= $use_search_results_interface ?>;
 <?php endif; ?>
 
 /**
@@ -109,11 +112,10 @@ class <?= $name_entity_repository ?> implements <?= "$name_entity_repository_int
      */
     public function getById($id): <?= "$name_entity_interface\r\n" ?>
     {
-        /** @var <?= $name_entity ?> $<?= $name_camel_case_entity ?> */
         $<?= $name_camel_case_entity ?> = $this-><?= $nameEntityFactory ?>->create();
         $this-><?= $nameResource ?>->load($<?= $name_camel_case_entity ?>, $id);
         if (!$<?= $name_camel_case_entity ?>->getId()) {
-            throw new NoSuchEntityException(__("No <?= $name_entity ?> found with id: %1", $id), $e);
+            throw new NoSuchEntityException(__("No <?= $name_entity ?> found with id: %1", $id));
         }
 
         return $<?= $name_camel_case_entity ?>;
@@ -177,7 +179,7 @@ class <?= $name_entity_repository ?> implements <?= "$name_entity_repository_int
      */
     public function getById($id): <?= "$name_entity_interface\r\n" ?>
     {
-        throw new LocalizedException(__('Service not yet implemented.')):
+        throw new LocalizedException(__('Service not yet implemented.'));
     }
 
     /**

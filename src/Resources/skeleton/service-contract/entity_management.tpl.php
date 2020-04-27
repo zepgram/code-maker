@@ -4,6 +4,7 @@ $classEntityFactory = $name_entity_interface. 'Factory';
 $useEntityFactory = $use_entity_interface. 'Factory';
 ?>
 <?= "<?php\n" ?>
+declare(strict_types=1);
 
 namespace <?= $namespace_entity_management ?>;
 

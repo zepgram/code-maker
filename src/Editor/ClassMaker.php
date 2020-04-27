@@ -169,26 +169,12 @@ class ClassMaker
     /**
      * @return string
      */
-    public function getRouteId()
-    {
-        if ($this->router) {
-            $moduleName = explode('\\', $this->moduleNamespace)[1];
-
-            return Str::asSnakeCase($moduleName) . '_' . Str::asSnakeCase($this->router);
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string
-     */
     public function getLayoutRoute()
     {
         $controllerPath = explode('/', $this->inputClass);
         unset($controllerPath[0]);
 
-        return $this->getRouteId() . '_' . Str::asSnakeCase(implode('/', $controllerPath));
+        return Str::asSnakeCase($this->moduleNamespace) . '_' . Str::asSnakeCase(implode('/', $controllerPath));
     }
 
     /**
