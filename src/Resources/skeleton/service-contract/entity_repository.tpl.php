@@ -43,7 +43,7 @@ use <?= $use_search_results_interface ?>;
  */
 class <?= $name_entity_repository ?> implements <?= "$name_entity_repository_interface\r\n" ?>
 {
-<?php if(isset($name_resource)): ?>
+<?php if (isset($name_resource)): ?>
     /**
      * @var CollectionProcessorInterface
      */
