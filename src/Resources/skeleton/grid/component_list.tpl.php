@@ -16,7 +16,7 @@ $provider = $grid_name . '_list.' . $grid_name . '_grid_data_source';
             <dep><?= $provider ?></dep>
         </deps>
     </settings>
-    <dataSource name="<?= $provider ?>" component="Magento_Ui/js/grid/provider">
+    <dataSource name="<?= $grid_name . '_grid_data_source' ?>" component="Magento_Ui/js/grid/provider">
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>

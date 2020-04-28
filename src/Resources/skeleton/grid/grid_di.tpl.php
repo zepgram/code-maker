@@ -3,7 +3,7 @@
     <virtualType name="<?= $use_model ?>\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string"><?= $table_name ?></argument>
-            <argument name="resourceModel" xsi:type="string"><?= $use_collection ?></argument>
+            <argument name="resourceModel" xsi:type="string"><?= $use_resource ?></argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">

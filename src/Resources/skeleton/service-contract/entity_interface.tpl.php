@@ -3,6 +3,7 @@ use Zepgram\CodeMaker\Str;
 
 ?>
 <?= "<?php\n" ?>
+
 declare(strict_types=1);
 
 namespace <?= $namespace_entity_interface ?>;

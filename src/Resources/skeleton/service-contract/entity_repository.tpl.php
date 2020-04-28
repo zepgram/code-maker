@@ -1,4 +1,5 @@
 <?= "<?php\n" ?>
+
 declare(strict_types=1);
 
 namespace <?= $namespace_entity_repository ?>;
@@ -19,13 +20,13 @@ $useResource = $use_resource . ' as ' . $entity_name. 'Resource';
 ?>
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use <?= $use_entity_repository_interface ?>;
 use <?= $use_entity_interface ?>;
 use <?= $useEntityFactory ?>;
-use <?= $use_search_results_interface ?>;
 use <?= $useSearchResultFactory ?>;
 use <?= $useResource ?>;
 use <?= $use_collection ?>;
@@ -124,13 +125,13 @@ class <?= $name_entity_repository ?> implements <?= "$name_entity_repository_int
     /**
      * {@inheritdoc}
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): <?= "$name_search_results_interface\r\n" ?>
+    public function getList(SearchCriteriaInterface $searchCriteria): SearchResults
     {
         /** @var <?= $name_collection ?> $<?= $name_camel_case_entity ?> */
         $<?= $name_camel_case_collection ?> = $this-><?= $nameCollectionFactory ?>->create();
         $this->collectionProcessor->process($searchCriteria, $<?= $name_camel_case_collection ?>);
 
-        /** @var <?= $name_search_results_interface ?> $searchResults */
+        /** @var SearchResults $searchResults */
         $searchResults = $this-><?= $nameSearchResultFactory ?>->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());

@@ -4,6 +4,7 @@ use Zepgram\CodeMaker\Str;
 $implements = "\r\n";
 ?>
 <?= "<?php\n" ?>
+
 declare(strict_types=1);
 
 namespace <?= $namespace_model ?>;

@@ -1,9 +1,11 @@
 <?= "<?php\n" ?>
+
 declare(strict_types=1);
 
 namespace <?= $namespace_entity_repository_interface ?>;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -40,12 +42,12 @@ interface <?= "$name_entity_repository_interface\r\n" ?>
      * Get <?= $name_entity_interface ?> Entity List
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return <?= "$name_search_results_interface\r\n" ?>
+     * @return <?= "$name_search_results_interface\r\n" ?>|SearchResults
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): <?= $name_search_results_interface ?>;
+    public function getList(SearchCriteriaInterface $searchCriteria): SearchResults;
 
     /**
-     * Delete<?= $name_entity_interface ?> Entity
+     * Delete <?= $name_entity_interface ?> Entity
      *
      * @param $<?= "$name_camel_case_entity\r\n" ?>
      * @throws CouldNotDeleteException

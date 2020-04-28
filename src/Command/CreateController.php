@@ -61,6 +61,9 @@ class CreateController extends BaseCommand
     {
         $controller = new Controller();
         $this->entities = $controller->create($this->parameters, $this->entities);
+        $this->parameters['dependencies'] = $this->parameters['area'] === 'adminhtml' ?
+            ['Magento\Backend\App\Action', 'Magento\Backend\App\Action\Context'] :
+            ['Magento\Framework\App\Action\Action', 'Magento\Framework\App\Action\Context'];
 
         parent::execute($input, $output);
     }
