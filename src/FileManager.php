@@ -115,9 +115,12 @@ class FileManager
     public static function appendFiles($filePath, $content)
     {
         if (pathinfo($filePath, PATHINFO_EXTENSION) === 'xml') {
+            $asChange = false;
             $file = new SimpleXmlExtend(file_get_contents($filePath));
             $append = new SimpleXmlExtend($content);
-            $asChange = $file->appendXML($append->children());
+            foreach ($append->children() as $child) {
+                $asChange = $file->appendXML($child);
+            }
             if ($asChange) {
                 self::saveXml($filePath, $file->asXML());
             }
@@ -125,24 +128,6 @@ class FileManager
         } else {
             return file_put_contents($filePath, self::applyLfOnContent(PHP_EOL.$content), FILE_APPEND | LOCK_EX);
         }
-    }
-
-    /**
-     * @param $xmlOne
-     * @param $xmlTwo
-     *
-     * @return bool
-     */
-    public static function mergeContentXml($xmlOne, $xmlTwo)
-    {
-        $file = new SimpleXmlExtend($xmlOne);
-        $append = new SimpleXmlExtend($xmlTwo);
-        $asChange = $file->appendXML($append->children());
-        if ($asChange) {
-            return $file->asXML();
-        }
-
-        return $asChange;
     }
 
     /**

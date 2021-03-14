@@ -136,6 +136,8 @@ class CreateModel extends BaseCommand
             $this->entities->addFile('layout.tpl.php', "view/adminhtml/layout/$route_action.xml");
             $this->entities->addFile('component_list.tpl.php', "view/adminhtml/ui_component/".$gridName."_list.xml");
             $this->entities->addFile('menu.tpl.php', "etc/adminhtml/menu.xml");
+        } else {
+            unset($this->parameters['generate_grid']);
         }
 
         $this->maker->setTemplateSkeleton($template);

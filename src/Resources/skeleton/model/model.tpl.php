@@ -55,13 +55,12 @@ class <?= $name_model ?> extends AbstractModel<?= $implements ?>
     /**
 <?php if (isset($use_entity_interface)): ?>
      * {@inheritdoc}
-     */
 <?php else: ?>
      * Get <?= "$fieldName\n" ?>
      *
      * @return <?= $option['type'] . "\n" ?>
+<?php endif; ?>
      */
- <?php endif; ?>
     public function get<?= $fieldName ?>()
     {
         return $this->getData(self::<?= $fieldConst ?>);

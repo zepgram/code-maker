@@ -16,11 +16,17 @@ class SimpleXmlExtend extends SimpleXMLElement
 {
     const XML_NAMESPACE_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
 
-    // @todo:
-    /* handle cron - node group_id (node)
-    /* handle observer - node event (node)
-    /* handle commandline - node event (node)
+    // @todo: use the "name" field to set node append on children
+    /* handle observer - node event (name)
+    /* handle commandline - node commands (argument)
+    /* handle menu - node menu (node)
 
+    /**
+     * Add SimpleXMLElement code into a SimpleXMLElement
+     *
+     * @param SimpleXMLElement $append
+     * @return bool
+     */
     /**
      * Add SimpleXMLElement code into a SimpleXMLElement
      *
@@ -36,14 +42,15 @@ class SimpleXmlExtend extends SimpleXMLElement
                 return false;
             }
         }
-        // write changes
+        // add child
         if (trim((string)$append) === '') {
             $xml = $this->addChild($append->getName());
-            foreach ($append->children() as $child) {
-                $xml->appendXML($child);
-            }
         } else {
             $xml = $this->addChild($append->getName(), (string)$append);
+        }
+        // append child and add attributes
+        foreach ($append->children() as $child) {
+            $xml->appendXML($child);
         }
         foreach ($append->attributes() as $n => $v) {
             $xml->addAttribute($n, $v);
