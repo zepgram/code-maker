@@ -166,7 +166,6 @@ class ClassMaker
         $action = Str::lowercase($this->inputParameters['action']);
 
         return $base . '_' . $controller . '_' . $action;
-
     }
 
     /**
