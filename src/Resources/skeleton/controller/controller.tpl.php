@@ -11,14 +11,11 @@ use <?= "$dependency;\r\n" ?>
 use Magento\Framework\View\Result\PageFactory;
 <?php endif; ?>
 
-/**
- * Class <?= $name_controller ?>.
- */
 class <?= $name_controller ?> extends Action
 {
 <?php if (isset($generate_grid)): ?>
     /** @var string */
-    const ADMIN_RESOURCE = '<?= $module_namespace ?>_<?= $module_name ?>::<?= $table_name ?>';
+    public const ADMIN_RESOURCE = '<?= $module_namespace ?>_<?= $module_name ?>::<?= $table_name ?>';
 
     /** @var PageFactory */
     private $pageFactory;
@@ -65,7 +62,7 @@ class <?= $name_controller ?> extends Action
 
         return $resultPage;
 <?php else: ?>
-        die('You are in controller action:' . $this->getRequest()->getActionName());
+        $this->getResponse()->setBody('You are in controller action: ' . $this->getRequest()->getActionName());
 <?php endif; ?>
     }
 }

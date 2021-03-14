@@ -8,14 +8,11 @@ declare(strict_types=1);
 
 namespace <?= $namespace_entity_interface ?>;
 
-/**
- * Interface <?= $name_entity_interface ?>.
- */
 interface <?= "$name_entity_interface\r\n" ?>
 {
 <?php foreach ($option_fields as $field => $option): ?>
     /** @var <?= $option['type'] ?> */
-    const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
+    public const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
 <?php if ($field !== array_key_last($option_fields)):
 echo "\n";
 endif; ?>

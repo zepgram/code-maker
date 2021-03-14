@@ -23,14 +23,15 @@ class CreateControllerView extends CreateController
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $controllerEntity = 'Controller/'. $this->parameters['controller'].'/' . $this->parameters['action'];
+        $this->parameters['template'] = true;
+        $controllerEntity = 'Controller/' . $this->parameters['controller'] . '/' . $this->parameters['action'];
         $class = new ClassMaker($this->maker->getModuleNamespace(), $controllerEntity, $this->parameters);
         $area = $class->getArea();
-        $route_action = $class->getLayoutRoute();
+        $layoutRoute = $class->getLayoutRoute();
         $template = $class->getNameSnakeCase();
 
         $this->entities->addEntity('ViewModel/'.$this->parameters['action'], 'view_model.tpl.php');
-        $this->entities->addFile('layout.tpl.php', "view/$area/layout/$route_action.xml");
+        $this->entities->addFile('layout.tpl.php', "view/$area/layout/$layoutRoute.xml");
         $this->entities->addFile('template.tpl.php', "view/$area/templates/$template.phtml");
         $this->entities->addFile('routes.tpl.php', "etc/$area/routes.xml");
 

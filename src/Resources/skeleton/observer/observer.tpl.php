@@ -7,9 +7,6 @@ namespace <?= $namespace_observer ?>;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class <?= $name_observer ?>.
- */
 class <?= $name_observer ?> implements ObserverInterface
 {
     /**
@@ -17,6 +14,6 @@ class <?= $name_observer ?> implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-
+        // @todo: implement observer
     }
 }

@@ -11,10 +11,16 @@
 
 namespace Zepgram\CodeMaker\Editor;
 
+use RuntimeException;
 use Zepgram\CodeMaker\Str;
 
 class ClassMaker
 {
+    /**
+     * @var string
+     */
+    protected $moduleNamespace;
+
     /**
      * @var string
      */
@@ -28,17 +34,7 @@ class ClassMaker
     /**
      * @var string
      */
-    protected $moduleNamespace;
-
-    /**
-     * @var string
-     */
-    protected $area;
-
-    /**
-     * @var string
-     */
-    protected $router;
+    protected $inputParameters;
 
     /**
      * ClassMaker constructor.
@@ -49,19 +45,10 @@ class ClassMaker
      */
     public function __construct(string $moduleNamespace, string $class, array $parameters = [])
     {
-        $this->extractConfig($parameters);
         $this->moduleNamespace = $moduleNamespace;
-        $this->inputClass = $class;
         $this->class = $this->format($class);
-    }
-
-    /**
-     * @param array $extraConfig
-     */
-    private function extractConfig(array $extraConfig)
-    {
-        $this->area = $extraConfig['area'] ?? null;
-        $this->router = $extraConfig['router'] ?? null;
+        $this->inputClass = $class;
+        $this->inputParameters = $parameters;
     }
 
     /**
@@ -171,10 +158,15 @@ class ClassMaker
      */
     public function getLayoutRoute()
     {
-        $controllerPath = explode('/', $this->inputClass);
-        unset($controllerPath[0]);
+        $base = Str::asSnakeCase($this->moduleNamespace);
+        if (!isset($this->inputParameters['controller']) && !isset($this->inputParameters['action'])) {
+            throw new RuntimeException('Cannot create layout route: controller parameters are missing');
+        }
+        $controller = Str::lowercase($this->inputParameters['controller']);
+        $action = Str::lowercase($this->inputParameters['action']);
 
-        return Str::asSnakeCase($this->moduleNamespace) . '_' . Str::asSnakeCase(implode('/', $controllerPath));
+        return $base . '_' . $controller . '_' . $action;
+
     }
 
     /**
@@ -182,11 +174,7 @@ class ClassMaker
      */
     public function getArea()
     {
-        if ($this->area === null) {
-            $this->area = 'base';
-        }
-
-        return $this->area;
+        return $this->inputParameters['area'] ?? 'base';
     }
 
     /**

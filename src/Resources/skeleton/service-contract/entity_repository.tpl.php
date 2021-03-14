@@ -39,9 +39,6 @@ use <?= $use_entity_repository_interface ?>;
 use <?= $use_search_results_interface ?>;
 <?php endif; ?>
 
-/**
- * Class <?= $name_entity_repository ?>.
- */
 class <?= $name_entity_repository ?> implements <?= "$name_entity_repository_interface\r\n" ?>
 {
 <?php if (isset($name_resource)): ?>
@@ -116,7 +113,7 @@ class <?= $name_entity_repository ?> implements <?= "$name_entity_repository_int
         $<?= $name_camel_case_entity ?> = $this-><?= $nameEntityFactory ?>->create();
         $this-><?= $nameResource ?>->load($<?= $name_camel_case_entity ?>, $id);
         if (!$<?= $name_camel_case_entity ?>->getId()) {
-            throw new NoSuchEntityException(__("No <?= $name_entity ?> found with id: %1", $id));
+            throw new NoSuchEntityException(__('No <?= $name_entity ?> found with id: %1', $id));
         }
 
         return $<?= $name_camel_case_entity ?>;

@@ -26,7 +26,10 @@ abstract class Operations
         'widget.xml',
         'system.xml',
         'config.xml',
-        'acl.xml'
+        'acl.xml',
+        'menu.xml',
+        'db_schema.xml',
+        'schema.graphqls'
     ];
 
     /**
@@ -61,7 +64,7 @@ abstract class Operations
         }
         if ($this->filesAppend) {
             foreach ($this->filesAppend as $path => $content) {
-                $asChange = FileManager::appendXmlFiles($this->getAbsoluteFilePath($path), $content);
+                $asChange = FileManager::appendFiles($this->getAbsoluteFilePath($path), $content);
                 if (!$asChange) {
                     unset($this->filesAppend[$path]);
                 }

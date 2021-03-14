@@ -1,5 +1,5 @@
 <?php
-$output = $name_camel_case.'Output';
+$output = $name_camel_case_resolver.'Output';
 ?>
 <?php if ($type === 'query'): ?>
 type Query {
@@ -7,7 +7,7 @@ type Query {
 <?php if ($type === 'mutation'): ?>
 type Mutation {
 <?php endif; ?>
-    <?= $name_camel_case ?>(id: Int): <?= $output ?> @resolver(class: "<?= $use_escaped_resolver ?>") @doc(description:"<?= $description ?>")
+    <?= $name_camel_case_resolver ?>(id: Int): <?= $output ?> @resolver(class: "<?= $use_escaped_resolver ?>") @doc(description:"<?= $description ?>")
 }
 
 type <?= $output ?> {

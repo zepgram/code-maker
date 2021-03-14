@@ -8,9 +8,6 @@ namespace <?= $namespace_block ?>;
 use <?= "$dependency;\r\n" ?>
 <?php endforeach; ?>
 
-/**
- * Class <?= $name_block ?>.
- */
 class <?= $name_block ?> extends Template
 {
     public function __construct(Context $context, array $data = [])

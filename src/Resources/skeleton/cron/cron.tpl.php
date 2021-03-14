@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace <?= $namespace_cron ?>;
 
-/**
- * Class <?= $name_cron ?>.
- */
 class <?= "$name_cron\n" ?>
 {
     /**
-     * Execute
+     * Cronjob Description
+     *
+     * @return void
      */
     public function execute()
     {
-
+        // @todo: implement cronjob
     }
 }

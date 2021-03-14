@@ -57,7 +57,7 @@ class CreateCron extends BaseCommand
     {
         $this->entities->addEntity('Cron/'.$this->parameters['cron_name'], 'cron.tpl.php');
         $this->entities->addFile('crontab.tpl.php', 'etc/crontab.xml');
-        if ($this->parameters['is_new_cron_group']) {
+        if (isset($this->parameters['is_new_cron_group']) && $this->parameters['is_new_cron_group']) {
             $this->entities->addFile('cron_groups.tpl.php', 'etc/cron_groups.xml');
         }
 

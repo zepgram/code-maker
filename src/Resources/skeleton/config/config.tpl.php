@@ -4,17 +4,16 @@ use Zepgram\CodeMaker\Str;
 ?>
 <?= "<?php\n" ?>
 
+declare(strict_types=1);
+
 namespace <?= $namespace_config ?>;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-/**
- * Class <?= $name_config ?>.
- */
 class <?= "$name_config\n"?>
 {
 <?php foreach ($option_fields as $option): ?>
-    const <?= $option['const'] ?> = '<?= $option['xml']."';\n" ?>
+    public const <?= $option['const'] ?> = '<?= $option['xml']."';\n" ?>
 <?php endforeach; ?>
 
     /**

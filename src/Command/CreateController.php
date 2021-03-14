@@ -41,7 +41,7 @@ class CreateController extends BaseCommand
             ],
             'router' => [
                 'default' => 'subscriber',
-                'formatter' => 'asSnakeCase'
+                'formatter' => 'asKebabCase'
             ],
             'controller' => [
                 'default' => 'Update',

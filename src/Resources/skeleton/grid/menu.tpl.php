@@ -14,7 +14,7 @@ $table_title = Str::getPhraseUcWord($table_name);
         <add id="<?= $module_name ?>::<?= $table_name ?>" title="<?= $table_title ?>" sortOrder="20"
              module="<?= $module_name ?>" dependsOnModule="<?= $module_name ?>"
              parent="<?= $module_name ?>::parent"
-             action="<?= $router ?>/<?= Str::asSnakeCase($controller) ?>"
+             action="<?= $router ?>/<?= Str::lowercase($controller) ?>"
              resource="<?= $module_name ?>::<?= $table_name ?>" />
     </menu>
 </config>

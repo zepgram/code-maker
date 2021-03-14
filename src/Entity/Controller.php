@@ -12,6 +12,9 @@ class Controller
     {
         $area = $parameters['area'];
         $controller = $parameters['controller'];
+        if ($area === 'adminhtml') {
+            $controller = 'Adminhtml/'.$controller;
+        }
         $entities->addEntity("Controller/$controller/" . $parameters['action'], 'controller.tpl.php');
         $entities->addFile('routes.tpl.php', "etc/$area/routes.xml");
 

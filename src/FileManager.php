@@ -73,35 +73,7 @@ class FileManager
         if (@mkdir($directory) || file_exists($directory)) {
             return true;
         }
-        return (self::mkdir(dirname($directory)) and mkdir($directory));
-    }
-
-    /**
-     * @param $filePath
-     *
-     * @return false|string
-     */
-    public static function readFile($filePath)
-    {
-        if (!file_exists($filePath)) {
-            throw new \RuntimeException("File $filePath doesn't exist.");
-        }
-
-        return file($filePath);
-    }
-
-    /**
-     * @param $filePath
-     *
-     * @return bool
-     */
-    public static function contentFile($filePath)
-    {
-        if (!file_exists($filePath)) {
-            throw new \RuntimeException("File $filePath doesn't exist.");
-        }
-
-        return file_get_contents($filePath);
+        return (self::mkdir(dirname($directory)) && mkdir($directory));
     }
 
     /**
@@ -124,11 +96,32 @@ class FileManager
     public static function writeFiles($filePath, $content)
     {
         self::createFileDirectories($filePath);
-        if (strpos(pathinfo($filePath)['extension'], 'xml') !== false) {
+        if (pathinfo($filePath, PATHINFO_EXTENSION) === 'xml') {
             self::saveXml($filePath, $content);
-            return;
+        } else {
+            file_put_contents($filePath, self::applyLfOnContent($content));
         }
-        file_put_contents($filePath, $content);
+    }
+
+    /**
+     * @param $filePath
+     * @param $content
+     *
+     * @return bool
+     */
+    public static function appendFiles($filePath, $content)
+    {
+        if (pathinfo($filePath, PATHINFO_EXTENSION) === 'xml') {
+            $file = new SimpleXmlExtend(file_get_contents($filePath));
+            $append = new SimpleXmlExtend($content);
+            $asChange = $file->appendXML($append->children());
+            if ($asChange) {
+                self::saveXml($filePath, $file->asXML());
+            }
+            return $asChange;
+        } else {
+            return file_put_contents($filePath, self::applyLfOnContent(PHP_EOL.$content), FILE_APPEND | LOCK_EX);
+        }
     }
 
     /**
@@ -152,24 +145,6 @@ class FileManager
     /**
      * @param $filePath
      * @param $content
-     *
-     * @return bool
-     */
-    public static function appendXmlFiles($filePath, $content)
-    {
-        $file = new SimpleXmlExtend(file_get_contents($filePath));
-        $append = new SimpleXmlExtend($content);
-        $asChange = $file->appendXML($append->children());
-        if ($asChange) {
-            self::saveXml($filePath, $file->asXML());
-        }
-
-        return $asChange;
-    }
-
-    /**
-     * @param $filePath
-     * @param $content
      */
     public static function saveXml($filePath, $content)
     {
@@ -178,5 +153,14 @@ class FileManager
         $xml->formatOutput = true;
         $xml->loadXML($content);
         $xml->save($filePath);
+    }
+
+    /**
+     * @param $content
+     * @return string|string[]
+     */
+    private static function applyLfOnContent($content)
+    {
+        return str_replace("\r\n", PHP_EOL, $content);
     }
 }

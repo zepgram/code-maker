@@ -13,9 +13,6 @@ use <?= $use_entity_management_interface ?>;
 use <?= $use_entity_repository_interface ?>;
 use <?= $useEntityFactory ?>;
 
-/**
- * Class <?= $name_entity_management ?>.
- */
 class <?= $name_entity_management ?> implements <?= "$name_entity_management_interface\r\n" ?>
 {
     /**
@@ -42,5 +39,5 @@ class <?= $name_entity_management ?> implements <?= "$name_entity_management_int
         $this-><?= $name_camel_case_entity_repository ?> = $<?= $name_camel_case_entity_repository ?>;<?= "\r\n" ?>
     }
 
-    // put your business code here
+    // @todo: create business code here
 }

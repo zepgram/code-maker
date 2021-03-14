@@ -15,9 +15,6 @@ use Magento\Framework\Exception\LocalizedException;
 use <?= $use_entity_interface ?>;
 use <?= $use_search_results_interface ?>;
 
-/**
- * Interface <?= $name_entity_repository_interface ?>.
- */
 interface <?= "$name_entity_repository_interface\r\n" ?>
 {
     /**

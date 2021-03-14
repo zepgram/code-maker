@@ -34,10 +34,10 @@ class CreateCommand extends BaseCommand
     {
         return [
             'class_command' => [
-                'default' => 'ConfigShow', 'formatter' => 'ucwords'
+                'default' => 'CommandShow', 'formatter' => 'ucwords'
             ],
             'command' => [
-                'default' => 'config:show'
+                'default' => 'command:show'
             ]
         ];
     }

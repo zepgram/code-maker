@@ -30,6 +30,14 @@ class Str
         return $string;
     }
 
+    public static function asSnakeCaseNoUnderScore(string $string)
+    {
+        $string = self::caseFormatter('', $string);
+        $string = self::lowercase($string);
+
+        return $string;
+    }
+
     /**
      * @param string $string
      * @param bool   $upper
@@ -134,6 +142,10 @@ class Str
         return ucwords(trim($string));
     }
 
+    /**
+     * @param string $string
+     * @return string
+     */
     public static function ucfirst(string $string)
     {
         return ucfirst(trim($string));

@@ -6,9 +6,6 @@ namespace <?= $namespace_search_results_interface ?>;
 
 use Magento\Framework\Api\SearchResultsInterface;
 
-/**
- * Interface <?= $name_search_results_interface ?>.
- */
 interface <?= $name_search_results_interface ?> extends SearchResultsInterface
 {
     /**

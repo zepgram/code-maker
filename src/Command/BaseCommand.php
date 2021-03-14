@@ -54,6 +54,27 @@ abstract class BaseCommand extends Command
     public $parameters = [];
 
     /**
+     * @return array
+     */
+    abstract protected function getParameters();
+
+    /**
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [];
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getCommandSkeleton()
+    {
+        return explode(':', $this->getName())[1];
+    }
+
+    /**
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
@@ -125,27 +146,6 @@ abstract class BaseCommand extends Command
             return;
         }
         $this->printFiles(['created' => $created, 'modified' => $append], $output);
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getCommandSkeleton()
-    {
-        return explode(':', $this->getName())[1];
-    }
-
-    /**
-     * @return array
-     */
-    abstract protected function getParameters();
-
-    /**
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [];
     }
 
     /**
@@ -226,6 +226,9 @@ abstract class BaseCommand extends Command
     {
         $answers = [];
         foreach ($this->getParameters() as $parameter => $actions) {
+            if ($this->mustSkip($answers)) {
+                continue;
+            }
             /** @var QuestionHelper $helper */
             $helper = $this->getHelper('question');
 
@@ -271,7 +274,7 @@ abstract class BaseCommand extends Command
      *
      * @return array
      */
-    protected function askOptions($input, $output)
+    private function askOptions($input, $output)
     {
         $fields = [];
         $isFirstField = true;
@@ -307,7 +310,7 @@ abstract class BaseCommand extends Command
      *
      * @return string|string[]|null
      */
-    protected function askForNextField($input, $output, array $fields, string $questionText)
+    private function askForNextField($input, $output, array $fields, string $questionText)
     {
         $question = $this->formattedQuestion($questionText);
         /** @var QuestionHelper $helper */
@@ -319,12 +322,10 @@ abstract class BaseCommand extends Command
         }
 
         foreach ($fields as $fieldKey => $values) {
-            if ($fieldKey) {
-                if (Str::asSnakeCase($fieldName) === Str::asSnakeCase($fieldKey)) {
-                    $output->writeln(sprintf('<error>The "%s" property already exists.</error>', $fieldName));
+            if ($fieldKey && Str::asSnakeCase($fieldName) === Str::asSnakeCase($fieldKey)) {
+                $output->writeln(sprintf('<error>The "%s" property already exists.</error>', $fieldName));
 
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -340,5 +341,18 @@ abstract class BaseCommand extends Command
         }
 
         return $fields;
+    }
+
+    /**
+     * @param array $answer
+     * @return bool
+     */
+    private function mustSkip(array $answer)
+    {
+        if (isset($answer['cron_group']) && $answer['cron_group'] === 'default') {
+            return true;
+        }
+
+        return false;
     }
 }

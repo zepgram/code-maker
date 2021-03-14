@@ -34,12 +34,12 @@ class CreateLogger extends BaseCommand
     protected function getParameters()
     {
         $loggerPath = explode('\\', $this->maker->getModuleNamespace());
-        $loggerFile = Str::asSnakeCase($loggerPath[0].'/'.$loggerPath[1]).'.log';
+        $loggerFile = Str::lowercase($loggerPath[1]);
 
         return [
             'filename' => [
                 'default' => $loggerFile,
-                'formatter' => 'asSnakeCase'
+                'formatter' => 'asKebabCase'
             ]
         ];
     }

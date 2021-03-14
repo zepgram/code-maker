@@ -16,15 +16,12 @@ use <?= $use_entity_interface ?>;
 endif; ?>
 use <?= $use_resource ?> as <?= $name_model ?>Resource;
 
-/**
-* Class <?= $name_model ?>.
-*/
 class <?= $name_model ?> extends AbstractModel<?= $implements ?>
 {
 <?php if (!isset($use_entity_interface)): ?>
 <?php foreach ($option_fields as $field => $option): ?>
     /** @var <?= $option['type'] ?> */
-    const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
+    public const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
 
 <?php endforeach; ?>
 <?php endif; ?>
@@ -58,12 +55,13 @@ class <?= $name_model ?> extends AbstractModel<?= $implements ?>
     /**
 <?php if (isset($use_entity_interface)): ?>
      * {@inheritdoc}
+     */
 <?php else: ?>
      * Get <?= "$fieldName\n" ?>
      *
-     * @return <?= $option['type']."\n" ?>
- <?php endif; ?>
+     * @return <?= $option['type'] . "\n" ?>
      */
+ <?php endif; ?>
     public function get<?= $fieldName ?>()
     {
         return $this->getData(self::<?= $fieldConst ?>);

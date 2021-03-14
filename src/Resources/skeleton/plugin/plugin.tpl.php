@@ -6,9 +6,6 @@ namespace <?= $namespace_plugin ?>;
 
 use <?= "$target_class" ?>;
 
-/**
- * Class <?= $name_plugin ?>.
- */
 class <?= "$name_plugin\n" ?>
 {
     /**
@@ -16,16 +13,7 @@ class <?= "$name_plugin\n" ?>
      */
     public function beforeMethod(<?= $target_class_name ?> $subject)
     {
-
-    }
-
-    /**
-     * @param <?= $target_class_name ?> $subject
-     * @param $result
-     */
-    public function afterMethod(<?= $target_class_name ?> $subject, $result)
-    {
-
+         // @todo: implement plugin before
     }
 
     /**
@@ -34,6 +22,15 @@ class <?= "$name_plugin\n" ?>
      */
     public function aroundMethod(<?= $target_class_name ?> $subject, callable $proceed)
     {
+        // @todo: implement plugin around
+    }
 
+    /**
+     * @param <?= $target_class_name ?> $subject
+     * @param $result
+     */
+    public function afterMethod(<?= $target_class_name ?> $subject, $result)
+    {
+        // @todo: implement plugin after
     }
 }
