@@ -11,7 +11,10 @@
 
 namespace Zepgram\CodeMaker;
 
-use Zepgram\CodeMaker\Xml\SimpleXmlExtend;
+use Zepgram\CodeMaker\SimpleXml\Config;
+use Zepgram\CodeMaker\SimpleXml\Converter\Dom;
+use Zepgram\CodeMaker\SimpleXml\Element;
+use Zepgram\CodeMaker\SimpleXml\SimpleXmlExtend;
 
 class FileManager
 {

@@ -8,12 +8,14 @@
  * @author     bcalef <zepgram@gmail.com>
  * @license    proprietary
  */
-namespace Zepgram\CodeMaker\Xml;
+namespace Zepgram\CodeMaker\SimpleXml;
 
 use SimpleXMLElement;
 
 class SimpleXmlExtend extends SimpleXMLElement
 {
+    const XML_NAMESPACE_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
+
     // @todo:
     /* handle cron - node group_id (node)
     /* handle observer - node event (node)
@@ -26,7 +28,7 @@ class SimpleXmlExtend extends SimpleXMLElement
      *
      * @return bool
      */
-    public function appendXML($append)
+    public function appendXML(SimpleXMLElement $append)
     {
         // do not add a node already in file
         foreach ($this->children() as $base) {
@@ -45,6 +47,9 @@ class SimpleXmlExtend extends SimpleXMLElement
         }
         foreach ($append->attributes() as $n => $v) {
             $xml->addAttribute($n, $v);
+        }
+        foreach ($append->attributes('xsi', true) as $xsi => $value) {
+            $xml->addAttribute('xsi:'.$xsi, $value, self::XML_NAMESPACE_XSI);
         }
 
         return true;
