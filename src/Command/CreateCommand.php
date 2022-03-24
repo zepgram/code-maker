@@ -34,7 +34,8 @@ class CreateCommand extends BaseCommand
     {
         return [
             'class_command' => [
-                'default' => 'CommandShow', 'formatter' => 'ucwords'
+                'default' => 'CommandShow',
+                'formatter' => 'ucwords'
             ],
             'command' => [
                 'default' => 'command:show'

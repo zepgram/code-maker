@@ -78,7 +78,6 @@ class Cli extends Application
                 'Zepgram code maker is only compatible with magento version >= '. self::MAGENTO_VERSION
             );
         }
-        // @todo: set magento version in config to be able to load the correct version constraint
     }
 
     /**

@@ -13,7 +13,7 @@ class <?= "$name_plugin\n" ?>
      */
     public function beforeMethod(<?= $target_class_name ?> $subject)
     {
-         // @todo: implement plugin before
+        // @todo: implement plugin before
     }
 
     /**

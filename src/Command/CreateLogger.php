@@ -45,7 +45,6 @@ class CreateLogger extends BaseCommand
     }
 
     /**
-     * @todo: resolve xml merge
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)

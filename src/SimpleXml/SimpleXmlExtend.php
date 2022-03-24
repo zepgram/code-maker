@@ -16,17 +16,6 @@ class SimpleXmlExtend extends SimpleXMLElement
 {
     const XML_NAMESPACE_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
 
-    // @todo: use the "name" field to set node append on children
-    /* handle observer - node event (name)
-    /* handle commandline - node commands (argument)
-    /* handle menu - node menu (node)
-
-    /**
-     * Add SimpleXMLElement code into a SimpleXMLElement
-     *
-     * @param SimpleXMLElement $append
-     * @return bool
-     */
     /**
      * Add SimpleXMLElement code into a SimpleXMLElement
      *
