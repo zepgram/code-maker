@@ -1,13 +1,12 @@
 <?php
-/**
- * This file is part of Zepgram\CodeMaker\File
- *
- * @package    Zepgram\CodeMaker
- * @file       AppendXml.php
- * @date       31 08 2019 17:27
- * @author     bcalef <zepgram@gmail.com>
- * @license    proprietary
+
+/*
+ * This file is part of Zepgram Code Maker.
+ * (c) Benjamin Calef <bcalef.pro@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
+
 namespace Zepgram\CodeMaker\SimpleXml;
 
 use SimpleXMLElement;

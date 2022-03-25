@@ -1,12 +1,10 @@
 <?php
-/**
- * This file is part of Zepgram\CodeMaker\Console
- *
- * @package    Zepgram\CodeMaker\Console
- * @file       CreateModule.php
- * @date       30 08 2019 17:55
- * @author     bcalef <zepgram@gmail.com>
- * @license    proprietary
+
+/*
+ * This file is part of Zepgram Code Maker.
+ * (c) Benjamin Calef <bcalef.pro@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Zepgram\CodeMaker\Command;

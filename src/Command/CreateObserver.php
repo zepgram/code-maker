@@ -1,12 +1,10 @@
 <?php
-/**
- * This file is part of Zepgram\CodeMaker\Command
- *
- * @package    Zepgram\CodeMaker\Command
- * @file       CreateCron.php
- * @date       03 09 2019 14:01
- * @author     bcalef <zepgram@gmail.com>
- * @license    proprietary
+
+/*
+ * This file is part of Zepgram Code Maker.
+ * (c) Benjamin Calef <bcalef.pro@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Zepgram\CodeMaker\Command;
