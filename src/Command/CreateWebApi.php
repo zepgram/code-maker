@@ -12,9 +12,9 @@ namespace Zepgram\CodeMaker\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateGraphQl extends BaseCommand
+class CreateWebApi extends BaseCommand
 {
-    protected static $defaultName = 'create:graph-ql';
+    protected static $defaultName = 'create:webapi';
 
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class CreateGraphQl extends BaseCommand
     protected function configure()
     {
         $this->setName(self::$defaultName)
-            ->setDescription('Create resolver graphQL');
+            ->setDescription('Create webapi REST or SOAP');
     }
 
     /**
@@ -31,18 +31,26 @@ class CreateGraphQl extends BaseCommand
     protected function getParameters()
     {
         return [
-            'resolver_name' => [
-                'default' => 'AddItem',
-                'formatter' => 'ucwords'
+            'url' => [
+                'default' => '/V1/customerGroups/:id',
             ],
-            'type' => [
+            'http_method' => [
                 'choice_question' => [
-                    'query',
-                    'mutation'
+                    'GET',
+                    'POST',
+                    'PUT',
+                    'DELETE',
                 ]
             ],
-            'description' => [
-                'default' => 'Add item', 'getPhrase'
+            'service_class' => [
+                'default' => 'Magento\Customer\Api\GroupRepositoryInterface'
+            ],
+            'service_method' => [
+                'default' => 'getById',
+                'formatter' => 'camelCase'
+            ],
+            'resource' => [
+                'default' => 'Magento_Customer::group',
             ]
         ];
     }
@@ -52,8 +60,7 @@ class CreateGraphQl extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->entities->addEntity('Model/Resolver/'.$this->parameters['resolver_name'], 'resolver.tpl.php');
-        $this->entities->addFile('schema.tpl.php', 'etc/schema.graphqls');
+        $this->entities->addFile('webapi.tpl.php', 'etc/webapi.xml');
 
         parent::execute($input, $output);
     }
