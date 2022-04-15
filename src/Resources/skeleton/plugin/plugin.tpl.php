@@ -16,7 +16,7 @@ class <?= "$name_plugin\n" ?>
     {
         // @todo: implement plugin before
     }
-<?php elseif($plugin_method === 'around'): ?>
+<?php elseif ($plugin_method === 'around'): ?>
     /**
      * @param <?= $target_class_name ?> $subject
      * @param callable $proceed
@@ -25,7 +25,7 @@ class <?= "$name_plugin\n" ?>
     {
         // @todo: implement plugin around
     }
-<?php elseif($plugin_method === 'after'): ?>
+<?php elseif ($plugin_method === 'after'): ?>
     /**
      * @param <?= $target_class_name ?> $subject
      * @param $result
