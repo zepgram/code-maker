@@ -35,11 +35,21 @@ class CreatePlugin extends BaseCommand
                 'choice_question' => self::MAGENTO_AREA
             ],
             'plugin_name' => [
-                'default' =>'QueryText',
+                'default' => 'QueryText',
                 'formatter' => 'ucwords'
+            ],
+            'plugin_method' => [
+                'choice_question' => [
+                    'before',
+                    'around',
+                    'after'
+                ]
             ],
             'target_class' => [
                 'default' => 'Magento\CatalogSearch\Block\Result',
+                'formatter' => 'ucwords'
+            ],
+            'target_method' => [
                 'formatter' => 'ucwords'
             ]
         ];
