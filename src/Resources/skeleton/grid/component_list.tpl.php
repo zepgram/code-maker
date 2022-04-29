@@ -43,7 +43,7 @@ $provider = $grid_name . '_list.' . $grid_name . '_grid_data_source';
             <settings>
                 <filter>text</filter>
                 <label translate="true"><?= Str::getPhraseUcWord($primary_key) ?></label>
-                <sorting>asc</sorting>
+                <sorting>desc</sorting>
             </settings>
         </column>
 <?php foreach ($option_fields as $field => $option):
@@ -94,7 +94,6 @@ case 'boolean': ?>
             <settings>
                 <filter>text</filter>
                 <label translate="true"><?= $comment ?></label>
-                <sorting>asc</sorting>
             </settings>
         </column>
 <?php endswitch; ?>
