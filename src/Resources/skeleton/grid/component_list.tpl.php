@@ -21,7 +21,8 @@ $provider = $grid_name . '_list.' . $grid_name . '_grid_data_source';
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource><?= $module_namespace ?>_<?= $module_name ?>::<?= $table_name ?></aclResource>
-        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="<?= $grid_name . '_grid_data_source' ?>">
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="<?= $grid_name . '_grid_data_source' ?>">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName><?= $primary_key ?></primaryFieldName>

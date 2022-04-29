@@ -20,7 +20,7 @@ interface <?= "$name_entity_repository_interface\r\n" ?>
     /**
      * Save <?= $name_entity_interface ?> Entity
      *
-     * @param $<?= "$name_camel_case_entity\r\n" ?>
+     * @param <?= "$name_entity_interface" ?> $<?= "$name_camel_case_entity\r\n" ?>
      * @throws CouldNotSaveException
      * @return <?= "$name_entity_interface\r\n" ?>
      */
@@ -39,14 +39,14 @@ interface <?= "$name_entity_repository_interface\r\n" ?>
      * Get <?= $name_entity_interface ?> Entity List
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return <?= "$name_search_results_interface\r\n" ?>|SearchResults
+     * @return <?= "$name_search_results_interface|SearchResults\r\n" ?>
      */
     public function getList(SearchCriteriaInterface $searchCriteria): SearchResults;
 
     /**
      * Delete <?= $name_entity_interface ?> Entity
      *
-     * @param $<?= "$name_camel_case_entity\r\n" ?>
+     * @param <?= "$name_entity_interface" ?> $<?= "$name_camel_case_entity\r\n" ?>
      * @throws CouldNotDeleteException
      * @return bool
      */

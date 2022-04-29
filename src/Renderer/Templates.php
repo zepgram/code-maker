@@ -57,9 +57,9 @@ class Templates extends Operations
         if (!$this->maker->getIsInitialized()) {
             $this->maker->setTemplateSkeleton(array_merge($this->maker->getTemplateSkeleton(), ['module']))
                 ->setFilesPath(array_merge([
-                    'module.tpl.php'       => 'etc/module.xml',
+                    'module.tpl.php' => 'etc/module.xml',
                     'registration.tpl.php' => 'registration.php',
-                    'composer.tpl.php'     => 'composer.json'
+                    'composer.tpl.php' => 'composer.json'
                 ], $this->maker->getFilesPath()));
         }
     }

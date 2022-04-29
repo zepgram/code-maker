@@ -11,7 +11,7 @@ namespace <?= $namespace_entity_interface ?>;
 interface <?= "$name_entity_interface\r\n" ?>
 {
 <?php foreach ($option_fields as $field => $option): ?>
-    /** @var <?= $option['type'] ?> */
+    /** @var string */
     public const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
 <?php if ($field !== array_key_last($option_fields)):
 echo "\n";

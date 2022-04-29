@@ -55,10 +55,10 @@ class Maker
             ->setModuleNamespace($moduleNamespace)
             ->setTemplateSkeleton([$template])
             ->setTemplateParameters([
-                'module_name'      => $this->moduleName,
+                'module_name' => $this->moduleName,
                 'module_namespace' => $this->vendorName,
-                'lower_namespace'  => Str::lowercase($this->vendorName),
-                'lower_module'     => Str::lowercase($this->moduleName),
+                'lower_namespace' => Str::lowercase($this->vendorName),
+                'lower_module' => Str::lowercase($this->moduleName),
             ])
             ->setIsInitialized();
     }

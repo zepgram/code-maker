@@ -99,7 +99,7 @@ class CreateModel extends BaseCommand
             'is_nullable' => [
                 'true',
                 'false'
-            ],
+            ]
         ];
     }
 
