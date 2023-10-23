@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace <?= $namespace_entity_repository ?>;
 
 <?php if (isset($name_resource)):
-$nameEntityFactory = $name_camel_case_entity. 'Factory';
-$classEntityFactory = $name_entity_interface. 'Factory';
-$useEntityFactory = $use_entity_interface. 'Factory';
-$nameSearchResultFactory = $name_camel_case_search_results_interface. 'Factory';
-$classSearchResultFactory = $name_search_results_interface. 'Factory';
-$useSearchResultFactory = $use_search_results_interface. 'Factory';
-$nameCollectionFactory = $name_camel_case_collection. 'Factory';
-$classCollectionFactory = $name_collection. 'Factory';
-$useCollectionFactory = $use_collection. 'Factory';
-$nameResource = $name_camel_case_entity . 'Resource';
-$classResource = $entity_name . 'Resource';
-$useResource = $use_resource . ' as ' . $entity_name. 'Resource';
-?>
+    $nameEntityFactory = $name_camel_case_entity. 'Factory';
+    $classEntityFactory = $name_entity_interface. 'Factory';
+    $useEntityFactory = $use_entity_interface. 'Factory';
+    $nameSearchResultFactory = $name_camel_case_search_results_interface. 'Factory';
+    $classSearchResultFactory = $name_search_results_interface. 'Factory';
+    $useSearchResultFactory = $use_search_results_interface. 'Factory';
+    $nameCollectionFactory = $name_camel_case_collection. 'Factory';
+    $classCollectionFactory = $name_collection. 'Factory';
+    $useCollectionFactory = $use_collection. 'Factory';
+    $nameResource = $name_camel_case_entity . 'Resource';
+    $classResource = $entity_name . 'Resource';
+    $useResource = $use_resource . ' as ' . $entity_name. 'Resource';
+    ?>
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResults;

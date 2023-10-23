@@ -50,9 +50,9 @@ $provider = $grid_name . '_list.' . $grid_name . '_grid_data_source';
     $dbType = $option['db_type'];
     $field = Str::asSnakeCase($field);
     $comment = Str::getPhraseUcWord($field);
-?>
+    ?>
 <?php switch ($dbType):
-case 'date': ?>
+        case 'date': ?>
         <column name="<?= $field ?>" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
             <settings>
                 <timezone>false</timezone>

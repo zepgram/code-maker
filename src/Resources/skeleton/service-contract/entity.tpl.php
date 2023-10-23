@@ -35,7 +35,7 @@ class <?= $name_entity ?> extends DataObject implements <?= "$name_entity_interf
         return $this;
     }
 <?php if ($field !== array_key_last($option_fields)):
-echo "\n";
+    echo "\n";
 endif?>
 <?php endforeach; ?>
 }

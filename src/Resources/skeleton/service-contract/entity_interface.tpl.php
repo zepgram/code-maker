@@ -14,8 +14,8 @@ interface <?= "$name_entity_interface\r\n" ?>
     /** @var string */
     public const <?= Str::asUpperSnakeCase($field) ?> = '<?= Str::asSnakeCase($field)."';\r\n" ?>
 <?php if ($field !== array_key_last($option_fields)):
-echo "\n";
-endif; ?>
+        echo "\n";
+    endif; ?>
 <?php endforeach; ?>
 
 <?php if (isset($primary_key)): ?>
@@ -55,7 +55,7 @@ endif; ?>
      */
     public function set<?= $fieldName ?>(<?= $option['type'] ?> $<?= $fieldParameter ?>);
 <?php if ($field !== array_key_last($option_fields)):
-echo "\n";
+    echo "\n";
 endif?>
 <?php endforeach; ?>
 }

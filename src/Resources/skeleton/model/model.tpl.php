@@ -84,7 +84,7 @@ class <?= $name_model ?> extends AbstractModel<?= $implements ?>
         return $this;
     }
 <?php if ($field !== array_key_last($option_fields)):
-echo "\n";
+    echo "\n";
 endif; ?>
 <?php endforeach; ?>
 }
