@@ -39,6 +39,11 @@ $provider = $grid_name . '_list.' . $grid_name . '_grid_data_source';
         <filters name="listing_filters"/>
     </listingToolbar>
     <columns name="<?= $grid_name ?>_list_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField><?= $primary_key ?></indexField>
+            </settings>
+        </selectionsColumn>
         <column name="<?= $primary_key ?>">
             <settings>
                 <filter>text</filter>

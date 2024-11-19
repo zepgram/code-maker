@@ -1,45 +1,46 @@
 {
-    "name": "zepgram/code-maker",
-    "type": "magento2-component",
-    "description": "Helps you to create code on the fly for magento2",
-    "keywords": [
-        "generator",
-        "code generator",
-        "installer",
-        "scaffolding",
-        "scaffold"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Benjamin Calef",
-            "email": "zepgram@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^7.0",
-        "ext-dom": "*",
-        "ext-json": "*",
-        "ext-simplexml": "*",
-        "symfony/console": "^2.8.0 || ^3.0.0 || ^4.0.0"
-    },
-    "extra": {
-        "chmod": [
-            {
-                "mask": "0755",
-                "path": "bin/maker"
-            }
-        ],
-        "map": [
-            [
-                "src/dist/bin/maker",
-                "bin/maker"
-            ]
-        ]
-    },
-    "autoload": {
-        "psr-4": {
-            "Zepgram\\CodeMaker\\": "src"
-        }
+  "name": "zepgram/code-maker",
+  "type": "magento2-component",
+  "version": "0.0.1",
+  "description": "Helps you to create code on the fly for magento2",
+  "keywords": [
+    "generator",
+    "code generator",
+    "installer",
+    "scaffolding",
+    "scaffold"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Benjamin Calef",
+      "email": "admin@username.digital"
     }
+  ],
+  "require": {
+    "php": "^7.0|^8.0",
+    "ext-dom": "*",
+    "ext-json": "*",
+    "ext-simplexml": "*",
+    "symfony/console": "^2.8.0 || ^3.0.0 || ^4.0.0"
+  },
+  "extra": {
+    "chmod": [
+      {
+        "mask": "0755",
+        "path": "bin/maker"
+      }
+    ],
+    "map": [
+      [
+        "src/dist/bin/maker",
+        "bin/maker"
+      ]
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "Zepgram\\CodeMaker\\": "src"
+    }
+  }
 }
