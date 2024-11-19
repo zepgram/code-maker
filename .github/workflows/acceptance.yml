@@ -18,17 +18,3 @@ jobs:
           .github/push.sh \
           "zepgram@gmail.com" "Benjamin Calef" "php-cs-fixer" \
           "${{ secrets.GITHUB_SECRET_TOKEN }}" "${{ secrets.GITHUB_PUBLIC_TOKEN }}"
-  composer-normalize:
-    name: Composer-Normalize
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: composer-normalize-action
-        uses: docker://ergebnis/composer-normalize-action:latest
-        env:
-          COMPOSER_HOME: /root/.composer
-      - name: Push
-        run: |
-          .github/push.sh \
-          "zepgram@gmail.com" "Benjamin Calef" "composer-normalize" \
-          "${{ secrets.GITHUB_SECRET_TOKEN }}" "${{ secrets.GITHUB_PUBLIC_TOKEN }}"
