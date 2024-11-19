@@ -4,6 +4,7 @@
 git clone git@github.com:zepgram/magento2-code-maker.git
 cd magento2-code-maker
 composer install
+chmod +x bin/maker
 sudo ln -sfn {absloute_path}/magento2-code-maker/bin/maker /usr/local/bin/maker
 ```
 
