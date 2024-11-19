@@ -12,6 +12,29 @@ To execute maker, you must be in a Magento project directory and run:
 maker
 ```
 
+### Available commands
+
+| Command                        | Description                           |
+|--------------------------------|---------------------------------------|
+| `create:block`                 | Create block                         |
+| `create:command`               | Create console command               |
+| `create:config`                | Create system config                 |
+| `create:controller`            | Create controller                    |
+| `create:controller-view`       | Create controller with view          |
+| `create:cron`                  | Create cron                          |
+| `create:graph-ql`              | Create resolver GraphQL              |
+| `create:logger`                | Create logger                        |
+| `create:model`                 | Create model                         |
+| `create:model:service-contract`| Create model with service contract   |
+| `create:module`                | Create new module                    |
+| `create:observer`              | Create observer                      |
+| `create:patch-data`            | Create patch data                    |
+| `create:patch-schema`          | Create patch schema                  |
+| `create:plugin`                | Create plugin                        |
+| `create:service-contract`      | Create service contract              |
+| `create:view-model`            | Create view model                    |
+| `create:webapi`                | Create WebAPI REST or SOAP           |
+
 ### Todo
 - Generator issue:
   - Resolve specific case of xml merge
